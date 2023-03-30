@@ -2,6 +2,7 @@ import type { IUpdateName } from "../interfaces";
 import { Evogram } from "../Client";
 import { Polling, Webhook } from "../transports";
 import { CallbackQueryContext, ChatJoinRequestContext, ChatMemberUpdatedContext, ChosenInlineResultContext, InlineQueryContext, MessageContext, PollAnswerContext, PollContext, PreCheckoutQueryContext, ShippingQueryContext, UpdateContext } from "../contexts";
+import { commandsHandler } from "../modules/commands/commandHandler";
 
 export type IUpdateHandler<T> = (data: T) => Promise<void> | void;
 
@@ -13,6 +14,8 @@ export class Updates {
 	public handlers: { [updateName in IUpdateName]?: ((data: any) => Promise<void> | void)[]} = {}
 
 	constructor(client: Evogram) {
+		this.on("message", commandsHandler);
+
 		this.polling = new Polling(client, this);
 		this.webhook = new Webhook(client, this);
 	}

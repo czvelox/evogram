@@ -1,5 +1,6 @@
 import { API } from "./API";
 import { BotContext } from "./contexts";
+import { CommandManager } from "./modules/commands/CommandManager";
 import { ContextManager } from "./modules/context";
 import { Updates } from "./updates";
 
@@ -18,6 +19,8 @@ export class Evogram {
 	public contexts: ContextManager;
 	/** Context of a running bot */
 	public bot?: BotContext;
+	/** Command manager for adding and running bot commands  */
+	public commandManager: CommandManager;
  
 	/**
 	 * Create a new instance of the Evogram class.
@@ -27,6 +30,7 @@ export class Evogram {
 		this.api = new API(this);
 		this.updates = new Updates(this);
 		this.contexts = new ContextManager(this);
+		this.commandManager = new CommandManager(this);
 
 		this.checkTokenValidity();
 	}
