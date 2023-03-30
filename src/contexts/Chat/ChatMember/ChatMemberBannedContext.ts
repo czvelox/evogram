@@ -7,6 +7,6 @@ export class ChatMemberBannedContext extends Context<IChatMemberBanned & { chat_
 
 	/** Unbans the chat member. */
 	public unban() {
-		return this.client.api.unbanChatMember({ chat_id: this._source.chat_id, user_id: this._source.user.id });
+		return this._client.api.unbanChatMember({ chat_id: this._source.chat_id, user_id: this._source.user.id });
 	}
 }

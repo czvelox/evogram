@@ -3,10 +3,12 @@ import { Context } from "../modules/context";
 import { UserContext } from "./";
 
 export class CallbackQueryContext extends Context<ICallbackQuery> {
+	public client = this._client;
+
 	/** The user who triggered the callback query. */
-	public user = this.client.contexts.getContext<UserContext>("User", this._source.from);
+	public user = this._client.contexts.getContext<UserContext>("User", this._source.from);
 	/** The message context associated with the callback query, if available. */
-	public message = this._source.message && this.client.contexts.getContext("Message", this._source.from);
+	public message = this._source.message && this._client.contexts.getContext("Message", this._source.from);
 
 	/** The ID of the callback query. */
 	public get id() { return this._source.id }
@@ -25,6 +27,6 @@ export class CallbackQueryContext extends Context<ICallbackQuery> {
 	 * @returns A Promise that resolves with the result of the API call to answer the callback query.
 	 */
 	public answer(params?: Partial<IAnswerCallbackQueryParams>) {
-		return this.client.api.answerCallbackQuery(Object.assign({ callback_query_id: this._source.id}, params));
+		return this._client.api.answerCallbackQuery(Object.assign({ callback_query_id: this._source.id}, params));
 	}
 }

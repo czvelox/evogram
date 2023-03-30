@@ -4,7 +4,7 @@ import { LocationContext } from "./";
 
 export class VenueContext extends Context<IVenue> {
 	/** The location context associated with this venue context. */
-	public location = this.client.contexts.getContext<LocationContext>("Location", this._source.location);
+	public location = this._client.contexts.getContext<LocationContext>("Location", this._source.location);
 
 	/** Returns the title of the venue. */
 	public get title() { return this._source.title }

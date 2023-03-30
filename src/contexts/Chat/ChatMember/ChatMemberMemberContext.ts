@@ -8,7 +8,7 @@ export class ChatMemberMemberContext extends Context<(IChatMemberMember | IChatM
 	 * @returns A promise that resolves to true if the ban was successful.
 	 */
 	public ban(params?: Partial<IBanChatMemberParams>): Promise<true> {
-		return this.client.api.banChatMember(Object.assign({ chat_id: this._source.chat_id, user_id: this._source.user.id }, params));
+		return this._client.api.banChatMember(Object.assign({ chat_id: this._source.chat_id, user_id: this._source.user.id }, params));
 	}
 
 	/**
@@ -16,7 +16,7 @@ export class ChatMemberMemberContext extends Context<(IChatMemberMember | IChatM
 	 * @returns A promise that resolves to true if the ban was successful.
 	 */
 	public banSenderChat(): Promise<true> {
-		return this.client.api.banChatSenderChat({ chat_id: this._source.chat_id, sender_chat_id: this._source.user.id });
+		return this._client.api.banChatSenderChat({ chat_id: this._source.chat_id, sender_chat_id: this._source.user.id });
 	}
 
 	/**
@@ -44,7 +44,7 @@ export class ChatMemberMemberContext extends Context<(IChatMemberMember | IChatM
 		if(params && !params.results) params.permissions = permissions;
 		else if(!params) params = { permissions };
 
-		return this.client.api.restrictChatMember(Object.assign({ chat_id: this._source.chat_id, user_id: this._source.user.id }, params));
+		return this._client.api.restrictChatMember(Object.assign({ chat_id: this._source.chat_id, user_id: this._source.user.id }, params));
 	}
 
 	/**
@@ -53,6 +53,6 @@ export class ChatMemberMemberContext extends Context<(IChatMemberMember | IChatM
 	 * @returns A promise that resolves to true if the promotion was successful.
 	 */
 	public promote(params?: Partial<IPromoteChatMemberParams>) {
-		return this.client.api.promoteChatMember(Object.assign({ chat_id: this._source.chat_id, user_id: this._source.user.id }, params));
+		return this._client.api.promoteChatMember(Object.assign({ chat_id: this._source.chat_id, user_id: this._source.user.id }, params));
 	}
 }

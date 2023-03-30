@@ -3,10 +3,12 @@ import { Context } from "../../modules/context";
 import { UserContext, LocationContext } from "../";
 
 export class ChosenInlineResultContext extends Context<IChosenInlineResult> {
+	public client = this._client;
+
 	/** The user who chose the inline result. */
-	public user = this.client.contexts.getContext<UserContext>("User", this._source.from);
+	public user = this._client.contexts.getContext<UserContext>("User", this._source.from);
 	/** Sender location, only for bots that require user location */
-	public location = this._source.location && this.client.contexts.getContext<LocationContext>("Location", this._source.location);
+	public location = this._source.location && this._client.contexts.getContext<LocationContext>("Location", this._source.location);
 
 	/** The unique identifier for the result that was chosen */
 	public get id() { return this._source.result_id; }
@@ -27,6 +29,6 @@ export class ChosenInlineResultContext extends Context<IChosenInlineResult> {
 		if(params && !params.results) params.results = results;
 		else if(!params) params = { results };
 		
-		return this.client.api.answerInlineQuery(Object.assign({inline_query_id: this._source.inline_message_id}, params));
+		return this._client.api.answerInlineQuery(Object.assign({inline_query_id: this._source.inline_message_id}, params));
 	}
 }

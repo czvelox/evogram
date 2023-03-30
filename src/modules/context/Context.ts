@@ -1,7 +1,7 @@
 import { Evogram } from "../../Client";
 
 export class Context<T> {
-	constructor(protected client: Evogram, protected _source: T) {}
+	constructor(protected _client: Evogram, protected _source: T) {}
 	/**
 	 * Converts the source object to a context object of a given type.
 	 * @template TContext - Generic type parameter for the context object.

@@ -37,7 +37,7 @@ export class UserContext extends Context<IUser & { chat_id?: number | string }> 
 	 * @returns The API response.
 	 */
 	public getProfilePhotos(params?: Partial<IGetUserProfilePhotosParams>) {
-		return this.client.api.getUserProfilePhotos({ user_id: this._source.id, ...params });
+		return this._client.api.getUserProfilePhotos({ user_id: this._source.id, ...params });
 	}
 
 	#member: any;
@@ -48,7 +48,7 @@ export class UserContext extends Context<IUser & { chat_id?: number | string }> 
 	public async getMember<T extends Context<IChatMember> = ChatMemberContext>(): Promise<T | null> {
 		if(!this._source.chat_id) return null;
 
-		if(!this.#member) this.#member = await this.client.api.getChatMember({ chat_id: this._source.chat_id, user_id: this._source.id });
+		if(!this.#member) this.#member = await this._client.api.getChatMember({ chat_id: this._source.chat_id, user_id: this._source.id });
 		return this.#member;
 	}
 }

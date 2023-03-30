@@ -3,12 +3,14 @@ import { Context } from "../../modules/context";
 import { UserContext, ChatContext, ChatInviteLinkContext } from "../";
 
 export class ChatJoinRequestContext extends Context<IChatJoinRequest> {
+	public client = this._client;
+
 	/** The chat the join request was sent to. */
-	public chat = this.client.contexts.getContext<ChatContext>("Chat", this._source.chat);
+	public chat = this._client.contexts.getContext<ChatContext>("Chat", this._source.chat);
 	/** The user who sent the join request. */
-	public user = this.client.contexts.getContext<UserContext>("User", this._source.from);
+	public user = this._client.contexts.getContext<UserContext>("User", this._source.from);
 	/** The invite link used to send the join request. Undefined if no invite link was used. */
-	public link = this._source.invite_link && this.client.contexts.getContext<ChatInviteLinkContext>("ChatInviteLink", Object.assign(this._source.invite_link, { chat_id: this._source.chat.id }));
+	public link = this._source.invite_link && this._client.contexts.getContext<ChatInviteLinkContext>("ChatInviteLink", Object.assign(this._source.invite_link, { chat_id: this._source.chat.id }));
 	/** The date when the join request was sent. */
 	public date = new Date(this._source.date);
 
@@ -23,7 +25,7 @@ export class ChatJoinRequestContext extends Context<IChatJoinRequest> {
 	 * @returns Promise that resolves with true on success, or rejects with an error on failure.
 	 */
 	public approve() {
-		return this.client.api.approveChatJoinRequest({ chat_id: this._source.chat.id, user_id: this._source.from.id });
+		return this._client.api.approveChatJoinRequest({ chat_id: this._source.chat.id, user_id: this._source.from.id });
 	}
 
 	/**
@@ -31,6 +33,6 @@ export class ChatJoinRequestContext extends Context<IChatJoinRequest> {
 	 * @returns Promise that resolves with true on success, or rejects with an error on failure.
 	 */
 	public decline() {
-		return this.client.api.declineChatJoinRequest({ chat_id: this._source.chat.id, user_id: this._source.from.id });
+		return this._client.api.declineChatJoinRequest({ chat_id: this._source.chat.id, user_id: this._source.from.id });
 	}
 }

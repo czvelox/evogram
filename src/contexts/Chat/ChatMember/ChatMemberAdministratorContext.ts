@@ -62,6 +62,6 @@ export class ChatMemberAdministratorContext extends ChatMemberMemberContext {
 	 * @returns A Promise that resolves to true on success.
 	 */
 	public setCustomTitle(customTitle: string) {
-		return this.client.api.setChatAdministratorCustomTitle({ chat_id: this._source.chat_id, user_id: this._source.user.id, custom_title: customTitle });
+		return this._client.api.setChatAdministratorCustomTitle({ chat_id: this._source.chat_id, user_id: this._source.user.id, custom_title: customTitle });
 	}
 }

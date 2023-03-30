@@ -9,7 +9,7 @@ export class BotContext extends UserContext {
 	 * @returns A Promise that resolves to the current list of the bot's commands.
 	 */
 	public getCommands<T extends Context<IBotCommand> | object = IBotCommand>(params?: IGetMyCommandsParams) {
-		return this.client.api.getMyCommands<T>(params);
+		return this._client.api.getMyCommands<T>(params);
 	}
 
 	/**
@@ -31,7 +31,7 @@ export class BotContext extends UserContext {
 		if(params && !params.commands) params.commands = commands;
 		else if(!params) params = { commands };
 
-		return this.client.api.setMyCommands(params);
+		return this._client.api.setMyCommands(params);
 	}
 
 	/**
@@ -40,7 +40,7 @@ export class BotContext extends UserContext {
 	 * @returns A Promise that resolves to true if the operation succeeded.
 	 */
 	public deleteCommands(params?: IDeleteMyCommandsParams) {
-		return this.client.api.deleteMyCommands(params);
+		return this._client.api.deleteMyCommands(params);
 	}
 
 	/**
@@ -49,7 +49,7 @@ export class BotContext extends UserContext {
 	 * @returns A Promise that resolves to true if the operation succeeded.
 	 */
 	public setChatMenuButton(params?: ISetChatMenuButtonParams) {
-		return this.client.api.setChatMenuButton(params);
+		return this._client.api.setChatMenuButton(params);
 	}
 
 	/**
@@ -58,7 +58,7 @@ export class BotContext extends UserContext {
 	 * @returns A Promise that resolves to the bot's menu button for the specified chat.
 	 */
 	public getChatMenuButton<T extends Context<IMenuButton> | object = IMenuButton>(params?: IGetChatMenuButtonParams) {
-		return this.client.api.getChatMenuButton<T>(params);
+		return this._client.api.getChatMenuButton<T>(params);
 	}
 
 	/**
@@ -67,7 +67,7 @@ export class BotContext extends UserContext {
 	 * @returns A Promise that resolves to true if the operation succeeded.
 	 */
 	public setDefaultAdministratorRights(params?: ISetMyDefaultAdministratorRightsParams) {
-		return this.client.api.setMyDefaultAdministratorRights(params);
+		return this._client.api.setMyDefaultAdministratorRights(params);
 	}
 
 	/**
@@ -76,6 +76,6 @@ export class BotContext extends UserContext {
 	 * @returns A Promise that resolves to the bot's default administrator rights.
 	 */
 	public getDefaultAdministratorRights<T extends Context<IChatAdministratorRights> | object = IChatAdministratorRights>(params?: IGetMyDefaultAdministratorRightsParams) {
-		return this.client.api.getMyDefaultAdministratorRights<T>(params);
+		return this._client.api.getMyDefaultAdministratorRights<T>(params);
 	}
 }

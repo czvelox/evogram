@@ -4,7 +4,7 @@ import { UserContext } from "../";
 
 export class ChatInviteLinkContext extends Context<IChatInviteLink & { chat_id: number | string }> {
 	/** The user who created the chat invite link. */
-	public creator = this.client.contexts.getContext<UserContext>("User", this._source.creator);
+	public creator = this._client.contexts.getContext<UserContext>("User", this._source.creator);
 	/** The date and time when the chat invite link will expire, or `undefined` if it does not expire. */
 	public expireDate = (this._source.expire_date && new Date(this._source.expire_date)) || undefined;
 
@@ -26,11 +26,11 @@ export class ChatInviteLinkContext extends Context<IChatInviteLink & { chat_id: 
 
 	/** Edits the chat invite link. */
 	public edit<T extends Context<IChatInviteLink> = ChatInviteLinkContext>(params: Partial<IEditChatInviteLinkParams>) {
-		return this.client.api.editChatInviteLink<T>(Object.assign({ chat_id: this._source.chat_id, invite_link: this._source.invite_link }, params));
+		return this._client.api.editChatInviteLink<T>(Object.assign({ chat_id: this._source.chat_id, invite_link: this._source.invite_link }, params));
 	}
 
 	/** Revokes the chat invite link. */
 	public revoke<T extends Context<IChatInviteLink> = ChatInviteLinkContext>() {
-		return this.client.api.revokeChatInviteLink<T>({ chat_id: this._source.chat_id, invite_link: this._source.invite_link });
+		return this._client.api.revokeChatInviteLink<T>({ chat_id: this._source.chat_id, invite_link: this._source.invite_link });
 	}
 }

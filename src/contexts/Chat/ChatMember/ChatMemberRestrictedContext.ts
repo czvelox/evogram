@@ -10,5 +10,5 @@ export class ChatMemberRestrictedContext extends ChatMemberMemberContext {
 	/** Returns a boolean indicating whether the user is a member of the chat. */
 	public get isMember() { return this._source.is_member }
 	/** Returns the Chat Member permissions. */
-	public permissions = this.client.contexts.getContext<IChatPermissions>("ChatPermissions", this._source);
+	public permissions = this._client.contexts.getContext<IChatPermissions>("ChatPermissions", this._source);
 }

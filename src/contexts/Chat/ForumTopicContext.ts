@@ -31,24 +31,24 @@ export class ForumTopicContext extends Context<{
 	public edit(params: Partial<IEditForumTopicParams>) {
 		if(this.isGeneral && !params.name) throw new Error("The topic is General and has a mandatory name parameter for editing");
 
-		if(this.isGeneral && params.name) return this.client.api.editGeneralForumTopic({ chat_id: this._source.chat_id, name: params.name });
-		else return this.client.api.editForumTopic(Object.assign({ chat_id: this._source.chat_id, message_thread_id: this._source.message_thread_id }, params));
+		if(this.isGeneral && params.name) return this._client.api.editGeneralForumTopic({ chat_id: this._source.chat_id, name: params.name });
+		else return this._client.api.editForumTopic(Object.assign({ chat_id: this._source.chat_id, message_thread_id: this._source.message_thread_id }, params));
 	}
 
 	/** Closes the forum topic. */
 	public close() {
-		if(this.isGeneral) return this.client.api.closeGeneralForumTopic({ "chat_id": this._source.chat_id });
-		else return this.client.api.closeForumTopic({ chat_id: this._source.chat_id, message_thread_id: this._source.message_thread_id });
+		if(this.isGeneral) return this._client.api.closeGeneralForumTopic({ "chat_id": this._source.chat_id });
+		else return this._client.api.closeForumTopic({ chat_id: this._source.chat_id, message_thread_id: this._source.message_thread_id });
 	}
 
 	/** Reopens the forum topic. */
 	public reopen() {
-		if(this.isGeneral) this.client.api.reopenGeneralForumTopic({ "chat_id": this._source.chat_id });
-		else return this.client.api.reopenForumTopic({ chat_id: this._source.chat_id, message_thread_id: this._source.message_thread_id });
+		if(this.isGeneral) this._client.api.reopenGeneralForumTopic({ "chat_id": this._source.chat_id });
+		else return this._client.api.reopenForumTopic({ chat_id: this._source.chat_id, message_thread_id: this._source.message_thread_id });
 	}
 
 	/** Delete the forum topic. */
 	public delete() {
-		return this.client.api.deleteForumTopic({ chat_id: this._source.chat_id, message_thread_id: this._source.message_thread_id });
+		return this._client.api.deleteForumTopic({ chat_id: this._source.chat_id, message_thread_id: this._source.message_thread_id });
 	}
 }

@@ -5,29 +5,30 @@ import { IncomingMessageContext } from "./";
 
 export class MessageContext extends Context<IMessage> {
 	public source = this._source;
+	public client = this._client;
 
-	public user = this._source.from && this.client.contexts.getContext<UserContext>("User", this._source.from);
-	public viaBot = this._source.via_bot && this.client.contexts.getContext<UserContext>("User", this._source.via_bot);
+	public user = this._source.from && this._client.contexts.getContext<UserContext>("User", this._source.from);
+	public viaBot = this._source.via_bot && this._client.contexts.getContext<UserContext>("User", this._source.via_bot);
 
-	public chat = this.client.contexts.getContext<ChatContext>("Chat", this._source.chat);
-	public senderChat = this._source.sender_chat && this.client.contexts.getContext<ChatContext>("Chat", this._source.chat);
+	public chat = this._client.contexts.getContext<ChatContext>("Chat", this._source.chat);
+	public senderChat = this._source.sender_chat && this._client.contexts.getContext<ChatContext>("Chat", this._source.chat);
 
 	public date = new Date(this._source.date);
 	public editDate = this._source.edit_date && new Date(this._source.edit_date);
 
-	public forwardMessage = this._source.forward_date && this.client.contexts.getContext<ForwardMessageContext>("ForwardMessage", { forward_from: this._source.forward_from, forward_from_chat: this._source.forward_from_chat, forward_from_message_id: this._source.forward_from_message_id, forward_signature: this._source.forward_signature, forward_sender_name: this.source.forward_sender_name, forward_date: this._source.forward_date });
-	public replyMessage = this._source.reply_to_message && this.client.contexts.getContext<MessageContext>("Message", this._source.reply_to_message);
+	public forwardMessage = this._source.forward_date && this._client.contexts.getContext<ForwardMessageContext>("ForwardMessage", { forward_from: this._source.forward_from, forward_from_chat: this._source.forward_from_chat, forward_from_message_id: this._source.forward_from_message_id, forward_signature: this._source.forward_signature, forward_sender_name: this.source.forward_sender_name, forward_date: this._source.forward_date });
+	public replyMessage = this._source.reply_to_message && this._client.contexts.getContext<MessageContext>("Message", this._source.reply_to_message);
 
-	public location = this._source.location && this.client.contexts.getContext<LocationContext>("Location", this._source.location);
-	public venue = this._source.venue && this.client.contexts.getContext<VenueContext>("Venue", this._source.venue);
+	public location = this._source.location && this._client.contexts.getContext<LocationContext>("Location", this._source.location);
+	public venue = this._source.venue && this._client.contexts.getContext<VenueContext>("Venue", this._source.venue);
 
-	public entities = this._source.entities || this._source.caption_entities && this.client.contexts.getContext<IMessageEntity>("MessageEntity", this._source.entities || this._source.caption_entities);
-	public poll = this._source.poll && this.client.contexts.getContext<PollContext>("Poll", this._source.poll);
+	public entities = this._source.entities || this._source.caption_entities && this._client.contexts.getContext<IMessageEntity>("MessageEntity", this._source.entities || this._source.caption_entities);
+	public poll = this._source.poll && this._client.contexts.getContext<PollContext>("Poll", this._source.poll);
 
 	public forumTopic = ["forum_topic_created", "forum_topic_edited", "forum_topic_closed", "forum_topic_reopened", "general_forum_topic_hidden", "general_forum_topic_unhidden"].map(x => {
 		//@ts-ignore
 		const data = this._source[x];
-		if(data) return this.client.contexts.getContext<ForumTopicContext>("ForumTopic", Object.assign(data, { 
+		if(data) return this._client.contexts.getContext<ForumTopicContext>("ForumTopic", Object.assign(data, { 
 			chat_id: this._source.chat.id, 
 			message_thread_id: this._source.message_thread_id, 
 			updateType: x 
@@ -35,8 +36,8 @@ export class MessageContext extends Context<IMessage> {
 	}).find(x => x);
 
 	public update = {
-		new_chat_members: this._source.new_chat_members?.map(user => this.client.contexts.getContext<UserContext>("User", user)),
-		left_chat_member: this._source.left_chat_member && this.client.contexts.getContext<UserContext>("User", this._source.left_chat_member),
+		new_chat_members: this._source.new_chat_members?.map(user => this._client.contexts.getContext<UserContext>("User", user)),
+		left_chat_member: this._source.left_chat_member && this._client.contexts.getContext<UserContext>("User", this._source.left_chat_member),
 		new_chat_title: this._source.new_chat_title,
 		new_chat_photo: this._source.new_chat_photo,
 		delete_chat_photo: this._source.delete_chat_photo,
@@ -98,7 +99,7 @@ export class MessageContext extends Context<IMessage> {
 		if(params && !params.text) params.permissions = text;
 		else if(!params) params = { text };
 
-		return this.client.api.sendMessage(Object.assign({ chat_id: this.source.chat.id, message_thread_id: this.source.message_thread_id, text }, params));
+		return this._client.api.sendMessage(Object.assign({ chat_id: this.source.chat.id, message_thread_id: this.source.message_thread_id, text }, params));
 	}
 
 	/** Replies to the current message. */
@@ -110,26 +111,26 @@ export class MessageContext extends Context<IMessage> {
 
 	/** Deletes the current message. */
 	public delete() {
-		return this.client.api.deleteMessage({ chat_id: this.source.chat.id, message_id: this.source.message_id });
+		return this._client.api.deleteMessage({ chat_id: this.source.chat.id, message_id: this.source.message_id });
 	}
 
 	/** Forwards the current message to a specified chat. */
 	public forward<T extends Context<IMessage> = IncomingMessageContext>(chat_id: string | number, params?: Partial<IForwardMessageParams>) {
-		return this.client.api.forwardMessage<T>(Object.assign({ message_thread_id: this.source.message_thread_id, from_chat_id: this.source.chat.id, message_id: this.source.message_id, chat_id }, params));
+		return this._client.api.forwardMessage<T>(Object.assign({ message_thread_id: this.source.message_thread_id, from_chat_id: this.source.chat.id, message_id: this.source.message_id, chat_id }, params));
 	}
 
 	/** Pin the message in the chat. */
 	public pin(params?: Partial<IPinChatMessageParams>) {
-		return this.client.api.pinChatMessage(Object.assign({ chat_id: this.source.chat.id, message_id: this.source.message_id }, params));
+		return this._client.api.pinChatMessage(Object.assign({ chat_id: this.source.chat.id, message_id: this.source.message_id }, params));
 	}
 
 	/** Unpin the message in the chat. */
 	public unpin(params?: Partial<IUnpinChatMessageParams>) {
-		return this.client.api.unpinChatMessage(Object.assign({ chat_id: this.source.chat.id, message_id: this.source.message_id }, params));
+		return this._client.api.unpinChatMessage(Object.assign({ chat_id: this.source.chat.id, message_id: this.source.message_id }, params));
 	}
 
 	/** Send the action in the chat.  */
 	public sendAction(action: IChatActionType) {
-		return this.client.api.sendChatAction({ chat_id: this.source.chat.id, message_thread_id: this.source.message_thread_id, action });
+		return this._client.api.sendChatAction({ chat_id: this.source.chat.id, message_thread_id: this.source.message_thread_id, action });
 	}
 }

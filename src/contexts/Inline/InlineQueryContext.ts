@@ -3,10 +3,12 @@ import { Context } from "../../modules/context";
 import { UserContext, LocationContext } from "../";
 
 export class InlineQueryContext extends Context<IInlineQuery> {
+	public client = this._client
+
 	/** Sender */
-	public user = this.client.contexts.getContext<UserContext>("User", this._source.from);
+	public user = this._client.contexts.getContext<UserContext>("User", this._source.from);
 	/** Sender location, only for bots that request user location */
-	public location = this._source.location && this.client.contexts.getContext<LocationContext>("Location", this._source.location);
+	public location = this._source.location && this._client.contexts.getContext<LocationContext>("Location", this._source.location);
 
 	
 	/** Unique identifier for this query */
@@ -29,6 +31,6 @@ export class InlineQueryContext extends Context<IInlineQuery> {
 		if(params && !params.results) params.results = results;
 		else if(!params) params = { results };
 		
-		return this.client.api.answerInlineQuery(Object.assign({ inline_query_id: this._source.id }, params));
+		return this._client.api.answerInlineQuery(Object.assign({ inline_query_id: this._source.id }, params));
 	}
 }

@@ -18,7 +18,7 @@ export class ChatContext extends Context<IChat> {
 	 * @returns A Promise that resolves to the invite link.
 	 */
 	public exportInviteLink() {
-		return this.client.api.exportChatInviteLink({ chat_id: this._source.id });
+		return this._client.api.exportChatInviteLink({ chat_id: this._source.id });
 	}
 
 	/**
@@ -27,7 +27,7 @@ export class ChatContext extends Context<IChat> {
 	 * @returns A Promise that resolves to the new invite link.
 	 */
 	public createInviteLink<T extends Context<IChatInviteLink> = ChatInviteLinkContext>(params?: Partial<ICreateChatInviteLinkParams>) {
-		return this.client.api.createChatInviteLink<T>({ chat_id: this._source.id, ...params });
+		return this._client.api.createChatInviteLink<T>({ chat_id: this._source.id, ...params });
 	}
 
 	/**
@@ -36,7 +36,7 @@ export class ChatContext extends Context<IChat> {
 	 * @returns A Promise that resolves to true if the photo was successfully set.
 	 */
 	public setPhoto(photo: IInputFile) {
-		return this.client.api.setChatPhoto({ chat_id: this._source.id, photo });
+		return this._client.api.setChatPhoto({ chat_id: this._source.id, photo });
 	}
 
 	/**
@@ -45,7 +45,7 @@ export class ChatContext extends Context<IChat> {
 	 * @returns A Promise that resolves to true if the title was successfully set.
 	 */
 	public setTitle(title: string) {
-		return this.client.api.setChatTitle({ chat_id: this._source.id, title });
+		return this._client.api.setChatTitle({ chat_id: this._source.id, title });
 	}
 
 	/**
@@ -54,7 +54,7 @@ export class ChatContext extends Context<IChat> {
 	 * @returns A Promise that resolves to true if the description was successfully set.
 	 */
 	public setDescription(description?: string) {
-		return this.client.api.setChatDescription({ chat_id: this._source.id, description });
+		return this._client.api.setChatDescription({ chat_id: this._source.id, description });
 	}
 
 	/**
@@ -62,12 +62,12 @@ export class ChatContext extends Context<IChat> {
 	 * @returns A Promise that resolves to true if the chat was successfully left.
 	 */
 	public leave() {
-		return this.client.api.leaveChat({ chat_id: this._source.id });
+		return this._client.api.leaveChat({ chat_id: this._source.id });
 	}
 
 	#detailedChat: any;
 	public async getChat<T extends Context<IChat> = DetailedChatContext>(): Promise<T> {
-		if(!this.#detailedChat) this.#detailedChat = await this.client.api.getChat({ chat_id: this._source.id });
+		if(!this.#detailedChat) this.#detailedChat = await this._client.api.getChat({ chat_id: this._source.id });
 		return this.#detailedChat;
 	}
 }
