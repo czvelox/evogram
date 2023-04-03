@@ -1,6 +1,7 @@
 import { Evogram } from "../../Client";
 import { MessageContext } from "../../contexts";
 
+export type ICommandArguments = { [x: string]: MessageContext };
 /** Defines the parameters of a command. */
 export interface ICommandParams {
 	/** Text of the command; 1-32 characters. Can contain only lowercase English letters, digits and underscores. */
@@ -48,5 +49,5 @@ export abstract class Command {
 	 * @returns {any}
 	 * @abstract
 	 */
-	public abstract execute(message: MessageContext, args?: { [x: string]: MessageContext }): any;
+	public abstract execute(message: MessageContext, args?: ICommandArguments): any;
 }
