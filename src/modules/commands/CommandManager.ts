@@ -2,12 +2,15 @@ import type { ISetMyCommandsParams } from "../../interfaces";
 import { Evogram } from "../../Client";
 import { MessageContext } from "../../contexts";
 import { Command } from "./Command";
+import { commandsHandler } from "./commandHandler";
 
 export class CommandManager {
-	constructor(private client: Evogram) {}
+	constructor(private client: Evogram) {
+		client.updates.on("message", commandsHandler);
+	}
 
 	/** Map of commands stored by name */
-	private commands: Command[] = [];
+	public commands: Command[] = [];
 	private timeoutId: ReturnType<typeof setTimeout> | null = null;
 
 	/**
@@ -26,8 +29,8 @@ export class CommandManager {
 			// Array with commands in ISetMyCommandsParams format for registration
 			const commands: ISetMyCommandsParams[] = [];
 			for(const command of this.commands) 
-				if(command.params?.сommandParams)
-					for(const params of command.params?.сommandParams || []) 
+				if(command.params?.commandParams)
+					for(const params of command.params?.commandParams || []) 
 						commands.find(x => x.language_code === params.language_code) ? 
 							commands.find(x => x.language_code === params.language_code)?.commands.push({ command: command.params.name, description: params.description }) :
 							commands.push({ language_code: params.language_code, commands: [{ command: command.params.name, description: params.description }] });
@@ -50,5 +53,19 @@ export class CommandManager {
 			command.isExecutable(message, () => status = true);
 			if(status) return command;
 		});
+	}
+
+	public async getCommandArguments(chat_id: number, user_id: number, command: Command): Promise<{ [x: string]: MessageContext } | undefined> {
+		const args = command.params?.args;
+		if(!args) return;
+
+		//@ts-ignore
+		return await Promise.all(args.map((arg) => 
+			new Promise((resolve, reject) => {
+				this.client.modules.questions.addQuestion(user_id, (msg) => resolve(msg))
+				this.client.api.sendMessage({ chat_id, text: arg.text })
+				setTimeout(reject, 120000);
+			})
+		));
 	}
 }

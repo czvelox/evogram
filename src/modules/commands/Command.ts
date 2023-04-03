@@ -5,7 +5,13 @@ import { MessageContext } from "../../contexts";
 export interface ICommandParams {
 	/** Text of the command; 1-32 characters. Can contain only lowercase English letters, digits and underscores. */
 	name: string,
-	сommandParams?: {
+	args?: {
+		/** Argument name */
+		name: string,
+		/** Text sent to request an argument */
+		text: string
+	}[]
+	commandParams?: {
 		/** Description of the command; 1-256 characters. */
 		description: string,
 		/** A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands */
@@ -26,10 +32,10 @@ export abstract class Command {
 	 * @returns {any}
 	 */
 	public isExecutable(message: MessageContext, next: () => void): any {
-		if (this.params?.сommandParams && message.text) {
+		if (this.params && message.text) {
 			if([`/${this.params.name}`, `/${this.params.name}@${this.client.bot?.username}`].includes(message.text))
 					return next();
-		} else return next();
+		}
 	}
 
 	/**
@@ -38,5 +44,5 @@ export abstract class Command {
 	 * @returns {any}
 	 * @abstract
 	 */
-	public abstract execute(message: MessageContext): any;
+	public abstract execute(message: MessageContext, args?: { [x: string]: MessageContext }): any;
 }
