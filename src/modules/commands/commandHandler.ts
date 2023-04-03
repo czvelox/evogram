@@ -7,6 +7,5 @@ export function commandsHandler(message: MessageContext) {
 	if(command.params?.args) {
 		message.client.modules.commands.getCommandArguments(message.chat.id, message.user.id, command)
 			.then(args => command.execute(message, args))
-			.catch(() => {})
 	} else command.execute(message);
 }

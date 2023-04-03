@@ -59,18 +59,20 @@ export class CommandManager {
 		const args = command.params?.args;
 		if(!args) return;
 
-		//@ts-ignore
-		return await Promise.all(args.map((arg) => 
-			new Promise(async (resolve, reject) => {
-				const incomingMessage = await this.client.api.sendMessage({ chat_id, text: arg.text });
-				this.client.modules.questions.addQuestion(user_id, (msg) => {
-					if(arg.deleteQuestionMessage) incomingMessage.delete();
-					if(arg.deleteAnswerMessage) msg.delete();
+		try {
+			//@ts-ignore
+			return Object(...await Promise.all(args.map((arg) => 
+				new Promise(async (resolve, reject) => {
+					const incomingMessage = await this.client.api.sendMessage({ chat_id, text: arg.text });
+					this.client.modules.questions.addQuestion(user_id, (msg) => {
+						if(arg.deleteQuestionMessage) incomingMessage.delete();
+						if(arg.deleteAnswerMessage) msg.delete();
 
-					resolve(msg);
+						resolve({ [arg.name]: msg });
+					})
+					setTimeout(reject, 120000);
 				})
-				setTimeout(reject, 120000);
-			})
-		));
+			)));
+		} catch { return undefined }
 	}
 }
