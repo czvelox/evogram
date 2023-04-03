@@ -28,7 +28,7 @@ export abstract class Command {
 	constructor(private client: Evogram) {}
 
 	/** Returns an object with the parameters of a command. */
-	public params?: ICommandParams;
+	public abstract params: ICommandParams;
 
 	/**
 	 * Checks if a command is executable based on an incoming message.
@@ -50,4 +50,8 @@ export abstract class Command {
 	 * @abstract
 	 */
 	public abstract execute(message: MessageContext, args?: ICommandArguments): any;
+
+	public onError(message: MessageContext, error: any) {
+		throw error;
+	}
 }
