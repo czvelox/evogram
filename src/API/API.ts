@@ -970,9 +970,8 @@ export class API {
 	}
 
 	public async call(method: string, params?: object): Promise<any> {
-		const { data } = await axios.post(`${this.url}/${method}`, params);
-
-		if(!data.ok) throw new TelegramError(data, { method, params });
-		else return data.result;
+		const response = await axios.post(`${this.url}/${method}`, params)
+			.catch(error => { throw new TelegramError(error.response.data, { method, params }) });
+		return response.data.result;
 	}
 }
