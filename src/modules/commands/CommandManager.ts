@@ -3,6 +3,7 @@ import { Evogram } from "../../Client";
 import { MessageContext } from "../../contexts";
 import { Command } from "./Command";
 import { commandsHandler } from "./commandHandler";
+import { getPathsFromDirectory } from "../../utils";
 
 export class CommandManager {
 	constructor(private client: Evogram) {
@@ -40,6 +41,17 @@ export class CommandManager {
 		}, 1500);
 
 	  	return this;
+	}
+
+	/**
+	 * Asynchronously imports classes from specified typescript and javascript files in the specified directory and adds Commands to the CommandManager.
+	 * @param {string} directory - The directory path for the files containing commands.
+	 */
+	public async autoImport(directory: string) {
+		for(const path of getPathsFromDirectory(directory, ["ts", "js"])) {
+			const command = await import(path);
+			if(command?.default?.prototype?.__proto__?.constructor?.name === "Command") this.addCommand(new (command.default)(this.client))
+		}
 	}
 
 	/**
