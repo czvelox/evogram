@@ -9,7 +9,11 @@ export interface ICommandParams {
 		/** Argument name */
 		name: string,
 		/** Text sent to request an argument */
-		text: string
+		text: string,
+		/** Deletes the message requesting arguments when a reply is received */
+		deleteQuestionMessage?: boolean,
+		/** Deletes a reply message when it is received */
+		deleteAnswerMessage?: boolean
 	}[]
 	commandParams?: {
 		/** Description of the command; 1-256 characters. */

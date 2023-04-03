@@ -61,9 +61,14 @@ export class CommandManager {
 
 		//@ts-ignore
 		return await Promise.all(args.map((arg) => 
-			new Promise((resolve, reject) => {
-				this.client.modules.questions.addQuestion(user_id, (msg) => resolve(msg))
-				this.client.api.sendMessage({ chat_id, text: arg.text })
+			new Promise(async (resolve, reject) => {
+				const incomingMessage = await this.client.api.sendMessage({ chat_id, text: arg.text });
+				this.client.modules.questions.addQuestion(user_id, (msg) => {
+					if(arg.deleteQuestionMessage) incomingMessage.delete();
+					if(arg.deleteAnswerMessage) msg.delete();
+
+					resolve(msg);
+				})
 				setTimeout(reject, 120000);
 			})
 		));
