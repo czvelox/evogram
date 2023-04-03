@@ -8,7 +8,7 @@ export class OrderInfoContext extends Context<IOrderInfo> {
 	/** Returns the email associated with the order. */
 	public get email() { return this._source.email }
 	/** Returns the shipping address associated with the order. */
-	public get address() { return this._source.shipping_address && this._client.contexts.getContext<IShippingAddress>("ShippingAddress", this._source.shipping_address) }
+	public get address() { return this._source.shipping_address && this._client.modules.contexts.getContext<IShippingAddress>("ShippingAddress", this._source.shipping_address) }
 
 	/**
 	 * Returns an object that contains the phone number and country code associated with the order.

@@ -9,7 +9,7 @@ export class PollContext extends Context<IPoll> {
 	/** Gets the question text of the poll. */
 	public get question() { return this._source.question }
 	/** Gets the list of poll options. */
-	public get options() { return this._source.options.map(option => this._client.contexts.getContext<IPollOption>("PollOption", option)) }
+	public get options() { return this._source.options.map(option => this.client.modules.contexts.getContext<IPollOption>("PollOption", option)) }
 	/** Gets the total number of users that voted in the poll. */
 	public get totalVoterCount() { return this._source.total_voter_count }
 	/** Returns true if the poll is closed. */
@@ -25,7 +25,7 @@ export class PollContext extends Context<IPoll> {
 	/** Gets the text that is shown when a user chooses an incorrect answer or taps on the lamp icon in a quiz-style poll, if specified. */
 	public get explanation() { return this._source.explanation }
 	/** Gets the entities that appear in the explanation text, if specified. */
-	public get explanationEntities() { return this._source.explanation_entities && this._client.contexts.getContext<IMessageEntity>("MessageEntity", this._source.explanation_entities) }
+	public get explanationEntities() { return this._source.explanation_entities && this.client.modules.contexts.getContext<IMessageEntity>("MessageEntity", this._source.explanation_entities) }
 	/** Gets the amount of time in seconds the poll will be active after creation, if specified. */
 	public get openPeriod() { return this._source.open_period }
 
@@ -37,7 +37,7 @@ export class PollContext extends Context<IPoll> {
 	 */
 	public getPollOptionByText<T extends Context<IPollOption> = any>(text: string) {
 		const findResult = this._source.options.find((option) => option.text === text);
-		return findResult ? this._client.contexts.getContext<T>("PollOption", findResult) : undefined;
+		return findResult ? this.client.modules.contexts.getContext<T>("PollOption", findResult) : undefined;
 	}
 
 	/**

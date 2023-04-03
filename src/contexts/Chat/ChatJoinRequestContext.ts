@@ -6,11 +6,11 @@ export class ChatJoinRequestContext extends Context<IChatJoinRequest> {
 	public client = this._client;
 
 	/** The chat the join request was sent to. */
-	public chat = this._client.contexts.getContext<ChatContext>("Chat", this._source.chat);
+	public chat = this.client.modules.contexts.getContext<ChatContext>("Chat", this._source.chat);
 	/** The user who sent the join request. */
-	public user = this._client.contexts.getContext<UserContext>("User", this._source.from);
+	public user = this.client.modules.contexts.getContext<UserContext>("User", this._source.from);
 	/** The invite link used to send the join request. Undefined if no invite link was used. */
-	public link = this._source.invite_link && this._client.contexts.getContext<ChatInviteLinkContext>("ChatInviteLink", Object.assign(this._source.invite_link, { chat_id: this._source.chat.id }));
+	public link = this._source.invite_link && this.client.modules.contexts.getContext<ChatInviteLinkContext>("ChatInviteLink", Object.assign(this._source.invite_link, { chat_id: this._source.chat.id }));
 	/** The date when the join request was sent. */
 	public date = new Date(this._source.date);
 

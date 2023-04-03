@@ -6,9 +6,9 @@ export class InlineQueryContext extends Context<IInlineQuery> {
 	public client = this._client
 
 	/** Sender */
-	public user = this._client.contexts.getContext<UserContext>("User", this._source.from);
+	public user = this._client.modules.contexts.getContext<UserContext>("User", this._source.from);
 	/** Sender location, only for bots that request user location */
-	public location = this._source.location && this._client.contexts.getContext<LocationContext>("Location", this._source.location);
+	public location = this._source.location && this._client.modules.contexts.getContext<LocationContext>("Location", this._source.location);
 
 	
 	/** Unique identifier for this query */

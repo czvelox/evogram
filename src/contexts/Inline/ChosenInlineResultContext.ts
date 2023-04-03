@@ -6,9 +6,9 @@ export class ChosenInlineResultContext extends Context<IChosenInlineResult> {
 	public client = this._client;
 
 	/** The user who chose the inline result. */
-	public user = this._client.contexts.getContext<UserContext>("User", this._source.from);
+	public user = this._client.modules.contexts.getContext<UserContext>("User", this._source.from);
 	/** Sender location, only for bots that require user location */
-	public location = this._source.location && this._client.contexts.getContext<LocationContext>("Location", this._source.location);
+	public location = this._source.location && this._client.modules.contexts.getContext<LocationContext>("Location", this._source.location);
 
 	/** The unique identifier for the result that was chosen */
 	public get id() { return this._source.result_id; }

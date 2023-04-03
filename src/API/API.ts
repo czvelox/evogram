@@ -22,7 +22,7 @@ export class API {
 	 * @return {Promise<UpdateContext[]>} A Promise that resolves with an array of Update objects.
 	 */
 	public async getUpdates<T = UpdateContext>(params?: IGetUpdatesParams): Promise<T[]> {
-		return (await this.call("getUpdates", params)).map((update: IUpdate) => this.client.contexts.getContext("Update", update));
+		return (await this.call("getUpdates", params)).map((update: IUpdate) => this.client.modules.contexts.getContext("Update", update));
 	}
 
 	/**
@@ -58,7 +58,7 @@ export class API {
 	 * @returns {Promise<T>} A Promise that resolves with an object of type T, which defaults to UserContext.
 	 */
 	public async getMe<T extends Context<IUser> = BotContext>(): Promise<T> {
-		return this.client.contexts.getContext("Bot", await this.call("getMe"));
+		return this.client.modules.contexts.getContext("Bot", await this.call("getMe"));
 	}
 
 	/**
@@ -85,7 +85,7 @@ export class API {
 	 * @returns The context of the sent message.
 	 */
 	public async sendMessage<T extends Context<IMessage> = IncomingMessageContext>(params: ISendMessageParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.call("sendMessage", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.call("sendMessage", params));
 	}
 
 	/**
@@ -99,7 +99,7 @@ export class API {
 	 * @returns A Promise that resolves to the incoming message context containing the forwarded message.
 	 */
 	public async forwardMessage<T extends Context<IMessage> = IncomingMessageContext>(params: IForwardMessageParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.call("forwardMessage", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.call("forwardMessage", params));
 	}
 
 	/**
@@ -119,7 +119,7 @@ export class API {
 	 * @returns A Promise of type T, which extends Context (IncomingMessageContext by default).
 	 */
 	public async sendPhoto<T extends Context<IMessage> = IncomingMessageContext>(params: ISendPhotoParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.upload("sendPhoto", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.upload("sendPhoto", params));
 	}
 
 	/**
@@ -133,7 +133,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendAudio<T extends Context<IMessage> = IncomingMessageContext>(params: ISendAudioParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.upload("sendAudio", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.upload("sendAudio", params));
 	}
 
 	/**
@@ -147,7 +147,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendDocument<T extends Context<IMessage> = IncomingMessageContext>(params: ISendDocumentParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.upload("sendDocument", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.upload("sendDocument", params));
 	}
 
 	/**
@@ -161,7 +161,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendVideo<T extends Context<IMessage> = IncomingMessageContext>(params: ISendVideoParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.upload("sendVideo", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.upload("sendVideo", params));
 	}
 
 	/**
@@ -175,7 +175,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendAnimation<T extends Context<IMessage> = IncomingMessageContext>(params: ISendAnimationParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.upload("sendAnimation", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.upload("sendAnimation", params));
 	}
 
 	/**
@@ -190,7 +190,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendVoice<T extends Context<IMessage> = IncomingMessageContext>(params: ISendVoiceParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.upload("sendVoice", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.upload("sendVoice", params));
 	}
 
 	/**
@@ -204,7 +204,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendVideoNote<T extends Context<IMessage> = IncomingMessageContext>(params: ISendVideoNoteParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.upload("sendVideoNote", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.upload("sendVideoNote", params));
 	}
 
 	/**
@@ -218,7 +218,7 @@ export class API {
 	 * @returns A Promise that resolves with an array of messages that were sent.
 	 */
 	public async sendMediaGroup<T extends Context<IMessage> = IncomingMessageContext>(params: ISendMediaGroupParams): Promise<T[]> {
-		return this.client.contexts.getContext("IncomingMessage", await this.upload("sendMediaGroup", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.upload("sendMediaGroup", params));
 	}
 
 	/**
@@ -231,7 +231,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendLocation<T extends Context<IMessage> = IncomingMessageContext>(params: ISendLocationParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.call("sendLocation", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.call("sendLocation", params));
 	}
 
 	/**
@@ -246,7 +246,7 @@ export class API {
 	 */
 	public async editMessageLiveLocation<T extends Context<IMessage> = IncomingMessageContext>(params: IEditMessageLiveLocationParams): Promise<T | true> {
 		const response = await this.call("editMessageLiveLocation", params);
-		return typeof response === "object" ? this.client.contexts.getContext("IncomingMessage", response) : response;
+		return typeof response === "object" ? this.client.modules.contexts.getContext("IncomingMessage", response) : response;
 	}
 
 	/**
@@ -260,7 +260,7 @@ export class API {
 	 */
 	public async stopMessageLiveLocation<T extends Context<IMessage> = IncomingMessageContext>(params: IStopMessageLiveLocationParams): Promise<T | true> {
 		const response = await this.upload("stopMessageLiveLocation", params);
-		return typeof response === "object" ? this.client.contexts.getContext("IncomingMessage", response) : response;
+		return typeof response === "object" ? this.client.modules.contexts.getContext("IncomingMessage", response) : response;
 	}
 
 	/**
@@ -273,7 +273,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendVenue<T extends Context<IMessage> = IncomingMessageContext>(params: ISendVenueParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.call("sendVenue", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.call("sendVenue", params));
 	}
 
 	/**
@@ -286,7 +286,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendContact<T extends Context<IMessage> = IncomingMessageContext>(params: ISendContactParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.call("sendContact", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.call("sendContact", params));
 	}
 
 	/**
@@ -299,7 +299,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendPoll<T extends Context<IMessage> = IncomingMessageContext>(params: ISendPollParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.call("sendPoll", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.call("sendPoll", params));
 	}
 
 	/**
@@ -312,7 +312,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendDice<T extends Context<IMessage> = IncomingMessageContext>(params: ISendDiceParams): Promise<T> {
-		return this.client.contexts.getContext("IncomingMessage", await this.call("sendDice", params));
+		return this.client.modules.contexts.getContext("IncomingMessage", await this.call("sendDice", params));
 	}
 
 	/**
@@ -409,7 +409,7 @@ export class API {
 	 * @returns {Promise<ChatInviteLinkContext>} A promise that resolves to a ChatInviteLinkContext object representing the new invite link.
 	 */
 	public async createChatInviteLink<T extends Context<IChatInviteLink> = ChatInviteLinkContext>(params: ICreateChatInviteLinkParams): Promise<T> {
-		return this.client.contexts.getContext("ChatInviteLink", await this.call("createChatInviteLink", params));
+		return this.client.modules.contexts.getContext("ChatInviteLink", await this.call("createChatInviteLink", params));
 	}
 
 	/**
@@ -421,7 +421,7 @@ export class API {
 	 * @returns {Promise<ChatInviteLinkContext>} A promise that resolves to a ChatInviteLinkContext object representing the edited chat invite link.
 	 */
 	public async editChatInviteLink<T extends Context<IChatInviteLink> = ChatInviteLinkContext>(params: IEditChatInviteLinkParams): Promise<T> {
-		return this.client.contexts.getContext("ChatInviteLink", await this.call("editChatInviteLink", params));
+		return this.client.modules.contexts.getContext("ChatInviteLink", await this.call("editChatInviteLink", params));
 	}
 
 	/**
@@ -434,7 +434,7 @@ export class API {
 	 * @returns {Promise<ChatInviteLinkContext>} A promise that resolves to a ChatInviteLinkContext object representing the revoked link.
 	 */
 	public async revokeChatInviteLink<T extends Context<IChatInviteLink> = ChatInviteLinkContext>(params: IRevokeChatInviteLinkParams): Promise<T> {
-		return this.client.contexts.getContext("ChatInviteLink", await this.call("revokeChatInviteLink", params));
+		return this.client.modules.contexts.getContext("ChatInviteLink", await this.call("revokeChatInviteLink", params));
 	}
 
 	/**
@@ -516,7 +516,7 @@ export class API {
 	 * @return {Promise} Returns a Chat object on success.
 	 */
 	public async getChat<T extends Context<IChat> = DetailedChatContext>(params: IGetChatParams): Promise<T> {
-		return this.client.contexts.getContext("DetailedChat", await this.call("getChat", params));
+		return this.client.modules.contexts.getContext("DetailedChat", await this.call("getChat", params));
 	}
 
 	/**
@@ -527,7 +527,7 @@ export class API {
 	 * @returns {Promise<ChatMemberContext[]>} A promise that resolves with an array of ChatMemberContext objects containing information about the requested chat members.
 	 */
 	public async getChatAdministrators<T extends Context<IChatMember> = ChatMemberContext>(params: IGetChatAdministratorsParams): Promise<T[]> {
-		return (await this.call("getChatAdministrators", params)).map((member: IChatMember) => this.client.contexts.getContext("ChatMember", member));
+		return (await this.call("getChatAdministrators", params)).map((member: IChatMember) => this.client.modules.contexts.getContext("ChatMember", member));
 	}
 
 	/**
@@ -546,7 +546,7 @@ export class API {
 	 * @returns {Promise<ChatMemberContext>} A promise that resolves with a ChatMemberContext object containing information about the requested chat member.
 	 */
 	public async getChatMember<T extends Context<IChatMember> = ChatMemberContext>(params: IGetChatMemberParams): Promise<T> {
-		return this.client.contexts.getContext("ChatMember", await this.call("getChatMember", params));
+		return this.client.modules.contexts.getContext("ChatMember", await this.call("getChatMember", params));
 	}
 
 	/**
@@ -579,7 +579,7 @@ export class API {
 	 * @returns {Promise} - Returns information about the created topic as a ForumTopic object.
 	 */
 	public async createForumTopic<T extends Context<IForumTopic & any> = ForumTopicContext>(params: ICreateForumTopicParams): Promise<T> {
-		return this.client.contexts.getContext("ForumTopic", Object.assign(await this.call("createForumTopic", params), { chat_id: params.chat_id }));
+		return this.client.modules.contexts.getContext("ForumTopic", Object.assign(await this.call("createForumTopic", params), { chat_id: params.chat_id }));
 	}
 
 	/**
@@ -679,7 +679,7 @@ export class API {
 	 * If commands aren't set, an empty list is returned.
 	 */
 	public async getMyCommands<T extends Context<IBotCommand> | object = IBotCommand>(params?: IGetMyCommandsParams): Promise<T[]> {
-		return (await this.call("getMyCommands", params)).map((command: IBotCommand) => this.client.contexts.getContext("BotCommand", command));
+		return (await this.call("getMyCommands", params)).map((command: IBotCommand) => this.client.modules.contexts.getContext("BotCommand", command));
 	}
 
 	/**
@@ -694,7 +694,7 @@ export class API {
 	 * Returns MenuButton on success.
 	 */
 	public async getChatMenuButton<T extends Context<IMenuButton> | object = IMenuButton>(params?: IGetChatMenuButtonParams): Promise<T> {
-		return this.client.contexts.getContext("MenuButton", await this.call("getChatMenuButton", params));
+		return this.client.modules.contexts.getContext("MenuButton", await this.call("getChatMenuButton", params));
 	}
 
 	/**
@@ -723,7 +723,7 @@ export class API {
 	 */
 	public async editMessageText<T extends Context<IMessage> = IncomingMessageContext>(params: IEditMessageTextParams): Promise<T | true> {
 		const response = await this.upload("editMessageText", params);
-		return typeof response === "object" ? this.client.contexts.getContext("IncomingMessage", response) : response;
+		return typeof response === "object" ? this.client.modules.contexts.getContext("IncomingMessage", response) : response;
 	}
 
 	/**
@@ -737,7 +737,7 @@ export class API {
 	 */
 	public async editMessageCaption<T extends Context<IMessage> = IncomingMessageContext>(params: IEditMessageCaptionParams): Promise<T | true> {
 		const response = await this.upload("editMessageCaption", params);
-		return typeof response === "object" ? this.client.contexts.getContext("IncomingMessage", response) : response;
+		return typeof response === "object" ? this.client.modules.contexts.getContext("IncomingMessage", response) : response;
 	}
 
 	/**
@@ -753,7 +753,7 @@ export class API {
 	 */
 	public async editMessageMedia<T extends Context<IMessage> = IncomingMessageContext>(params: IEditMessageMediaParams): Promise<T | true> {
 		const response = await this.upload("editMessageMedia", params);
-		return typeof response === "object" ? this.client.contexts.getContext("IncomingMessage", response) : response;
+		return typeof response === "object" ? this.client.modules.contexts.getContext("IncomingMessage", response) : response;
 	}
 
 	/**
@@ -767,7 +767,7 @@ export class API {
 	 */
 	public async editMessageReplyMarkup<T extends Context<IMessage> = IncomingMessageContext>(params: IEditMessageReplyMarkupParams): Promise<T | true> {
 		const response = await this.upload("editMessageReplyMarkup", params);
-		return typeof response === "object" ? this.client.contexts.getContext("IncomingMessage", response) : response;
+		return typeof response === "object" ? this.client.modules.contexts.getContext("IncomingMessage", response) : response;
 	}
 
 	/**
@@ -780,7 +780,7 @@ export class API {
 	 * @returns {Promise<PollContext>} A Promise that resolves to a PollContext object representing the stopped poll.
 	 */
 	public async stopPoll<T extends Context<IPoll> = PollContext>(params: IStopPollParams): Promise<T> {
-		return this.client.contexts.getContext("Poll", await this.call("stopPoll", params));
+		return this.client.modules.contexts.getContext("Poll", await this.call("stopPoll", params));
 	}
 
 	/**
@@ -810,7 +810,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendSticker<T extends Context<IMessage> = IncomingMessageContext>(params: ISendStickerParams): Promise<T> {
-		return this.client.contexts.getContext("Message", await this.upload("sendSticker", params));
+		return this.client.modules.contexts.getContext("Message", await this.upload("sendSticker", params));
 	}
 
 	/**
@@ -893,7 +893,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendInvoice<T extends Context<IMessage> = IncomingMessageContext>(params: ISendInvoiceParams): Promise<T> {
-		return this.client.contexts.getContext("Message", await this.call("sendInvoice", params));
+		return this.client.modules.contexts.getContext("Message", await this.call("sendInvoice", params));
 	}
 
 	/**
@@ -936,7 +936,7 @@ export class API {
 	 * @returns The sent message on success.
 	 */
 	public async sendGame<T extends Context<IMessage> = IncomingMessageContext>(params: ISendGameParams): Promise<T> {
-		return this.client.contexts.getContext("Message", await this.call("sendGame", params));
+		return this.client.modules.contexts.getContext("Message", await this.call("sendGame", params));
 	}
 
 	/**
@@ -949,7 +949,7 @@ export class API {
 	 */
 	public async setGameScore<T extends Context<IMessage> = IncomingMessageContext>(params: ISetGameScoreParams): Promise<T | true> {
 		const response = await this.call("setGameScore", params);
-		return typeof response === "object" ? this.client.contexts.getContext("IncomingMessage", response) : response;
+		return typeof response === "object" ? this.client.modules.contexts.getContext("IncomingMessage", response) : response;
 	}
 
 	/**

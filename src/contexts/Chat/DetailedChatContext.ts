@@ -4,13 +4,13 @@ import { ChatContext } from "./";
 
 export class DetailedChatContext extends ChatContext {
 	/* The chat's photo object. */
-	public photo = this._source.photo && this._client.contexts.getContext<IChatPhoto>("ChatPhoto", this._source.photo);
+	public photo = this._source.photo && this._client.modules.contexts.getContext<IChatPhoto>("ChatPhoto", this._source.photo);
 	/** The chat's pinned message object. */
-	public pinnedMessage = this._source.pinned_message && this._client.contexts.getContext<MessageContext>("Message", this._source.pinned_message);
+	public pinnedMessage = this._source.pinned_message && this._client.modules.contexts.getContext<MessageContext>("Message", this._source.pinned_message);
 	/** The chat's permissions object. */
-	public permissions = this._source.permissions && this._client.contexts.getContext<IChatPermissions>("ChatPermissions", this._source.permissions);
+	public permissions = this._source.permissions && this._client.modules.contexts.getContext<IChatPermissions>("ChatPermissions", this._source.permissions);
 	/** The chat's location object. */
-	public location = this._source.location && this._client.contexts.getContext<IChatLocation>("ChatLocation", this._source.location);
+	public location = this._source.location && this._client.modules.contexts.getContext<IChatLocation>("ChatLocation", this._source.location);
 
 	/** An array of usernames of the chat's currently active users. */
 	public get activeUsers() { return this._source.active_usernames }

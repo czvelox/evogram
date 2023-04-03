@@ -4,9 +4,9 @@ import { ChatContext, UserContext } from "../";
 
 export class ForwardMessageContext extends Context<IForwardMessage> {
 	/** The user who sent the forwarded message, if available. */
-	public user = this._source.forward_from && this._client.contexts.getContext<UserContext>("User", this._source.forward_from);
+	public user = this._source.forward_from && this._client.modules.contexts.getContext<UserContext>("User", this._source.forward_from);
 	/** The chat from which the forwarded message was sent, if available. */
-	public chat = this._source.forward_from_chat && this._client.contexts.getContext<ChatContext>("Chat", this._source.forward_from_chat);
+	public chat = this._source.forward_from_chat && this._client.modules.contexts.getContext<ChatContext>("Chat", this._source.forward_from_chat);
 	/** The date and time at which the message was forwarded, if available. */
 	public date = this._source.forward_date && new Date(this._source.forward_date);
 

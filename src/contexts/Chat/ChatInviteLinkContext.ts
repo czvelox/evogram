@@ -4,7 +4,7 @@ import { UserContext } from "../";
 
 export class ChatInviteLinkContext extends Context<IChatInviteLink & { chat_id: number | string }> {
 	/** The user who created the chat invite link. */
-	public creator = this._client.contexts.getContext<UserContext>("User", this._source.creator);
+	public creator = this._client.modules.contexts.getContext<UserContext>("User", this._source.creator);
 	/** The date and time when the chat invite link will expire, or `undefined` if it does not expire. */
 	public expireDate = (this._source.expire_date && new Date(this._source.expire_date)) || undefined;
 

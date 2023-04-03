@@ -1,7 +1,6 @@
 import { API } from "./API";
 import { BotContext } from "./contexts";
-import { CommandManager } from "./modules/commands/CommandManager";
-import { ContextManager } from "./modules/context";
+import { Modules } from "./modules/";
 import { Updates } from "./updates";
 
 /** Options for initializing the Evogram */
@@ -12,26 +11,20 @@ export interface IEvogramParams {
 /** A class representing an instance of the Telegram bot. */
 export class Evogram {
 	/** An instance of the Telegram Bot API client. */
-	public api: API;
+	public api = new API(this);
 	/** An instance of the Telegram updates client. */
-	public updates: Updates;
-	/** An instance of the ContextManager for managing and manipulating contexts. */
-	public contexts: ContextManager;
+	public updates = new Updates(this);
+	/** A collection of modules for this bot */
+	public modules = new Modules(this);
+
 	/** Context of a running bot */
 	public bot?: BotContext;
-	/** Command manager for adding and running bot commands  */
-	public commandManager: CommandManager;
  
 	/**
 	 * Create a new instance of the Evogram class.
 	 * @param {IEvogramParams} options - The options for initializing the instance.
 	 */
 	constructor(public options: IEvogramParams) {
-		this.api = new API(this);
-		this.updates = new Updates(this);
-		this.contexts = new ContextManager(this);
-		this.commandManager = new CommandManager(this);
-
 		this.checkTokenValidity();
 	}
 

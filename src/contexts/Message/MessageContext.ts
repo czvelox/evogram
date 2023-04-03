@@ -7,28 +7,28 @@ export class MessageContext extends Context<IMessage> {
 	public source = this._source;
 	public client = this._client;
 
-	public user = this._source.from && this._client.contexts.getContext<UserContext>("User", this._source.from);
-	public viaBot = this._source.via_bot && this._client.contexts.getContext<UserContext>("User", this._source.via_bot);
+	public user = this._source.from && this._client.modules.contexts.getContext<UserContext>("User", this._source.from);
+	public viaBot = this._source.via_bot && this._client.modules.contexts.getContext<UserContext>("User", this._source.via_bot);
 
-	public chat = this._client.contexts.getContext<ChatContext>("Chat", this._source.chat);
-	public senderChat = this._source.sender_chat && this._client.contexts.getContext<ChatContext>("Chat", this._source.chat);
+	public chat = this._client.modules.contexts.getContext<ChatContext>("Chat", this._source.chat);
+	public senderChat = this._source.sender_chat && this._client.modules.contexts.getContext<ChatContext>("Chat", this._source.chat);
 
 	public date = new Date(this._source.date);
 	public editDate = this._source.edit_date && new Date(this._source.edit_date);
 
-	public forwardMessage = this._source.forward_date && this._client.contexts.getContext<ForwardMessageContext>("ForwardMessage", { forward_from: this._source.forward_from, forward_from_chat: this._source.forward_from_chat, forward_from_message_id: this._source.forward_from_message_id, forward_signature: this._source.forward_signature, forward_sender_name: this.source.forward_sender_name, forward_date: this._source.forward_date });
-	public replyMessage = this._source.reply_to_message && this._client.contexts.getContext<MessageContext>("Message", this._source.reply_to_message);
+	public forwardMessage = this._source.forward_date && this._client.modules.contexts.getContext<ForwardMessageContext>("ForwardMessage", { forward_from: this._source.forward_from, forward_from_chat: this._source.forward_from_chat, forward_from_message_id: this._source.forward_from_message_id, forward_signature: this._source.forward_signature, forward_sender_name: this.source.forward_sender_name, forward_date: this._source.forward_date });
+	public replyMessage = this._source.reply_to_message && this._client.modules.contexts.getContext<MessageContext>("Message", this._source.reply_to_message);
 
-	public location = this._source.location && this._client.contexts.getContext<LocationContext>("Location", this._source.location);
-	public venue = this._source.venue && this._client.contexts.getContext<VenueContext>("Venue", this._source.venue);
+	public location = this._source.location && this._client.modules.contexts.getContext<LocationContext>("Location", this._source.location);
+	public venue = this._source.venue && this._client.modules.contexts.getContext<VenueContext>("Venue", this._source.venue);
 
-	public entities = this._source.entities || this._source.caption_entities && this._client.contexts.getContext<IMessageEntity>("MessageEntity", this._source.entities || this._source.caption_entities);
-	public poll = this._source.poll && this._client.contexts.getContext<PollContext>("Poll", this._source.poll);
+	public entities = this._source.entities || this._source.caption_entities && this._client.modules.contexts.getContext<IMessageEntity>("MessageEntity", this._source.entities || this._source.caption_entities);
+	public poll = this._source.poll && this._client.modules.contexts.getContext<PollContext>("Poll", this._source.poll);
 
 	public forumTopic = ["forum_topic_created", "forum_topic_edited", "forum_topic_closed", "forum_topic_reopened", "general_forum_topic_hidden", "general_forum_topic_unhidden"].map(x => {
 		//@ts-ignore
 		const data = this._source[x];
-		if(data) return this._client.contexts.getContext<ForumTopicContext>("ForumTopic", Object.assign(data, { 
+		if(data) return this._client.modules.contexts.getContext<ForumTopicContext>("ForumTopic", Object.assign(data, { 
 			chat_id: this._source.chat.id, 
 			message_thread_id: this._source.message_thread_id, 
 			updateType: x 
@@ -36,8 +36,8 @@ export class MessageContext extends Context<IMessage> {
 	}).find(x => x);
 
 	public update = {
-		new_chat_members: this._source.new_chat_members?.map(user => this._client.contexts.getContext<UserContext>("User", user)),
-		left_chat_member: this._source.left_chat_member && this._client.contexts.getContext<UserContext>("User", this._source.left_chat_member),
+		new_chat_members: this._source.new_chat_members?.map(user => this._client.modules.contexts.getContext<UserContext>("User", user)),
+		left_chat_member: this._source.left_chat_member && this._client.modules.contexts.getContext<UserContext>("User", this._source.left_chat_member),
 		new_chat_title: this._source.new_chat_title,
 		new_chat_photo: this._source.new_chat_photo,
 		delete_chat_photo: this._source.delete_chat_photo,

@@ -6,13 +6,13 @@ export class ShippingQueryContext extends Context<IShippingQuery> {
 	public client = this._client;
 
 	/** The user who sent the shipping query */
-	public user = this._client.contexts.getContext<UserContext>("User", this._source.from);
+	public user = this.client.modules.contexts.getContext<UserContext>("User", this._source.from);
 	/** The unique identifier for the shipping query */
 	public get id() { return this._source.id }
 	/** The invoice payload associated with the shipping query */
 	public get payload() { return this._source.invoice_payload }
 	/** The shipping address associated with the shipping query */
-	public get shippingAddress() { return this._client.contexts.getContext<IShippingAddress>("ShippingAddress", this._source.shipping_address) }
+	public get shippingAddress() { return this.client.modules.contexts.getContext<IShippingAddress>("ShippingAddress", this._source.shipping_address) }
 
 	
     /**
