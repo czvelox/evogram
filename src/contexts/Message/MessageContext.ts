@@ -1,7 +1,7 @@
 import type { IChatActionType, IForwardMessageParams, IMessage, IMessageEntity, IPinChatMessageParams, ISendMessageParams, IUnpinChatMessageParams } from "../../interfaces";
 import { Context } from "../../modules/context";
-import { ChatContext, UserContext, VenueContext, LocationContext, ForwardMessageContext, PollContext, ForumTopicContext } from "../";
-import { IncomingMessageContext } from "./";
+import { ChatContext, UserContext, VenueContext, LocationContext, ForwardMessageContext, PollContext, ForumTopicContext } from "..";
+import { IncomingMessageContext } from ".";
 
 export class MessageContext extends Context<IMessage> {
 	public source = this._source;
@@ -99,7 +99,7 @@ export class MessageContext extends Context<IMessage> {
 		if(params && !params.text) params.permissions = text;
 		else if(!params) params = { text };
 
-		return this._client.api.sendMessage(Object.assign({ chat_id: this.source.chat.id, message_thread_id: this.source.message_thread_id, text }, params));
+		return this._client.api.sendMessage(Object.assign({ chat_id: this.source.chat.id, message_thread_id: this._source.is_topic_message ? this.source.message_thread_id : undefined, text }, params));
 	}
 
 	/** Replies to the current message. */
@@ -116,7 +116,7 @@ export class MessageContext extends Context<IMessage> {
 
 	/** Forwards the current message to a specified chat. */
 	public forward<T extends Context<IMessage> = IncomingMessageContext>(chat_id: string | number, params?: Partial<IForwardMessageParams>) {
-		return this._client.api.forwardMessage<T>(Object.assign({ message_thread_id: this.source.message_thread_id, from_chat_id: this.source.chat.id, message_id: this.source.message_id, chat_id }, params));
+		return this._client.api.forwardMessage<T>(Object.assign({ message_thread_id: this._source.is_topic_message ? this.source.message_thread_id : undefined, from_chat_id: this.source.chat.id, message_id: this.source.message_id, chat_id }, params));
 	}
 
 	/** Pin the message in the chat. */
@@ -131,6 +131,24 @@ export class MessageContext extends Context<IMessage> {
 
 	/** Send the action in the chat.  */
 	public sendAction(action: IChatActionType) {
-		return this._client.api.sendChatAction({ chat_id: this.source.chat.id, message_thread_id: this.source.message_thread_id, action });
+		return this._client.api.sendChatAction({ chat_id: this.source.chat.id, message_thread_id: this._source.is_topic_message ? this.source.message_thread_id : undefined, action });
+	}
+
+	/**
+	 * Asks a question to the user and waits for a response.
+	 * @template T - The context type. Default is IncomingMessageContext.
+	 * @param {string | { text: string } & Partial<ISendMessageParams>} text - The text of the message to be sent, or an object containing the text and other options.
+	 * @param {(message: MessageContext) => void} callback - The function to run once the user responds to the question.
+	 * @returns {Promise<T>} - A promise that resolves with the context of the user's response.
+	 * @throws {Error} - If there is no user id in the source object.
+	 */
+	public question<T extends Context<IMessage> = IncomingMessageContext>(text: string, callback: (message: MessageContext) => any): Promise<T>;
+	public question<T extends Context<IMessage> = IncomingMessageContext>(params: { text: string } & Partial<ISendMessageParams>, callback: (message: MessageContext) => any): Promise<T>;
+	public question(text: string | { text: string } & Partial<ISendMessageParams>, callback: (message: MessageContext) => any) {
+		if(!this._source.from?.id) throw new Error("User ID not found.");
+
+		this._client.modules.questions.addQuestion(this._source.from?.id, callback);
+		//@ts-ignore
+		return this.send(text);
 	}
 }
