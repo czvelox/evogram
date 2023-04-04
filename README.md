@@ -19,7 +19,7 @@ npm install evogram
 Once you have installed the Evogram package, you can start writing code to build your bot. Here is an example of a simple bot using Evogram:
 ```js
 const { Evogram } = require('evogram');
-const client = new Evogram({ token: "YOUR_TOKEN" });
+const client = new Evogram("YOUR_TOKEN");
 
 client.updates.on("message", (message) => {
     message.send(message.text || "Sorry, I can only repeat the text.");
