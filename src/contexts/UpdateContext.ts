@@ -20,7 +20,8 @@ export class UpdateContext extends Context<IUpdate> {
 		this._source.poll_answer && "poll_answer" ||
 		this._source.my_chat_member && "my_chat_member" ||
 		this._source.chat_member && "chat_member" ||
-		this._source.chat_join_request && "chat_join_request";
+		this._source.chat_join_request && "chat_join_request" ||
+		this._source.chosen_inline_result && "chosen_inline_result";
 
 	/** The context for the message in the update, if there is one. */
 	public message = this._source.message && this._client.modules.contexts.getContext("Message", this._source.message);

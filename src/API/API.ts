@@ -990,7 +990,7 @@ export class API {
 		if(!upload && params) params = this.getCustomizedParams(method, params);
 
 		const response = await axios.post(`${this.url}/${method}`, params)
-			.catch(error => { throw new TelegramError(error.response.data, { method, params }) });
+			.catch(error => { throw new TelegramError(error.response?.data, { method, params }) });
 		return response.data.result;
 	}
 }

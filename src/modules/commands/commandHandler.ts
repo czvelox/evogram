@@ -1,10 +1,10 @@
 import { MessageContext, UserMessageContext } from "../../contexts";
 
 export async function commandsHandler(message: MessageContext) {
-	if(message.isAnswer || !message.user) return;
+	if(message.isAnswer) return;
 	
-	const command = message.client.modules.commands.getCommand(message as UserMessageContext);
-	if(!command) return;
+	const command = message.client.modules.commands.getCommand(message);
+	if(!command || !message.user?.id) return;
 
 	try {
 		if(command.params?.args) {

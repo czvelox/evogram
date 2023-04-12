@@ -94,6 +94,8 @@ export class MessageContext extends Context<IMessage> {
 		return match[1];
 	}
 
+	public isAnswer = this._source.from && Boolean(this.client.modules.questions.getQuestion(this._source.from.id, false))
+
 	/**
 	 * Sends a message to the chat.
 	 * 
@@ -105,8 +107,8 @@ export class MessageContext extends Context<IMessage> {
 	public send<T extends Context<IMessage> = IncomingMessageContext>(text: string, params?: Partial<ISendMessageParams>): Promise<T>;
 	public send<T extends Context<IMessage> = IncomingMessageContext>(params: { text: string } & Partial<ISendMessageParams>): Promise<T>;
 	public send(text: any, params?: any) {
-		if(params && !params.text) params.permissions = text;
-		else if(!params) params = { text };
+		if(params && !params.text) params.text = text;
+		else if(!params) params = typeof text === "string" ? { text } : text;
 
 		return this._client.api.sendMessage(Object.assign({ chat_id: this.source.chat.id, message_thread_id: this._source.is_topic_message ? this.source.message_thread_id : undefined, text }, params));
 	}

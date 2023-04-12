@@ -17,7 +17,7 @@ export class UserContext extends Context<IUser & { chat_id?: number | string }> 
 	/** Returns whether the user is a premium user. */
 	public get isPremium() { return this._source.is_premium }
 	/** Returns the user's language code and country. */
-	public get language() { return this._source.language_code && { code: this._source.language_code, country: getCountryWithCode(this._source.language_code) } }
+	public get language() { return this._source.language_code ? { code: this._source.language_code, country: getCountryWithCode(this._source.language_code) } : undefined }
 
 
 	/** Returns the user's appeal, which is either their username or full name. */

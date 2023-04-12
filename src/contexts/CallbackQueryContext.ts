@@ -1,6 +1,6 @@
 import type { IAnswerCallbackQueryParams, ICallbackQuery } from "../interfaces";
 import { Context } from "../modules/context";
-import { UserContext } from "./";
+import { MessageContext, UserContext } from "./";
 
 export class CallbackQueryContext extends Context<ICallbackQuery> {
 	public client = this._client;
@@ -8,7 +8,7 @@ export class CallbackQueryContext extends Context<ICallbackQuery> {
 	/** The user who triggered the callback query. */
 	public user = this.client.modules.contexts.getContext<UserContext>("User", this._source.from);
 	/** The message context associated with the callback query, if available. */
-	public message = this._source.message && this.client.modules.contexts.getContext("Message", this._source.from);
+	public message = this._source.message && this.client.modules.contexts.getContext<MessageContext>("Message", this._source.message);
 
 	/** The ID of the callback query. */
 	public get id() { return this._source.id }
