@@ -20,11 +20,7 @@ export class Evogram {
 	/** Context of a running bot */
 	public bot?: BotContext;
  
-	/**
-	 * Create a new instance of the Evogram class.
-	 * @param {IEvogramParams} options - The options for initializing the instance.
-	 */
-	constructor(public options: IEvogramParams) {
+	constructor(public token: string) {
 		this.checkTokenValidity();
 	}
 

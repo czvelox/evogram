@@ -9,7 +9,7 @@ export class API {
 	private url: string;
 
 	constructor(private client: Evogram) {
-		this.url = "https://api.telegram.org/bot" + client.options.token;
+		this.url = "https://api.telegram.org/bot" + client.token;
 	}
 
 	/**
