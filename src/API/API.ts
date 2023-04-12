@@ -7,6 +7,11 @@ import { Context } from "../modules/context";
 
 export class API {
 	private url: string;
+	private defaultParams: Record<string, any> = {};
+
+	public setDefaultParams(method: string, params: Record<string, any>) {
+		this.defaultParams[method] = params;
+	}
 
 	constructor(private client: Evogram) {
 		this.url = "https://api.telegram.org/bot" + client.token;
@@ -961,15 +966,18 @@ export class API {
 
 	public async upload(method: string, params: Record<string, any>) {
 		const formdata = new FormData();
-		for (let [key, value] of Object.entries(params)) {
+		for (let [key, value] of Object.entries(Object.assign(params, this.defaultParams[method]))) {
 			if(Buffer.isBuffer(value)) formdata.append(key, new Blob([value]), "file.data");
+			//@ts-ignore
 			else formdata.append(key, value);
 		}
 
-		return this.call(method, formdata);
+		return this.call(method, formdata, true);
 	}
 
-	public async call(method: string, params?: object): Promise<any> {
+	public async call(method: string, params?: object, upload?: boolean): Promise<any> {
+		if(!upload && params) params = Object.assign(params, this.defaultParams[method]);
+
 		const response = await axios.post(`${this.url}/${method}`, params)
 			.catch(error => { throw new TelegramError(error.response.data, { method, params }) });
 		return response.data.result;
