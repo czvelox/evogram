@@ -1,6 +1,6 @@
 import type { ISetMyCommandsParams } from "../../interfaces";
 import { Evogram } from "../../Client";
-import { MessageContext } from "../../contexts";
+import { UserMessageContext } from "../../contexts";
 import { Command } from "./Command";
 import { commandsHandler } from "./commandHandler";
 import { getPathsFromDirectory } from "../../utils";
@@ -59,7 +59,7 @@ export class CommandManager {
 	 * @param {MessageContext} message The message context to search for
 	 * @returns {(Command | undefined)} Returns the command or undefined if not found
 	 */
-	public getCommand(message: MessageContext): Command | undefined {
+	public getCommand(message: UserMessageContext): Command | undefined {
 		return this.commands.find(command => {
 			let status = false;
 			command.isExecutable(message, () => status = true);
@@ -67,13 +67,12 @@ export class CommandManager {
 		});
 	}
 
-	public async getCommandArguments(chat_id: number, user_id: number, command: Command): Promise<{ [x: string]: MessageContext } | undefined> {
-		const args = command.params?.args;
-		if(!args) return;
+	public async getCommandArguments(chat_id: number, user_id: number, command: Command): Promise<Record<string, UserMessageContext> | undefined> {
+		if(!command.params?.args) return;
 
 		try {
 			//@ts-ignore
-			return Object(...await Promise.all(args.map((arg) => 
+			return Object(...await Promise.all(command.params?.args.map((arg) => 
 				new Promise(async (resolve, reject) => {
 					const incomingMessage = await this.client.api.sendMessage({ chat_id, text: arg.text });
 					this.client.modules.questions.addQuestion(user_id, (msg) => {

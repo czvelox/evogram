@@ -1,7 +1,7 @@
 import { Evogram } from "../../Client";
-import { MessageContext } from "../../contexts";
+import { UserMessageContext } from "../../contexts";
 
-export type ICommandArguments = { [x: string]: MessageContext };
+export type ICommandArguments = Record<string, UserMessageContext>;
 /** Defines the parameters of a command. */
 export interface ICommandParams {
 	/** Text of the command; 1-32 characters. Can contain only lowercase English letters, digits and underscores. */
@@ -36,7 +36,7 @@ export abstract class Command {
 	 * @param {()=>void} next - Function call to execute the next action.
 	 * @returns {any}
 	 */
-	public isExecutable(message: MessageContext, next: () => void): any {
+	public isExecutable(message: UserMessageContext, next: () => void): any {
 		if(message.hasCommand === this.params.name) next();
 	}
 
@@ -46,9 +46,9 @@ export abstract class Command {
 	 * @returns {any}
 	 * @abstract
 	 */
-	public abstract execute(message: MessageContext, args?: ICommandArguments): any;
+	public abstract execute(message: UserMessageContext, args?: ICommandArguments): any;
 
-	public onError(message: MessageContext, error: any) {
+	public onError(message: UserMessageContext, error: any) {
 		throw error;
 	}
 }
