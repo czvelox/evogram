@@ -84,6 +84,15 @@ export class MessageContext extends Context<IMessage> {
 	public get isAutomaticForward() { return this._source.is_automatic_forward }
 
 
+	/** 
+	 * Checks whether the incoming message to the bot has a recognized command.
+	 * @returns Returns the matched command from the message, or undefined if no match was found.
+	 */
+	public get hasCommand() {
+		const match = this._source.text?.match(/^\/(\w+)(@[\w]+)?$/);
+		if(!match || (match[2] && match[2] !== this._client.bot?.username)) return;
+		return match[1];
+	}
 
 	/**
 	 * Sends a message to the chat.

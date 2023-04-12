@@ -37,10 +37,7 @@ export abstract class Command {
 	 * @returns {any}
 	 */
 	public isExecutable(message: MessageContext, next: () => void): any {
-		if (this.params && message.text) {
-			if([`/${this.params.name}`, `/${this.params.name}@${this.client.bot?.username}`].includes(message.text))
-					return next();
-		}
+		if(message.hasCommand === this.params.name) next();
 	}
 
 	/**
