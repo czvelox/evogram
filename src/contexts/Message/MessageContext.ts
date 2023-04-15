@@ -115,7 +115,10 @@ export class MessageContext extends Context<IMessage> {
 	public reply<T extends Context<IMessage> = IncomingMessageContext>(text: string, params?: Partial<ISendMessageParams>): Promise<T>;
 	public reply<T extends Context<IMessage> = IncomingMessageContext>(params: { text: string } & Partial<ISendMessageParams>): Promise<T>;
 	public reply(text: any, params?: any) {
-		return this.send(text, Object.assign({ reply_to_message_id: this.id }, params));
+		if(typeof text === "string") Object.assign(params || {}, { text });
+		else params = text;
+
+		return this.send(Object.assign({ reply_to_message_id: this.id }, params));
 	}
 
 	/** Deletes the current message. */
