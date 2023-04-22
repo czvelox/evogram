@@ -4,6 +4,7 @@ import { TelegramError } from "./TelegramError";
 import { IAddStickerToSetParams, IAnswerCallbackQueryParams, IAnswerInlineQueryParams, IAnswerPreCheckoutQueryParams, IAnswerShippingQueryParams, IAnswerWebAppQueryParams, IApproveChatJoinRequestParams, IBanChatMemberParams, IBanChatSenderChatParams, IBotCommand, IChat, IChatAdministratorRights, IChatInviteLink, IChatMember, ICloseForumTopicParams, ICloseGeneralForumTopicParams, ICopyMessageParams, ICreateChatInviteLinkParams, ICreateForumTopicParams, ICreateInvoiceLinkParams, ICreateNewStickerSetParams, IDeclineChatJoinRequestParams, IDeleteChatPhotoParams, IDeleteChatStickerSetParams, IDeleteForumTopicParams, IDeleteMessageParams, IDeleteMyCommandsParams, IDeleteStickerFromSetParams, IDeleteWebhookParams, IEditChatInviteLinkParams, IEditForumTopicParams, IEditGeneralForumTopicParams, IEditMessageCaptionParams, IEditMessageLiveLocationParams, IEditMessageMediaParams, IEditMessageReplyMarkupParams, IEditMessageTextParams, IExportChatInviteLinkParams, IFile, IForumTopic, IForwardMessageParams, IGameHighScore, IGetChatAdministratorsParams, IGetChatMemberCountParams, IGetChatMemberParams, IGetChatMenuButtonParams, IGetChatParams, IGetCustomEmojiStickersParams, IGetFileParams, IGetForumTopicIconStickersParams, IGetGameHighScoresParams, IGetMyCommandsParams, IGetMyDefaultAdministratorRightsParams, IGetStickerSetParams, IGetUpdatesParams, IGetUserProfilePhotosParams, IHideGeneralForumTopicParams, ILeaveChatParams, IMenuButton, IMessage, IMessageId, IPinChatMessageParams, IPoll, IPromoteChatMemberParams, IReopenForumTopicParams, IReopenGeneralForumTopicParams, IRestrictChatMemberParams, IRevokeChatInviteLinkParams, ISendAnimationParams, ISendAudioParams, ISendChatActionParams, ISendContactParams, ISendDiceParams, ISendDocumentParams, ISendGameParams, ISendInvoiceParams, ISendLocationParams, ISendMediaGroupParams, ISendMessageParams, ISendPhotoParams, ISendPollParams, ISendStickerParams, ISendVenueParams, ISendVideoNoteParams, ISendVideoParams, ISendVoiceParams, ISentWebAppMessage, ISetChatAdministratorCustomTitleParams, ISetChatDescriptionParams, ISetChatMenuButtonParams, ISetChatPermissionsParams, ISetChatPhotoParams, ISetChatStickerSetParams, ISetChatTitleParams, ISetGameScoreParams, ISetMyCommandsParams, ISetMyDefaultAdministratorRightsParams, ISetPassportDataErrorsParams, ISetStickerPositionInSetParams, ISetStickerSetThumbParams, ISetWebhookParams, ISticker, IStickerSet, IStopMessageLiveLocationParams, IStopPollParams, IUnbanChatMemberParams, IUnbanChatSenderChatParams, IUnhideGeneralForumTopicParams, IUnpinAllChatMessagesParams, IUnpinAllForumTopicMessagesParams, IUnpinChatMessageParams, IUpdate, IUploadStickerFileParams, IUser, IUserProfilePhotos, IWebhookInfo } from "../interfaces";
 import { BotContext, ChatInviteLinkContext, ChatMemberContext, DetailedChatContext, ForumTopicContext, IncomingMessageContext, PollContext, UpdateContext, UserContext } from "../contexts";
 import { Context } from "../modules/context";
+import { removeParseModeErrors } from "../utils";
 
 export class API {
 	private url: string;
@@ -964,9 +965,19 @@ export class API {
 		return this.call("getGameHighScores", params);
 	}
 
+
+	private getCustomizedParams(method: string, params: Record<string, any>) {
+		params = Object.assign(params, this.defaultParams[method]);
+		if(params.parse_mode) params[params.text ? "text" : "caption"] = removeParseModeErrors(params.text || params.caption, params.parse_mode);
+
+		return params;
+	}
+
 	public async upload(method: string, params: Record<string, any>) {
+		params = this.getCustomizedParams(method, params);
+		
 		const formdata = new FormData();
-		for (let [key, value] of Object.entries(Object.assign(params, this.defaultParams[method]))) {
+		for (let [key, value] of Object.entries(params)) {
 			if(Buffer.isBuffer(value)) formdata.append(key, new Blob([value]), "file.data");
 			//@ts-ignore
 			else formdata.append(key, value);
@@ -976,7 +987,7 @@ export class API {
 	}
 
 	public async call(method: string, params?: object, upload?: boolean): Promise<any> {
-		if(!upload && params) params = Object.assign(params, this.defaultParams[method]);
+		if(!upload && params) params = this.getCustomizedParams(method, params);
 
 		const response = await axios.post(`${this.url}/${method}`, params)
 			.catch(error => { throw new TelegramError(error.response.data, { method, params }) });
