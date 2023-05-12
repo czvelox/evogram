@@ -1,54 +1,24 @@
-import { Evogram } from "../../Client";
+import type { ICommandParams, ICommandExecuteData } from "../../interfaces";
 import { UserMessageContext } from "../../contexts";
 
-export type ICommandArguments = Record<string, UserMessageContext>;
-/** Defines the parameters of a command. */
-export interface ICommandParams {
-	/** Text of the command; 1-32 characters. Can contain only lowercase English letters, digits and underscores. */
-	name: string,
-	args?: {
-		/** Argument name */
-		name: string,
-		/** Text sent to request an argument */
-		text: string,
-		/** Deletes the message requesting arguments when a reply is received */
-		deleteQuestionMessage?: boolean,
-		/** Deletes a reply message when it is received */
-		deleteAnswerMessage?: boolean
-	}[]
-	commandParams?: {
-		/** Description of the command; 1-256 characters. */
-		description: string,
-		/** A two-letter ISO 639-1 language code. If empty, commands will be applied to all users from the given scope, for whose language there are no dedicated commands */
-		language_code?: string
-	}[]
-}
-
 export abstract class Command {
-	constructor(private client: Evogram) {}
-
-	/** Returns an object with the parameters of a command. */
-	public abstract params: ICommandParams;
+	constructor(public params: ICommandParams) {}
 
 	/**
 	 * Checks if a command is executable based on an incoming message.
-	 * @param {MessageContext} message - The incoming message.
-	 * @param {()=>void} next - Function call to execute the next action.
-	 * @returns {any}
+	 * @param message - The incoming message.
 	 */
-	public isExecutable(message: UserMessageContext, next: () => void): any {
-		if(message.hasCommand === this.params.name) next();
+	public isExecutable(message: UserMessageContext): boolean {
+		return message.hasCommand === this.params.name;
 	}
 
 	/**
 	 * Executes a command based on an incoming message.
-	 * @param {MessageContext} message - The incoming message.
-	 * @returns {any}
-	 * @abstract
+	 * @param message - The incoming message.
 	 */
-	public abstract execute(message: UserMessageContext, args?: ICommandArguments): any;
+	public abstract execute(message: UserMessageContext, data: ICommandExecuteData): any;
 
-	public onError(message: UserMessageContext, error: any) {
+	public onError(message: UserMessageContext, error: any): any {
 		throw error;
 	}
 }

@@ -89,7 +89,7 @@ export class MessageContext extends Context<IMessage> {
 	 * @returns Returns the matched command from the message, or undefined if no match was found.
 	 */
 	public get hasCommand() {
-		const match = this._source.text?.match(/^\/(\w+)(@[\w]+)?$/);
+		const match = this._source.text?.match(/^\/(\w+)(@[\w]+)?.*?$/);
 		if(!match || (match[2] && match[2] !== this._client.bot?.username)) return;
 		return match[1];
 	}

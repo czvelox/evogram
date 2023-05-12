@@ -3,55 +3,32 @@ import { Evogram } from "../../Client";
 import { UserMessageContext } from "../../contexts";
 import { Command } from "./Command";
 import { commandsHandler } from "./commandHandler";
-import { getPathsFromDirectory } from "../../utils";
 
 export class CommandManager {
 	constructor(private client: Evogram) {
 		client.updates.on("message", commandsHandler);
+		setTimeout(() => this.setBotCommands, 10000);
 	}
 
-	/** Map of commands stored by name */
-	public commands: Command[] = [];
-	private timeoutId: ReturnType<typeof setTimeout> | null = null;
+	public static commands: Command[] = [];
 
-	/**
-	 * Adds a new command to the list.
-	 * @param {Command} command The command to add
-	 * @returns {this} Returns the command manager with the added command
-	 */
-	public addCommand(command: Command): this {
-	 	this.commands.push(command);
+	/** Sets the bot commands for the client. */
+	public setBotCommands() {
+		const commands: ISetMyCommandsParams[] = [];
+		// Iterate through all the commands in the CommandManager.
+		for(const command of CommandManager.commands) 
+			// If a command has a description...
+			if(command.params.description)
+				// Iterate through each language and text pair in the command's description.
+				for(const [, { text, language }] of command.params.description.entries()) 
+					// If there's already a command set for the current language...
+					commands.find(x => x.language_code === language) ? 
+						// Push the current command to that language's command list.
+						commands.find(x => x.language_code === language)?.commands.push({ command: command.params.name, description: text }) :
+						// Otherwise, create a new object for that language with the current command.
+						commands.push({ language_code: language, commands: [{ command: command.params.name, description: text }] });
 
-		// Clear previous timeout if there is one
-		if (this.timeoutId) clearTimeout(this.timeoutId);
-
-		// Timeout to wait for the end of adding commands
-		this.timeoutId = setTimeout(() => {
-			// Array with commands in ISetMyCommandsParams format for registration
-			const commands: ISetMyCommandsParams[] = [];
-			for(const command of this.commands) 
-				if(command.params?.commandParams)
-					for(const params of command.params?.commandParams || []) 
-						commands.find(x => x.language_code === params.language_code) ? 
-							commands.find(x => x.language_code === params.language_code)?.commands.push({ command: command.params.name, description: params.description }) :
-							commands.push({ language_code: params.language_code, commands: [{ command: command.params.name, description: params.description }] });
-
-			for(const item of commands) this.client.api.setMyCommands(item);
-			this.timeoutId = null;
-		}, 1500);
-
-	  	return this;
-	}
-
-	/**
-	 * Asynchronously imports classes from specified typescript and javascript files in the specified directory and adds Commands to the CommandManager.
-	 * @param {string} directory - The directory path for the files containing commands.
-	 */
-	public async autoImport(directory: string) {
-		for(const path of getPathsFromDirectory(directory, ["ts", "js"])) {
-			const command = await import(path);
-			if(command?.default?.prototype?.__proto__?.constructor?.name === "Command") this.addCommand(new (command.default)(this.client))
-		}
+		for(const item of commands) this.client.api.setMyCommands(item);
 	}
 
 	/**
@@ -59,31 +36,8 @@ export class CommandManager {
 	 * @param {MessageContext} message The message context to search for
 	 * @returns {(Command | undefined)} Returns the command or undefined if not found
 	 */
-	public getCommand(message: UserMessageContext): Command | undefined {
-		return this.commands.find(command => {
-			let status = false;
-			command.isExecutable(message, () => status = true);
-			if(status) return command;
-		});
-	}
-
-	public async getCommandArguments(chat_id: number, user_id: number, command: Command): Promise<Record<string, UserMessageContext> | undefined> {
-		if(!command.params?.args) return;
-
-		try {
-			//@ts-ignore
-			return Object(...await Promise.all(command.params?.args.map((arg) => 
-				new Promise(async (resolve, reject) => {
-					const incomingMessage = await this.client.api.sendMessage({ chat_id, text: arg.text });
-					this.client.modules.questions.addQuestion(user_id, (msg) => {
-						if(arg.deleteQuestionMessage) incomingMessage.delete();
-						if(arg.deleteAnswerMessage) msg.delete();
-
-						resolve({ [arg.name]: msg });
-					})
-					setTimeout(reject, 120000);
-				})
-			)));
-		} catch { return undefined }
+	public static getCommand(message: UserMessageContext): Command | undefined {
+		for(const command of CommandManager.commands)
+			if(command.isExecutable(message)) return command;
 	}
 }

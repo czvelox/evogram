@@ -8,5 +8,8 @@
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "declaration": true,
-  }
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+  },
+  "exclude": ["./examples"]
 }

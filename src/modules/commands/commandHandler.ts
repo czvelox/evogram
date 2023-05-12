@@ -1,17 +1,20 @@
 import { MessageContext, UserMessageContext } from "../../contexts";
+import { CommandManager } from "./CommandManager";
+import { getCommandArguments } from "./getCommandAgruments";
 
-export async function commandsHandler(message: MessageContext) {
-	if(message.isAnswer) return;
-	
-	const command = message.client.modules.commands.getCommand(message);
+export async function commandsHandler(event: MessageContext) {
+	if(event.isAnswer || !event.user) return;
+	const message = event as UserMessageContext;
+
+	const command = CommandManager.getCommand(message);
 	if(!command || !message.user?.id) return;
 
 	try {
 		if(command.params?.args) {
-			const args = await message.client.modules.commands.getCommandArguments(message.chat.id, message.user.id, command);
-			await command.execute(message as UserMessageContext, args)
-		} else await command.execute(message as UserMessageContext);
+			const args = await getCommandArguments(message, command);
+			await command.execute(message, { args })
+		} else await command.execute(message, {});
 	} catch (error: any) {
-		command.onError(message as UserMessageContext, error);
+		command.onError(message, error);
 	}
 }

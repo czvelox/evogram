@@ -48,7 +48,7 @@ export class Updates {
 	 * @param {UpdateContext} update Update to be processed
 	 */
 	public async onUpdate(update: UpdateContext) {
-		if(!update.name || !this.handlers[update.name]) return;
+		if(!update.name || !this.handlers[update.name]) return console.log(update.name);
 		//@ts-ignore
 		for(const handler of this.handlers[update.name]) handler(update[update.name]);
 	}

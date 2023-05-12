@@ -3,7 +3,6 @@ export function removeParseModeErrors(text: string | undefined, parse_mode: stri
 
 	switch(parse_mode) {
 		case "Markdown":
-		case "MarkdownV2":
 			return removeMarkdownErrors(text);
 	}
 }
