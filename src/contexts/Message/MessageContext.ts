@@ -83,79 +83,52 @@ export class MessageContext extends Context<IMessage> {
 	public get isTopicMessage() { return this._source.is_topic_message }
 	public get isAutomaticForward() { return this._source.is_automatic_forward }
 
-
-	/** 
-	 * Checks whether the incoming message to the bot has a recognized command.
-	 * @returns Returns the matched command from the message, or undefined if no match was found.
-	 */
 	public get hasCommand() {
-		const match = this._source.text?.match(/^\/(\w+)(@[\w]+)?.*?$/);
-		if(!match || (match[2] && match[2] !== this._client.bot?.username)) return;
+		const match = this._source.text?.match(/^\/(\w+)(@[\S]+)?.*?$/);
+		if(!match || (match[2] && match[2] !== "@" + this._client.bot?.username)) return;
 		return match[1];
 	}
 
 	public isAnswer = this._source.from && Boolean(this.client.modules.questions.getQuestion(this._source.from.id, false))
 
-	/**
-	 * Sends a message to the chat.
-	 * 
-	 * @example 
-	 * 	send("Hello, World!")
-	 * 	send("<b>This text is bold</b>", { parse_mode: "HTML" })
-	 * 	send({ text: "Hello, Evogram!" })
-	 */
 	public send<T extends Context<IMessage> = IncomingMessageContext>(text: string, params?: Partial<ISendMessageParams>): Promise<T>;
 	public send<T extends Context<IMessage> = IncomingMessageContext>(params: { text: string } & Partial<ISendMessageParams>): Promise<T>;
 	public send(text: any, params?: any) {
-		if(params && !params.text) params.text = text;
+		if(params && !params.text && typeof text === "string") params.text = text;
 		else if(!params) params = typeof text === "string" ? { text } : text;
 
 		return this._client.api.sendMessage(Object.assign({ chat_id: this.source.chat.id, message_thread_id: this._source.is_topic_message ? this.source.message_thread_id : undefined, text }, params));
 	}
 
-	/** Replies to the current message. */
 	public reply<T extends Context<IMessage> = IncomingMessageContext>(text: string, params?: Partial<ISendMessageParams>): Promise<T>;
 	public reply<T extends Context<IMessage> = IncomingMessageContext>(params: { text: string } & Partial<ISendMessageParams>): Promise<T>;
 	public reply(text: any, params?: any) {
-		if(typeof text === "string") Object.assign(params || {}, { text });
+		if(typeof text === "string") params = Object.assign(params || {}, { text });
 		else params = text;
 
 		return this.send(Object.assign({ reply_to_message_id: this.id }, params));
 	}
 
-	/** Deletes the current message. */
 	public delete() {
 		return this._client.api.deleteMessage({ chat_id: this.source.chat.id, message_id: this.source.message_id });
 	}
 
-	/** Forwards the current message to a specified chat. */
 	public forward<T extends Context<IMessage> = IncomingMessageContext>(chat_id: string | number, params?: Partial<IForwardMessageParams>) {
 		return this._client.api.forwardMessage<T>(Object.assign({ message_thread_id: this._source.is_topic_message ? this.source.message_thread_id : undefined, from_chat_id: this.source.chat.id, message_id: this.source.message_id, chat_id }, params));
 	}
 
-	/** Pin the message in the chat. */
 	public pin(params?: Partial<IPinChatMessageParams>) {
 		return this._client.api.pinChatMessage(Object.assign({ chat_id: this.source.chat.id, message_id: this.source.message_id }, params));
 	}
 
-	/** Unpin the message in the chat. */
 	public unpin(params?: Partial<IUnpinChatMessageParams>) {
 		return this._client.api.unpinChatMessage(Object.assign({ chat_id: this.source.chat.id, message_id: this.source.message_id }, params));
 	}
 
-	/** Send the action in the chat.  */
 	public sendAction(action: IChatActionType) {
 		return this._client.api.sendChatAction({ chat_id: this.source.chat.id, message_thread_id: this._source.is_topic_message ? this.source.message_thread_id : undefined, action });
 	}
 
-	/**
-	 * Asks a question to the user and waits for a response.
-	 * @template T - The context type. Default is IncomingMessageContext.
-	 * @param {string | { text: string } & Partial<ISendMessageParams>} text - The text of the message to be sent, or an object containing the text and other options.
-	 * @param {(message: MessageContext) => void} callback - The function to run once the user responds to the question.
-	 * @returns {Promise<T>} - A promise that resolves with the context of the user's response.
-	 * @throws {Error} - If there is no user id in the source object.
-	 */
 	public question<T extends Context<IMessage> = IncomingMessageContext>(text: string, callback: (message: MessageContext) => any): Promise<T>;
 	public question<T extends Context<IMessage> = IncomingMessageContext>(params: { text: string } & Partial<ISendMessageParams>, callback: (message: MessageContext) => any): Promise<T>;
 	public question(text: string | { text: string } & Partial<ISendMessageParams>, callback: (message: MessageContext) => any) {

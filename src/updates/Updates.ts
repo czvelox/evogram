@@ -3,14 +3,14 @@ import { Evogram } from "../Client";
 import { Polling, Webhook } from "../transports";
 import { CallbackQueryContext, ChatJoinRequestContext, ChatMemberUpdatedContext, ChosenInlineResultContext, InlineQueryContext, MessageContext, PollAnswerContext, PollContext, PreCheckoutQueryContext, ShippingQueryContext, UpdateContext } from "../contexts";
 
-export type IUpdateHandler<T> = (data: T) => Promise<void> | void;
+export type IUpdateHandler<T> = (data: T) => any;
 
 export class Updates {
 	public polling: Polling;
 	public webhook: Webhook;
 
 	/** Object with all update handlers */
-	public handlers: { [updateName in IUpdateName]?: ((data: any) => Promise<void> | void)[]} = {}
+	public handlers: { [updateName in IUpdateName]?: IUpdateHandler<any>[]} = {}
 
 	constructor(client: Evogram) {
 		this.polling = new Polling(client, this);
