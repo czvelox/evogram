@@ -4,6 +4,8 @@ export function removeParseModeErrors(text: string | undefined, parse_mode: stri
 	switch(parse_mode) {
 		case "Markdown":
 			return removeMarkdownErrors(text);
+		default:
+			return text;
 	}
 }
 
