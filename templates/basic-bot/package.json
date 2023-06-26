@@ -1,0 +1,26 @@
+{
+  "name": "basic-bot",
+  "version": "1.0.0",
+  "description": "Basic bot on Evogram",
+  "main": "./dist/index.js",
+  "scripts": {
+    "start": "npx ts-node ./src/index.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/czvelox/evogram.git"
+  },
+  "author": "czvelox",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/czvelox/evogram/issues"
+  },
+  "homepage": "https://github.com/czvelox/evogram#readme",
+  "dependencies": {
+    "dotenv": "^16.3.1",
+    "evogram": "^0.5.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.3.1"
+  }
+}

@@ -3,13 +3,12 @@
     "target": "es2016",
     "module": "CommonJS",
     "rootDir": "./src",
-    "outDir": "./lib",
+    "outDir": "./dist",
     "esModuleInterop": true,
     "forceConsistentCasingInFileNames": true,
     "strict": true,
     "declaration": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-  },
-  "exclude": ["./templates"]
+  }
 }
