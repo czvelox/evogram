@@ -1,6 +1,11 @@
+import { API } from './API';
+
 /** Represents the main client for the Evogram framework. */
 export class Evogram {
 	private static readonly TOKEN_REGEX = /^[0-9]+:[a-zA-Z0-9_-]+$/;
+
+	public api = new API(this);
+	public updates = new Updates(this);
 
 	/**
 	 * Creates an instance of the Evogram client.
