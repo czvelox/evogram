@@ -1,0 +1,23 @@
+{
+	"name": "evogram",
+	"version": "1.0.0",
+	"description": "Telegram Bot Framework",
+	"main": "./lib/index.js",
+	"repository": "https://github.com/evogram/evogram.git",
+	"author": "czvelox",
+	"license": "MIT",
+	"scripts": {
+		"build": "tsc"
+	},
+	"dependencies": {
+		"tslib": "^2.6.3"
+	},
+	"devDependencies": {
+		"@eslint/js": "^9.8.0",
+		"@types/node": "^22.5.0",
+		"eslint": "9.x",
+		"globals": "^15.9.0",
+		"prettier": "^3.3.3",
+		"typescript-eslint": "^8.0.0"
+	}
+}
