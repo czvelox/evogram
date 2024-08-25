@@ -1,10 +1,12 @@
 import { API } from './API';
+import { Middleware } from './middleware';
 
 /** Represents the main client for the Evogram framework. */
 export class Evogram {
 	private static readonly TOKEN_REGEX = /^[0-9]+:[a-zA-Z0-9_-]+$/;
 
 	public api = new API(this);
+	public middleware = new Middleware();
 	public updates = new Updates(this);
 
 	/**
