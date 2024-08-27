@@ -14,6 +14,10 @@ export abstract class EventTransport {
 	public abstract stop(): void;
 
 	protected async onUpdate(context: TelegramUpdate) {
-		await this.client.middleware.execute({ client: this.client, ...context });
+		const data = await this.client.middleware.execute({ client: this.client, ...context });
+		if (!data) return;
+
+		//@ts-ignore
+		for (const item of Object.keys(data)) if (Object.keys(this.client.updates.handlers).find((x) => x === item)) for (const handler of this.client.updates.handlers[item]) await handler({ context: data[item], client: this.client });
 	}
 }

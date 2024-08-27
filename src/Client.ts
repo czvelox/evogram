@@ -1,5 +1,6 @@
 import { API } from './API';
 import { Middleware } from './middleware';
+import { Updates } from './updates';
 
 /** Represents the main client for the Evogram framework. */
 export class Evogram {
