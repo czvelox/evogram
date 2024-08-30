@@ -38,7 +38,7 @@ export class Polling extends EventTransport {
 				for (const update of updates) {
 					this.onUpdate(update);
 					// Update the offset parameter to fetch only new updates next time
-					params.offset = update.update_id + 1;
+					params.offset = update.id + 1;
 				}
 			} catch (error) {
 				console.error(`\x1b[31m❌\x1b[0m Error during polling:`, error);

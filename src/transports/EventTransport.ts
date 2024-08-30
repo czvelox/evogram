@@ -1,5 +1,5 @@
-import { TelegramUpdate } from '../../src/types';
 import { Evogram } from '../Client';
+import { ContextManager, UpdateContext } from '../contexts';
 
 export enum EventTransportState {
 	Enabled = 1,
@@ -13,11 +13,15 @@ export abstract class EventTransport {
 	public abstract start(params: any, handle: any): void;
 	public abstract stop(): void;
 
-	protected async onUpdate(context: TelegramUpdate) {
-		const data = await this.client.middleware.execute({ client: this.client, ...context });
+	protected async onUpdate(context: UpdateContext) {
+		if (!context.name) return;
+
+		let data = await this.client.middleware.execute({ client: this.client, ...context.source });
 		if (!data) return;
 
-		//@ts-ignore
-		for (const item of Object.keys(data)) if (Object.keys(this.client.updates.handlers).find((x) => x === item)) for (const handler of this.client.updates.handlers[item]) await handler({ context: data[item], client: this.client });
+		const updateContext = ContextManager.getContext<UpdateContext>('Update', { client: this.client, source: data });
+
+		// @ts-ignore
+		if (Object.keys(this.client.updates.handlers).find((x) => x === updateContext.name)) for (const handler of this.client.updates.handlers[updateContext.name]) await handler({ context: updateContext[updateContext.name], client: this.client });
 	}
 }
