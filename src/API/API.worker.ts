@@ -1,6 +1,6 @@
 import axios from 'axios';
 import fs from 'node:fs';
-import { Evogram } from '..';
+import { ContextManager, Evogram } from '..';
 
 export class ApiWorker {
 	private url: string; // Private variable to store the base URL of the Telegram API
@@ -87,5 +87,10 @@ export class ApiWorker {
 			// Handling errors if any
 			console.error('Error occurred while making API call:', error);
 		}
+	}
+
+	public async getContext(methodName: string, params: Record<string, any>, context: string): Promise<any> {
+		const data = await this.call(methodName, params);
+		return ContextManager.getContext(context, { client: this.client, source: data });
 	}
 }
