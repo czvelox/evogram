@@ -1,6 +1,7 @@
-import { TelegramBusinessConnection, TelegramBusinessMessagesDeleted, TelegramCallbackQuery, TelegramChatBoostRemoved, TelegramChatBoostUpdated, TelegramChatJoinRequest, TelegramChatMemberUpdated, TelegramChosenInlineResult, TelegramInlineQuery, TelegramMessage, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramPoll, TelegramPollAnswer, TelegramPreCheckoutQuery, TelegramShippingQuery, TelegramUpdateType } from '../types';
+import { TelegramBusinessConnection, TelegramBusinessMessagesDeleted, TelegramCallbackQuery, TelegramChatBoostRemoved, TelegramChatBoostUpdated, TelegramChatJoinRequest, TelegramChatMemberUpdated, TelegramChosenInlineResult, TelegramInlineQuery, TelegramMessage, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramPreCheckoutQuery, TelegramShippingQuery, TelegramUpdateType } from '../types';
 import { Evogram } from '../Client';
 import { Polling } from '../transports';
+import { PollAnswerContext, PollContext } from '../contexts/migrated';
 
 export type UpdateHandler<T> = (data: { context: T; client: Evogram }) => any;
 export type UpdateHandlerMap = { [updateName in TelegramUpdateType]?: UpdateHandler<any>[] };
@@ -32,8 +33,8 @@ export class Updates {
 	public on(update: 'callback_query', handler: UpdateHandler<TelegramCallbackQuery>): this;
 	public on(update: 'shipping_query', handler: UpdateHandler<TelegramShippingQuery>): this;
 	public on(update: 'pre_checkout_query', handler: UpdateHandler<TelegramPreCheckoutQuery>): this;
-	public on(update: 'poll', handler: UpdateHandler<TelegramPoll>): this;
-	public on(update: 'poll_answer', handler: UpdateHandler<TelegramPollAnswer>): this;
+	public on(update: 'poll', handler: UpdateHandler<PollContext>): this;
+	public on(update: 'poll_answer', handler: UpdateHandler<PollAnswerContext>): this;
 	public on(update: 'my_chat_member' | 'chat_member', handler: UpdateHandler<TelegramChatMemberUpdated>): this;
 	public on(update: 'chat_join_request', handler: UpdateHandler<TelegramChatJoinRequest>): this;
 	public on(update: 'chat_boost', handler: UpdateHandler<TelegramChatBoostUpdated>): this;

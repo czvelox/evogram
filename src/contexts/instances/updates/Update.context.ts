@@ -1,5 +1,6 @@
 import { TelegramUpdate, TelegramUpdateType } from '../../../types';
 import { Context, ContextD } from '../../core';
+import { PollAnswerContext, PollContext } from '../../migrated';
 
 @ContextD('Update')
 export class UpdateContext extends Context<TelegramUpdate> {
@@ -46,8 +47,8 @@ export class UpdateContext extends Context<TelegramUpdate> {
 	public callbackQuery = this.getContext({ key: 'CallbackQuery', source: this.source.callback_query });
 	public shippingQuery = this.getContext({ key: 'ShippingQuery', source: this.source.shipping_query });
 	public preCheckoutQuery = this.getContext({ key: 'PreCheckoutQuery', source: this.source.pre_checkout_query });
-	public poll = this.getContext({ key: 'Poll', source: this.source.poll });
-	public pollAnswer = this.getContext({ key: 'PollAnswer', source: this.source.poll_answer });
+	public poll = this.getContext<PollContext>({ key: 'Poll', source: this.source.poll });
+	public pollAnswer = this.getContext<PollAnswerContext>({ key: 'PollAnswer', source: this.source.poll_answer });
 	public myChatMember = this.getContext({ key: 'ChatMemberUpdated', source: this.source.my_chat_member });
 	public chatMember = this.getContext({ key: 'ChatMemberUpdated', source: this.source.chat_member });
 	public chatJoinRequest = this.getContext({ key: 'ChatJoinRequest', source: this.source.chat_join_request });
