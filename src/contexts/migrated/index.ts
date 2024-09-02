@@ -1,10 +1,10 @@
-export { UpdateContext } from '../';
+export { UpdateContext } from '../instances/updates';
 
-export { UserContext } from '../';
-export { BotContext } from '../';
+export { UserContext } from '../instances/essence';
+export { BotContext } from '../instances/essence';
 
-export { LocationContext } from '../';
-export { VenueContext } from '../';
+export { LocationContext } from '../instances/location';
+export { VenueContext } from '../instances/location';
 
-export { PollContext } from '../';
-export { PollAnswerContext } from '../';
+export { PollContext } from '../instances/poll';
+export { PollAnswerContext } from '../instances/poll';

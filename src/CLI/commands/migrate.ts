@@ -1,6 +1,6 @@
 //@ts-nocheck
 import { Command } from 'commander';
-import { existsSync, readdirSync, readFileSync, writeFileSync } from 'fs';
+import { existsSync, readdirSync, readFileSync, writeFileSync, copyFileSync } from 'fs';
 import { join, extname } from 'path';
 import { register } from 'ts-node';
 
@@ -13,16 +13,22 @@ export const migrateCommand = new Command('migrate')
 		// Define the migration and generated file paths
 		const migrationPath = path || join(process.cwd(), 'src/contexts');
 		const generatedFilePath = join(process.cwd(), 'node_modules/evogram/lib/contexts/migrated/index.d.ts');
+		const backupFilePath = join(process.cwd(), 'node_modules/evogram/lib/contexts/migrated/index.backup.d.ts');
 
 		// Check if migration path exists
-		if (!existsSync(migrationPath)) console.error(`Error: The directory "${migrationPath}" does not exist.`);
+		if (!existsSync(migrationPath)) return console.error(`Error: The directory "${migrationPath}" does not exist.`);
 
 		// Read TypeScript files from the directory
 		const files = readdirSync(migrationPath).filter((file) => extname(file) === '.ts');
-		if (files.length === 0) console.error(`Error: No TypeScript files found in the directory "${migrationPath}".`);
+		if (files.length === 0) return console.error(`Error: No TypeScript files found in the directory "${migrationPath}".`);
 
 		const generatedImports: Record<string, string> = {};
 		const existingImports = new Set<string>();
+
+		// Backup the existing index.d.ts file
+		if (!existsSync(backupFilePath)) {
+			copyFileSync(generatedFilePath, backupFilePath);
+		} else copyFileSync(backupFilePath, generatedFilePath);
 
 		// Process each TypeScript file
 		for (const file of files) {
@@ -45,32 +51,37 @@ export const migrateCommand = new Command('migrate')
 			}
 		}
 
-		// Update the index.d.ts file
+		// Create or update the index.d.ts file
+		let updatedContent = '';
+
 		if (existsSync(generatedFilePath)) {
 			try {
 				let indexFileContent = readFileSync(generatedFilePath, 'utf-8');
 				const lines = indexFileContent.split('\n');
 
-				const updatedContent = lines
+				updatedContent = lines
 					.map((line) => {
 						// Extract class name from the import line
 						const match = line.match(/export\s+\{\s+(default as )?(\w+)\s+\}/);
 						if (match) {
 							const className = match[2];
-							// Replace line with new import or fallback to "../"
-							if (!existingImports.has(className)) return `export { ${className} } from "../";`;
 							return generatedImports[className] || line;
 						}
 						return line; // Return unchanged line
 					})
 					.join('\n');
-
-				// Write the updated content back to the file
-				writeFileSync(generatedFilePath, updatedContent, 'utf-8');
 			} catch (err) {
-				console.error(`Error reading or writing file: ${generatedFilePath}`, err);
+				console.error(`Error reading file: ${generatedFilePath}`, err);
 			}
 		} else {
-			console.error(`Error: The file "${generatedFilePath}" does not exist.`);
+			updatedContent = Object.values(generatedImports).join('\n');
+		}
+
+		// Write the updated content back to the index.d.ts file
+		try {
+			writeFileSync(generatedFilePath, updatedContent, 'utf-8');
+			console.log(`File "${generatedFilePath}" has been updated successfully.`);
+		} catch (err) {
+			console.error(`Error writing file: ${generatedFilePath}`, err);
 		}
 	});
