@@ -1,7 +1,7 @@
 import { TelegramBusinessConnection, TelegramBusinessMessagesDeleted, TelegramCallbackQuery, TelegramChatBoostRemoved, TelegramChatBoostUpdated, TelegramChatJoinRequest, TelegramChatMemberUpdated, TelegramChosenInlineResult, TelegramInlineQuery, TelegramMessage, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramPreCheckoutQuery, TelegramShippingQuery, TelegramUpdateType } from '../types';
 import { Evogram } from '../Client';
 import { Polling } from '../transports';
-import { PollAnswerContext, PollContext } from '../contexts/migrated';
+import { PollAnswerContext, PollContext, ServiceMessage } from '../contexts/migrated';
 
 export type UpdateHandler<T> = (data: { context: T; client: Evogram }) => any;
 export type UpdateHandlerMap = { [updateName in TelegramUpdateType]?: UpdateHandler<any>[] };
@@ -24,6 +24,7 @@ export class Updates {
 	 * 	});
 	 */
 	public on(update: 'message' | 'edited_message' | 'channel_post' | 'edited_channel_post' | 'business_message' | 'edited_business_message', handler: UpdateHandler<TelegramMessage>): this;
+	public on(update: 'service_message', handler: UpdateHandler<ServiceMessage>): this;
 	public on(update: 'business_connection', handler: UpdateHandler<TelegramBusinessConnection>): this;
 	public on(update: 'deleted_business_messages', handler: UpdateHandler<TelegramBusinessMessagesDeleted>): this;
 	public on(update: 'message_reaction', handler: UpdateHandler<TelegramMessageReactionUpdated>): this;

@@ -1,9 +1,15 @@
 import { TelegramUpdate, TelegramUpdateType } from '../../../types';
-import { Context, ContextD } from '../../core';
+import { Context, ContextD, ContextParams } from '../../core';
 import { PollAnswerContext, PollContext } from '../../migrated';
 
 @ContextD('Update')
 export class UpdateContext extends Context<TelegramUpdate> {
+	constructor(contextParams: ContextParams) {
+		super(contextParams);
+		//@ts-ignore
+		if (this.serviceMessage?.name) this.name = 'service_message';
+	}
+
 	/** The ID of the update. */
 	public id = this.source.update_id;
 	// prettier-ignore
@@ -54,4 +60,6 @@ export class UpdateContext extends Context<TelegramUpdate> {
 	public chatJoinRequest = this.getContext({ key: 'ChatJoinRequest', source: this.source.chat_join_request });
 	public chatBoost = this.getContext({ key: 'ChatBoost', source: this.source.chat_boost });
 	public removedChatBoost = this.getContext({ key: 'RemovedChatBoost', source: this.source.removed_chat_boost });
+
+	public serviceMessage = this.name === 'service_message' && this.getContext({ key: 'ServiceMessage', source: this.source.message });
 }

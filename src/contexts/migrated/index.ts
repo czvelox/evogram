@@ -8,3 +8,5 @@ export { VenueContext } from '../instances/location';
 
 export { PollContext } from '../instances/poll';
 export { PollAnswerContext } from '../instances/poll';
+
+export { ServiceMessage } from '../instances/message';

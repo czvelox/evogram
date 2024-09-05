@@ -1,8 +1,9 @@
 /**
  * Represents the possible types of updates in the Telegram.
  */
-export type TelegramUpdateType = 'message' | 'edited_message' | 'channel_post' | 'edited_channel_post' | 'business_connection' | 'business_message' | 'edited_business_message' | 'deleted_business_messages' | 'message_reaction' | 'message_reaction_count' | 'inline_query' | 'chosen_inline_result' | 'callback_query' | 'shipping_query' | 'pre_checkout_query' | 'poll' | 'poll_answer' | 'my_chat_member' | 'chat_member' | 'chat_join_request' | 'chat_boost' | 'removed_chat_boost';
+export type TelegramUpdateType = 'service_message' | 'message' | 'edited_message' | 'channel_post' | 'edited_channel_post' | 'business_connection' | 'business_message' | 'edited_business_message' | 'deleted_business_messages' | 'message_reaction' | 'message_reaction_count' | 'inline_query' | 'chosen_inline_result' | 'callback_query' | 'shipping_query' | 'pre_checkout_query' | 'poll' | 'poll_answer' | 'my_chat_member' | 'chat_member' | 'chat_join_request' | 'chat_boost' | 'removed_chat_boost';
 
+export type TelegramServiceMessageType = 'boost_added' | 'proximity_alert_triggered' | 'forum_topic_created' | 'forum_topic_edited' | 'forum_topic_closed' | 'forum_topic_reopened' | 'general_forum_topic_hidden' | 'general_forum_topic_unhidden' | 'giveaway_created' | 'giveaway_completed' | 'video_chat_scheduled' | 'video_chat_started' | 'video_chat_ended' | 'video_chat_participants_invited' | 'web_app_data' | 'chat_background_set' | 'delete_chat_photo' | 'group_chat_created' | 'supergroup_chat_created' | 'channel_chat_created' | 'message_auto_delete_timer_changed';
 /**
  * Represents the possible parse modes in Telegram.
  */
