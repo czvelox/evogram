@@ -11,6 +11,8 @@ export { PollAnswerContext } from '../instances/poll';
 
 export { ServiceMessage } from '../instances/message';
 
+export { MessageReplyContext } from '../instances/message';
+
 export { MessageOriginContext } from '../instances/message';
 export { MessageOriginUserContext } from '../instances/message';
 export { MessageOriginHiddenUserContext } from '../instances/message';
