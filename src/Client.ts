@@ -1,4 +1,5 @@
 import { API } from './API';
+import { DatabaseManager } from './database';
 import { Middleware } from './middleware';
 import { Updates } from './updates';
 
@@ -9,6 +10,7 @@ export class Evogram {
 	public api = new API(this);
 	public middleware = new Middleware();
 	public updates = new Updates(this);
+	public database = new DatabaseManager(this.token.split(':')[0] || 'default');
 
 	/**
 	 * Creates an instance of the Evogram client.

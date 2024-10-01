@@ -11,6 +11,8 @@ export class Polling extends EventTransport {
 	 */
 	public async start(params?: TelegramGetUpdatesParams) {
 		console.log(`\x1b[34m❯\x1b[0m Bot has been started! (Polling)`);
+		await this.client.database.init();
+		console.log(`\x1b[34m❯\x1b[0m Database connected!`);
 		this.state = EventTransportState.Enabled;
 		await this.worker(params);
 	}

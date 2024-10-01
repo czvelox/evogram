@@ -8,14 +8,18 @@
 	"license": "MIT",
 	"bin": {
 		"evogram": "./lib/CLI/index.js"
-	},	
+	},
 	"scripts": {
 		"build": "tsc"
 	},
 	"dependencies": {
 		"axios": "^1.7.5",
 		"commander": "^12.1.0",
-		"tslib": "^2.6.3"
+		"sqlite": "^5.1.1",
+		"sqlite3": "^5.1.7",
+		"ts-node": "^10.9.2",
+		"tslib": "^2.6.3",
+		"typescript": "^5.5.4"
 	},
 	"devDependencies": {
 		"@eslint/js": "^9.8.0",
