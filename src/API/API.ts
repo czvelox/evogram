@@ -1,5 +1,5 @@
 import { BotContext, ContextManager, PollContext, TelegramAddStickerToSetParams, TelegramAnswerCallbackQueryParams, TelegramAnswerInlineQueryParams, TelegramAnswerPreCheckoutQueryParams, TelegramAnswerShippingQueryParams, TelegramAnswerWebAppQueryParams, TelegramApproveChatJoinRequestParams, TelegramBanChatMemberParams, TelegramBanChatSenderChatParams, TelegramBotCommand, TelegramBotDescription, TelegramBotName, TelegramBotShortDescription, TelegramBusinessConnection, TelegramChat, TelegramChatAdministratorRights, TelegramChatInviteLink, TelegramChatMember, TelegramCloseForumTopicParams, TelegramCloseGeneralForumTopicParams, TelegramCopyMessageParams, TelegramCopyMessagesParams, TelegramCreateChatInviteLinkParams, TelegramCreateForumTopicParams, TelegramCreateInvoiceLinkParams, TelegramCreateNewStickerSetParams, TelegramDeclineChatJoinRequestParams, TelegramDeleteChatPhotoParams, TelegramDeleteChatStickerSetParams, TelegramDeleteForumTopicParams, TelegramDeleteMessageParams, TelegramDeleteMessagesParams, TelegramDeleteMyCommandsParams, TelegramDeleteStickerFromSetParams, TelegramDeleteStickerSetParams, TelegramDeleteWebhookParams, TelegramEditChatInviteLinkParams, TelegramEditForumTopicParams, TelegramEditGeneralForumTopicParams, TelegramEditMessageCaptionParams, TelegramEditMessageLiveLocationParams, TelegramEditMessageMediaParams, TelegramEditMessageReplyMarkupParams, TelegramEditMessageTextParams, TelegramExportChatInviteLinkParams, TelegramFile, TelegramForumTopic, TelegramForwardMessageParams, TelegramForwardMessagesParams, TelegramGameHighScore, TelegramGetChatAdministratorsParams, TelegramGetChatMemberCountParams, TelegramGetChatMemberParams, TelegramGetChatMenuButtonParams, TelegramGetChatParams, TelegramGetCustomEmojiStickersParams, TelegramGetFileParams, TelegramGetGameHighScoresParams, TelegramGetMyCommandsParams, TelegramGetMyDefaultAdministratorRightsParams, TelegramGetMyDescriptionParams, TelegramGetMyNameParams, TelegramGetMyShortDescriptionParams, TelegramGetStarTransactionsParams, TelegramGetStickerSetParams, TelegramGetUpdatesParams, TelegramGetUserChatBoostsParams, TelegramGetUserProfilePhotosParams, TelegramHideGeneralForumTopicParams, TelegramLeaveChatParams, TelegramMenuButton, TelegramMessageId, TelegramPinChatMessageParams, TelegramPromoteChatMemberParams, TelegramRefundStarPaymentParams, TelegramReopenForumTopicParams, TelegramReopenGeneralForumTopicParams, TelegramReplaceStickerInSetParams, TelegramRestrictChatMemberParams, TelegramRevokeChatInviteLinkParams, TelegramSendAnimationParams, TelegramSendAudioParams, TelegramSendChatActionParams, TelegramSendContactParams, TelegramSendDiceParams, TelegramSendDocumentParams, TelegramSendGameParams, TelegramSendInvoiceParams, TelegramSendLocationParams, TelegramSendMediaGroupParams, TelegramSendMessageParams, TelegramSendPaidMediaParams, TelegramSendPhotoParams, TelegramSendPollParams, TelegramSendStickerParams, TelegramSendVenueParams, TelegramSendVideoNoteParams, TelegramSendVideoParams, TelegramSendVoiceParams, TelegramSentWebAppMessage, TelegramSetChatAdministratorCustomTitleParams, TelegramSetChatDescriptionParams, TelegramSetChatMenuButtonParams, TelegramSetChatPermissionsParams, TelegramSetChatPhotoParams, TelegramSetChatStickerSetParams, TelegramSetChatTitleParams, TelegramSetCustomEmojiStickerSetThumbnailParams, TelegramSetGameScoreParams, TelegramSetMessageReactionParams, TelegramSetMyCommandsParams, TelegramSetMyDefaultAdministratorRightsParams, TelegramSetMyDescriptionParams, TelegramSetMyNameParams, TelegramSetMyShortDescriptionParams, TelegramSetStickerEmojiListParams, TelegramSetStickerKeywordsParams, TelegramSetStickerMaskPositionParams, TelegramSetStickerPositionInSetParams, TelegramSetStickerSetThumbnailParams, TelegramSetStickerSetTitleParams, TelegramSetWebhookParams, TelegramStarTransaction, TelegramStarTransactions, TelegramSticker, TelegramStickerSet, TelegramStopMessageLiveLocationParams, TelegramStopPollParams, TelegramUnbanChatMemberParams, TelegramUnbanChatSenderChatParams, TelegramUnhideGeneralForumTopicParams, TelegramUnpinAllChatMessagesParams, TelegramUnpinAllForumTopicMessagesParams, TelegramUnpinAllGeneralForumTopicMessagesParams, TelegramUnpinChatMessageParams, TelegramUpdate, TelegramUpdateType, TelegramUploadStickerFileParams, TelegramUserProfilePhotos, TelegramWebhookInfo, UpdateContext } from '..';
-import { MessageContext } from '../contexts/migrated';
+import { IncomingMessageContext } from '../contexts/migrated';
 import { ApiWorker } from './API.worker';
 
 /**
@@ -87,8 +87,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendmessage)
 	 */
-	public sendMessage(params: TelegramSendMessageParams): Promise<MessageContext> {
-		return this.getContext('sendMessage', params, "Message");
+	public sendMessage(params: TelegramSendMessageParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendMessage', params, 'IncomingMessage');
 	}
 
 	/**
@@ -96,8 +96,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#forwardmessage)
 	 */
-	public forwardMessage(params: TelegramForwardMessageParams): Promise<MessageContext> {
-		return this.getContext('forwardMessage', params, "Message");
+	public forwardMessage(params: TelegramForwardMessageParams): Promise<IncomingMessageContext> {
+		return this.getContext('forwardMessage', params, 'IncomingMessage');
 	}
 
 	/**
@@ -143,8 +143,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendphoto)
 	 */
-	public sendPhoto(params: TelegramSendPhotoParams): Promise<MessageContext> {
-		return this.getContext('sendPhoto', params, "Message");
+	public sendPhoto(params: TelegramSendPhotoParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendPhoto', params, 'IncomingMessage');
 	}
 
 	/**
@@ -154,8 +154,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendaudio)
 	 */
-	public sendAudio(params: TelegramSendAudioParams): Promise<MessageContext> {
-		return this.getContext('sendAudio', params, "Message");
+	public sendAudio(params: TelegramSendAudioParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendAudio', params, 'IncomingMessage');
 	}
 
 	/**
@@ -163,8 +163,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#senddocument)
 	 */
-	public sendDocument(params: TelegramSendDocumentParams): Promise<MessageContext> {
-		return this.getContext('sendDocument', params, "Message");
+	public sendDocument(params: TelegramSendDocumentParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendDocument', params, 'IncomingMessage');
 	}
 
 	/**
@@ -172,8 +172,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendvideo)
 	 */
-	public sendVideo(params: TelegramSendVideoParams): Promise<MessageContext> {
-		return this.getContext('sendVideo', params, "Message");
+	public sendVideo(params: TelegramSendVideoParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendVideo', params, 'IncomingMessage');
 	}
 
 	/**
@@ -181,8 +181,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendanimation)
 	 */
-	public sendAnimation(params: TelegramSendAnimationParams): Promise<MessageContext> {
-		return this.getContext('sendAnimation', params, "Message");
+	public sendAnimation(params: TelegramSendAnimationParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendAnimation', params, 'IncomingMessage');
 	}
 
 	/**
@@ -191,8 +191,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendvoice)
 	 */
-	public sendVoice(params: TelegramSendVoiceParams): Promise<MessageContext> {
-		return this.getContext('sendVoice', params, "Message");
+	public sendVoice(params: TelegramSendVoiceParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendVoice', params, 'IncomingMessage');
 	}
 
 	/**
@@ -200,8 +200,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendvideonote)
 	 */
-	public sendVideoNote(params: TelegramSendVideoNoteParams): Promise<MessageContext> {
-		return this.getContext('sendVideoNote', params, "Message");
+	public sendVideoNote(params: TelegramSendVideoNoteParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendVideoNote', params, 'IncomingMessage');
 	}
 
 	/**
@@ -210,7 +210,7 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendmediagroup)
 	 */
-	public async sendMediaGroup(params: TelegramSendMediaGroupParams): Promise<MessageContext[]> {
+	public async sendMediaGroup(params: TelegramSendMediaGroupParams): Promise<IncomingMessageContext[]> {
 		const data = await this.call('sendMediaGroup', params);
 		return data.map((update: TelegramUpdate) => ContextManager.getContext('Message', { client: this.client, source: update }));
 	}
@@ -220,8 +220,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendlocation)
 	 */
-	public sendLocation(params: TelegramSendLocationParams): Promise<MessageContext> {
-		return this.getContext('sendLocation', params, "Message");
+	public sendLocation(params: TelegramSendLocationParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendLocation', params, 'IncomingMessage');
 	}
 
 	/**
@@ -229,8 +229,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendvenue)
 	 */
-	public sendVenue(params: TelegramSendVenueParams): Promise<MessageContext> {
-		return this.getContext('sendVenue', params, "Message");
+	public sendVenue(params: TelegramSendVenueParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendVenue', params, 'IncomingMessage');
 	}
 
 	/**
@@ -238,8 +238,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendcontact)
 	 */
-	public sendContact(params: TelegramSendContactParams): Promise<MessageContext> {
-		return this.getContext('sendContact', params, "Message");
+	public sendContact(params: TelegramSendContactParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendContact', params, 'IncomingMessage');
 	}
 
 	/**
@@ -247,8 +247,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendpoll)
 	 */
-	public sendPoll(params: TelegramSendPollParams): Promise<MessageContext> {
-		return this.getContext('sendPoll', params, "Message");
+	public sendPoll(params: TelegramSendPollParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendPoll', params, 'IncomingMessage');
 	}
 
 	/**
@@ -256,8 +256,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#senddice)
 	 */
-	public sendDice(params: TelegramSendDiceParams): Promise<MessageContext> {
-		return this.getContext('sendDice', params, "Message");
+	public sendDice(params: TelegramSendDiceParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendDice', params, 'IncomingMessage');
 	}
 
 	/**
@@ -883,8 +883,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#editmessagetext)
 	 */
-	public editMessageText(params: TelegramEditMessageTextParams): Promise<MessageContext | boolean> {
-		return this.getContext('editMessageText', params, "Message");
+	public editMessageText(params: TelegramEditMessageTextParams): Promise<IncomingMessageContext | boolean> {
+		return this.getContext('editMessageText', params, 'IncomingMessage');
 	}
 
 	/**
@@ -892,8 +892,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#editmessagecaption)
 	 */
-	public editMessageCaption(params: TelegramEditMessageCaptionParams): Promise<MessageContext | boolean> {
-		return this.getContext('editMessageCaption', params, "Message");
+	public editMessageCaption(params: TelegramEditMessageCaptionParams): Promise<IncomingMessageContext | boolean> {
+		return this.getContext('editMessageCaption', params, 'IncomingMessage');
 	}
 
 	/**
@@ -904,8 +904,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#editmessagemedia)
 	 */
-	public editMessageMedia(params: TelegramEditMessageMediaParams): Promise<MessageContext | boolean> {
-		return this.getContext('editMessageMedia', params, "Message");
+	public editMessageMedia(params: TelegramEditMessageMediaParams): Promise<IncomingMessageContext | boolean> {
+		return this.getContext('editMessageMedia', params, 'IncomingMessage');
 	}
 
 	/**
@@ -914,8 +914,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#editmessagelivelocation)
 	 */
-	public editMessageLiveLocation(params: TelegramEditMessageLiveLocationParams): Promise<MessageContext | boolean> {
-		return this.getContext('editMessageLiveLocation', params, "Message");
+	public editMessageLiveLocation(params: TelegramEditMessageLiveLocationParams): Promise<IncomingMessageContext | boolean> {
+		return this.getContext('editMessageLiveLocation', params, 'IncomingMessage');
 	}
 
 	/**
@@ -923,8 +923,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#stopmessagelivelocation)
 	 */
-	public stopMessageLiveLocation(params: TelegramStopMessageLiveLocationParams): Promise<MessageContext | boolean> {
-		return this.getContext('stopMessageLiveLocation', params, "Message");
+	public stopMessageLiveLocation(params: TelegramStopMessageLiveLocationParams): Promise<IncomingMessageContext | boolean> {
+		return this.getContext('stopMessageLiveLocation', params, 'IncomingMessage');
 	}
 
 	/**
@@ -932,8 +932,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#editmessagereplymarkup)
 	 */
-	public editMessageReplyMarkup(params: TelegramEditMessageReplyMarkupParams): Promise<MessageContext | boolean> {
-		return this.getContext('editMessageReplyMarkup', params, "Message");
+	public editMessageReplyMarkup(params: TelegramEditMessageReplyMarkupParams): Promise<IncomingMessageContext | boolean> {
+		return this.getContext('editMessageReplyMarkup', params, 'IncomingMessage');
 	}
 
 	/**
@@ -977,8 +977,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendsticker)
 	 */
-	public sendSticker(params: TelegramSendStickerParams): Promise<MessageContext> {
-		return this.getContext('sendSticker', params, "Message");
+	public sendSticker(params: TelegramSendStickerParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendSticker', params, 'IncomingMessage');
 	}
 
 	/**
@@ -1139,8 +1139,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendinvoice)
 	 */
-	public sendInvoice(params: TelegramSendInvoiceParams): Promise<MessageContext> {
-		return this.getContext('sendInvoice', params, "Message");
+	public sendInvoice(params: TelegramSendInvoiceParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendInvoice', params, 'IncomingMessage');
 	}
 
 	/**
@@ -1191,8 +1191,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendgame)
 	 */
-	public sendGame(params: TelegramSendGameParams): Promise<MessageContext> {
-		return this.getContext('sendGame', params, "Message");
+	public sendGame(params: TelegramSendGameParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendGame', params, 'IncomingMessage');
 	}
 
 	/**
@@ -1201,8 +1201,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#setgamescore)
 	 */
-	public setGameScore(params: TelegramSetGameScoreParams): Promise<MessageContext | boolean> {
-		return this.getContext('setGameScore', params, "Message");
+	public setGameScore(params: TelegramSetGameScoreParams): Promise<IncomingMessageContext | boolean> {
+		return this.getContext('setGameScore', params, 'IncomingMessage');
 	}
 
 	/**
@@ -1242,7 +1242,7 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#sendpaidmedia)
 	 */
-	public sendPaidMedia(params: TelegramSendPaidMediaParams): Promise<MessageContext> {
-		return this.getContext('sendPaidMedia', params, "Message");
+	public sendPaidMedia(params: TelegramSendPaidMediaParams): Promise<IncomingMessageContext> {
+		return this.getContext('sendPaidMedia', params, 'IncomingMessage');
 	}
 }
