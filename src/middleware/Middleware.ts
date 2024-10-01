@@ -20,6 +20,7 @@ export type MiddlewareFunction = (ctx: MiddlewareContext, next: () => Promise<an
  * Manages the registration and execution of middleware functions for the Evogram client.
  */
 export class Middleware {
+	public static middlewares: MiddlewareFunction[] = [];
 	// Array to hold registered middleware functions
 	private middlewares: MiddlewareFunction[] = [];
 
@@ -38,11 +39,12 @@ export class Middleware {
 	 */
 	async execute(context: MiddlewareContext): Promise<MiddlewareContext | null> {
 		let allNextCalled = true;
+		const middlewares = [...this.middlewares, ...Middleware.middlewares];
 
 		// Recursive function to run middleware in order
 		const run = async (index: number) => {
-			if (index < this.middlewares.length) {
-				const middleware = this.middlewares[index];
+			if (index < middlewares.length) {
+				const middleware = middlewares[index];
 				let nextCalled = false;
 
 				try {
