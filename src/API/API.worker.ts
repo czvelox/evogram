@@ -1,6 +1,7 @@
 import axios from 'axios';
 import fs from 'node:fs';
 import { ContextManager, Evogram } from '..';
+import { KeyboardConvert } from '../keyboard';
 
 export class ApiWorker {
 	private url: string; // Private variable to store the base URL of the Telegram API
@@ -73,6 +74,7 @@ export class ApiWorker {
 		// Merging default parameters with provided parameters, if any
 		let mergedParams = { ...this.defaultParams[method], ...params };
 		// Convert reply_markup if it contains inline_keyboard
+		if (mergedParams.reply_markup?.inline_keyboard) mergedParams.reply_markup = await KeyboardConvert(this.client, mergedParams.reply_markup);
 
 		try {
 			// Making the API request using Axios

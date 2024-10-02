@@ -1,3 +1,5 @@
+import { EvogramInlineKeyboardButton } from '../keyboard';
+
 /**
  * Represents the possible types of updates in the Telegram.
  */
@@ -2694,7 +2696,7 @@ export interface TelegramInlineKeyboardMarkup {
 	/**
 	 * Array of button rows, each represented by an Array of InlineKeyboardButton objects.
 	 */
-	inline_keyboard: TelegramInlineKeyboardButton[][];
+	inline_keyboard: EvogramInlineKeyboardButton[][];
 }
 
 /**
