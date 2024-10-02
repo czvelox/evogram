@@ -16,10 +16,10 @@ export abstract class EventTransport {
 	protected async onUpdate(context: UpdateContext) {
 		if (!context.name) return;
 
-		let data = await this.client.middleware.execute({ client: this.client, ...context.source });
+		let data = await this.client.middleware.execute({ client: this.client, ...context.source, state: {} });
 		if (!data) return;
 
-		const updateContext = ContextManager.getContext<UpdateContext>('Update', { client: this.client, source: data });
+		const updateContext = ContextManager.getContext<UpdateContext>('Update', { client: this.client, source: data, state: data.state });
 
 		// @ts-ignore
 		if (Object.keys(this.client.updates.handlers).find((x) => x === updateContext.name)) for (const handler of this.client.updates.handlers[updateContext.name]) await handler({ context: updateContext[updateContext.name], client: this.client });

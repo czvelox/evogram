@@ -7,14 +7,14 @@ import { TelegramUpdate } from '../types';
  */
 export interface MiddlewareContext extends TelegramUpdate {
 	client: Evogram;
-	[key: string]: any; // Allow for any additional properties
+	state: Record<string, any>; // Allow for any additional properties
 }
 
 /**
  * Type definition for middleware functions.
  * It takes a MiddlewareContext and a next function to call the next middleware in the stack.
  */
-export type MiddlewareFunction = (ctx: MiddlewareContext, next: () => Promise<any>) => Promise<any> | void;
+export type MiddlewareFunction = (ctx: MiddlewareContext, next: () => Promise<any>) => Promise<any>;
 
 /**
  * Manages the registration and execution of middleware functions for the Evogram client.
