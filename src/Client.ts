@@ -1,6 +1,7 @@
 import { API } from './API';
 import { DatabaseManager } from './database';
 import { Middleware } from './middleware';
+import { QuestionManager } from './question';
 import { Updates } from './updates';
 
 /** Represents the main client for the Evogram framework. */
@@ -11,6 +12,7 @@ export class Evogram {
 	public middleware = new Middleware();
 	public updates = new Updates(this);
 	public database = new DatabaseManager(this.token.split(':')[0] || 'default');
+	public question = new QuestionManager();
 
 	/**
 	 * Creates an instance of the Evogram client.

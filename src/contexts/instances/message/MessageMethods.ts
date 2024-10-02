@@ -28,6 +28,25 @@ export class MessageMethods extends Context<TelegramMessage> {
 	}
 
 	/**
+	 * Sends a question to the chat.
+	 * @param text The text of the message to send.
+	 * @param callback A function to handle the response.
+	 * @returns A promise that resolves to the message context.
+	 */
+	public sendQuestion(text: string, callback: (response: IncomingMessageContext) => void): Promise<IncomingMessageContext>;
+	/**
+	 * Sends a question to the chat with optional parameters.
+	 * @param params Parameters for sending the message, including chat_id.
+	 * @param callback A function to handle the response.
+	 * @returns A promise that resolves to the message context.
+	 */
+	public sendQuestion(params: Omit<TelegramSendMessageParams, 'chat_id'>, callback: (response: IncomingMessageContext) => void): Promise<IncomingMessageContext>;
+	public async sendQuestion(data: any, callback: any): Promise<IncomingMessageContext> {
+		this.client.question.addQuestion(data.chat_id || this.source.chat.id, callback);
+		return this.send(data);
+	}
+
+	/**
 	 * Replies to the current message with a text message.
 	 *
 	 * @param text The text of the reply message.
