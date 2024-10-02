@@ -8,7 +8,6 @@ export class UpdateContext extends Context<TelegramUpdate> {
 		super(contextParams);
 		//@ts-ignore
 		if (this.serviceMessage?.name) this.name = 'service_message';
-		console.log(this.service_message);
 	}
 
 	/** The ID of the update. */
