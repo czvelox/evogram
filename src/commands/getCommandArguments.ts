@@ -1,34 +1,61 @@
 import { CommandContext, MessageContext } from '../contexts/migrated';
+import { KeyboardManager } from '../keyboard';
 import { Command } from './Command';
 import { CommandArguments } from './command.types';
 
 export async function getCommandArguments(message: CommandContext, command: Command): Promise<any> {
 	if (!command.params?.args || !message.text) return {};
-	const args = command.params.args,
-		argsType = typeof args.method === 'string' ? [args.method] : args.method,
-		text = message.text.replace(/^\/(\S+)\s?/, '');
 
+	const args = command.params.args;
+	const argsType = typeof args.method === 'string' ? [args.method] : args.method;
+	const text = message.text.replace(/^\/(\S+)\s?/, '');
+
+	// Получаем уже сохранённые аргументы из истории
+	const savedArgs = Object.assign(
+		KeyboardManager.redirectHistory.get(message.user.id)?.reduce((acc, item) => {
+			console.log(item);
+			return Object.assign(acc, item.args || {});
+		}, {}) || {},
+		(message.callbackQuery?.data as Record<string, any>) || {}
+	);
+
+	// Определяем, какие аргументы ещё не были запрошены
+	//@ts-ignore
+	const missingArgs = args.value.filter((arg: any) => !savedArgs[typeof arg === 'string' ? arg : arg.name]);
+
+	console.log({ missingArgs, savedArgs });
+
+	// Если все аргументы уже есть, возвращаем их
+	if (missingArgs.length === 0) return savedArgs;
+
+	// Запрашиваем только недостающие аргументы
 	for (const type of argsType) {
 		const splitSpace = text.split(' ');
 
 		if (['parameterized', 'space', 'fulltext'].includes(type) && !message.text.match(/\/\S+(@\S+)?\s\S+/)) continue;
 		else if (type === 'space' && argsType.includes('parameterized') && text.split('--').length > 1) continue;
-		else if (type === 'space' && args.value.length > splitSpace.length) continue;
+		else if (type === 'space' && missingArgs.length > splitSpace.length) continue;
 		else if (type === 'stdin' && message.text.match(/\/\S+(@\S+)?\s\S+/)) continue;
 		else if (type === 'parameterized' && text.split('--').length < 2) continue;
 
 		//@ts-ignore
 		if (type === 'space') {
-			const value = getBySpace(text, args);
-			if (value) return value;
-		} else if (type === 'fulltext') return { [typeof args.value[0] === 'string' ? args.value[0] : args.value[0].name]: text };
-		else if (type === 'parameterized') {
+			const value = getBySpace(text, { ...args, value: missingArgs });
+			if (value) return { ...savedArgs, ...value };
+		} else if (type === 'fulltext') {
+			const fulltextValue = { [typeof missingArgs[0] === 'string' ? missingArgs[0] : missingArgs[0].name]: text };
+			return { ...savedArgs, ...fulltextValue };
+		} else if (type === 'parameterized') {
 			const value = getByParameterized(text);
-			if (value) return value;
+			if (value) return { ...savedArgs, ...value };
 		} else if (type === 'stdin') {
-			return getByQuestion(message, args);
+			const stdinValue = await getByQuestion(message, { ...args, value: missingArgs });
+			console.log({ stdinValue });
+			return { ...savedArgs, ...stdinValue };
 		}
 	}
+
+	return savedArgs;
 }
 
 function getBySpace(text: string, args: CommandArguments) {
@@ -48,25 +75,22 @@ function getByParameterized(text: string) {
 }
 
 async function getByQuestion(message: CommandContext, args: CommandArguments) {
-	console.log(args);
-
 	try {
-		return Object(
-			//@ts-ignore
-			...(await Promise.all(
-				args.value.map(
-					(arg) =>
-						new Promise(async (resolve, reject) => {
-							//@ts-ignore
-							await message.client.api.sendMessage({ chat_id: message.chat.id, text: arg.question || `The "${arg.name || arg}" parameter is required for the command to work. Send the value in the following message` });
-							message.client.question.addQuestion(message.user.id, (msg) => {
-								resolve({ [typeof arg === 'string' ? arg : arg.name]: msg.text });
-							});
+		let object: Record<string, any> = {};
 
-							setTimeout(reject, 120000);
-						})
-				)
-			))
-		);
+		for (const value of args.value) {
+			object[typeof value === 'object' ? value.name : value] = await new Promise(async (resolve, reject) => {
+				//@ts-ignore
+				await message.send({ chat_id: message.chat.id, text: value.question || `The "${value.name || value}" parameter is required for the command to work. Send the value in the following message` });
+				message.client.question.addQuestion(message.user.id, (msg) => {
+					if (message.client.params.keyboardMode) msg.delete();
+					resolve(msg.text);
+				});
+
+				setTimeout(reject, 120000);
+			});
+		}
+
+		return object;
 	} catch {}
 }

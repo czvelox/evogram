@@ -6,6 +6,9 @@ import { Updates } from './updates';
 
 interface EvogramParams {
 	token: string;
+	keyboardMode?: {
+		menuCommand: string;
+	};
 }
 
 /** Represents the main client for the Evogram framework. */
