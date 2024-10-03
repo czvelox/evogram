@@ -23,7 +23,7 @@ export class ApiWorker {
 	 */
 	constructor(protected client: Evogram) {
 		// Setting the base URL for API requests by concatenating the Telegram bot token to the API URL
-		this.url = 'https://api.telegram.org/bot' + client.token;
+		this.url = 'https://api.telegram.org/bot' + client.params.token;
 	}
 
 	private isUpload(params: Record<string, any>) {
