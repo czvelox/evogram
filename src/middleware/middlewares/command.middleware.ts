@@ -2,7 +2,7 @@ import { getCommandArguments } from '../../commands';
 import { CommandManager } from '../../commands/CommandManager';
 import { ContextManager } from '../../contexts';
 import { CallbackQueryContext, CommandContext, MessageContext } from '../../contexts/migrated';
-import { MiddlewareContext, MiddlewareD } from '../../middleware';
+import { MiddlewareContext, MiddlewareD } from '..';
 
 class CommandMiddleware {
 	@MiddlewareD()

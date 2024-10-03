@@ -1,5 +1,5 @@
 import { ContextManager } from '../../contexts';
-import { MiddlewareContext, MiddlewareD } from '../../middleware';
+import { MiddlewareContext, MiddlewareD } from '..';
 
 class QuestionMiddleware {
 	@MiddlewareD()

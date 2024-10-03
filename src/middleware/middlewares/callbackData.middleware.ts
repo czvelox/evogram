@@ -1,7 +1,7 @@
 import { CommandManager } from '../../commands/CommandManager';
 import { CallbackQueryContext, ContextManager } from '../../contexts';
 import { CommandContext } from '../../contexts/migrated';
-import { MiddlewareContext, MiddlewareD } from '../../middleware';
+import { MiddlewareContext, MiddlewareD } from '..';
 
 class CallbackDataMiddleware {
 	@MiddlewareD()
