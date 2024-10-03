@@ -14,7 +14,7 @@ export class API extends ApiWorker {
 	 */
 	public async getUpdates(params?: TelegramGetUpdatesParams): Promise<UpdateContext[]> {
 		const data = await this.call('getUpdates', params);
-		return data.map((update: TelegramUpdate) => ContextManager.getContext('Update', { client: this.client, source: update }));
+		return data?.map((update: TelegramUpdate) => ContextManager.getContext('Update', { client: this.client, source: update })) || [];
 	}
 
 	/**

@@ -53,7 +53,7 @@ export class ApiWorker {
 				formData.append(key, new Blob([value]), 'file.data');
 			} else if (typeof value === 'string' && fs.existsSync(value)) {
 				// Read the file content, create a Blob, and append it to FormData, specifying a default filename "file.data"
-				formData.append(key, new Blob([fs.readFileSync(value)]), 'file.data');
+				formData.append(key, new Blob([fs.readFileSync(value)]), params.filename || 'file.data');
 			} else {
 				// For other types of values, simply append them to FormData
 				formData.append(key, value);
@@ -74,7 +74,7 @@ export class ApiWorker {
 		// Merging default parameters with provided parameters, if any
 		let mergedParams = { ...this.defaultParams[method], ...params };
 		// Convert reply_markup if it contains inline_keyboard
-		if (mergedParams.reply_markup?.inline_keyboard) mergedParams.reply_markup = await KeyboardConvert(this.client, mergedParams.reply_markup);
+		if (mergedParams.reply_markup?.inline_keyboard) mergedParams.reply_markup.inline_keyboard = await KeyboardConvert(this.client, mergedParams.reply_markup.inline_keyboard);
 
 		try {
 			// Making the API request using Axios
@@ -85,9 +85,9 @@ export class ApiWorker {
 			});
 			// Returning the API response data
 			return response.data.result;
-		} catch (error) {
+		} catch (error: any) {
 			// Handling errors if any
-			console.error('Error occurred while making API call:', error);
+			if (error.code !== 'ECONNRESET') console.error('Error occurred while making API call:', error);
 		}
 	}
 
