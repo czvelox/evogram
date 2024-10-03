@@ -1,6 +1,6 @@
 import { EmojiKey, TelegramChatActionType, TelegramForwardMessageParams, TelegramInputFile, TelegramInputPaidMedia, TelegramInputPollOption, TelegramMedia, TelegramMessage, TelegramPinChatMessageParams, TelegramPollOption, TelegramSendAnimationParams, TelegramSendAudioParams, TelegramSendContactParams, TelegramSendDiceParams, TelegramSendDocumentParams, TelegramSendGameParams, TelegramSendInvoiceParams, TelegramSendLocationParams, TelegramSendMediaGroupParams, TelegramSendMessageParams, TelegramSendPaidMediaParams, TelegramSendPhotoParams, TelegramSendPollParams, TelegramSendStickerParams, TelegramSendVenueParams, TelegramSendVideoNoteParams, TelegramSendVideoParams, TelegramSendVoiceParams, TelegramUnpinChatMessageParams } from '../../../types';
 import { Context } from '../../core';
-import { IncomingMessageContext } from './IncomingMessage.context';
+import { MessageContext, IncomingMessageContext } from '../../migrated';
 
 export class MessageMethods extends Context<TelegramMessage> {
 	/**
@@ -33,14 +33,14 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 * @param callback A function to handle the response.
 	 * @returns A promise that resolves to the message context.
 	 */
-	public sendQuestion(text: string, callback: (response: IncomingMessageContext) => void): Promise<IncomingMessageContext>;
+	public sendQuestion(text: string, callback: (message: MessageContext) => void): Promise<IncomingMessageContext>;
 	/**
 	 * Sends a question to the chat with optional parameters.
 	 * @param params Parameters for sending the message, including chat_id.
 	 * @param callback A function to handle the response.
 	 * @returns A promise that resolves to the message context.
 	 */
-	public sendQuestion(params: Omit<TelegramSendMessageParams, 'chat_id'>, callback: (response: IncomingMessageContext) => void): Promise<IncomingMessageContext>;
+	public sendQuestion(params: Omit<TelegramSendMessageParams, 'chat_id'>, callback: (message: MessageContext) => void): Promise<IncomingMessageContext>;
 	public async sendQuestion(data: any, callback: any): Promise<IncomingMessageContext> {
 		this.client.question.addQuestion(data.chat_id || this.source.chat.id, callback);
 		return this.send(data);

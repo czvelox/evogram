@@ -15,6 +15,7 @@ export { ServiceMessage } from '../instances/message';
 export { MessageContext } from '../instances/message';
 export { IncomingMessageContext } from '../instances/message';
 export { MessageReplyContext } from '../instances/message';
+export { CommandContext } from '../instances/commands';
 
 export { MessageOriginContext } from '../instances/message';
 export { MessageOriginUserContext } from '../instances/message';
