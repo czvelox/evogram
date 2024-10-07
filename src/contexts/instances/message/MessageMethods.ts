@@ -18,11 +18,11 @@ export class MessageMethods extends Context<TelegramMessage> {
 	public send(params: Omit<TelegramSendMessageParams, 'chat_id'>): Promise<IncomingMessageContext>;
 	public send(data: any, params?: any): Promise<IncomingMessageContext> {
 		return this.client.api.sendMessage({
-			text: data,
+			text: typeof data === 'string' ? data : data.text,
 			chat_id: this.source.chat.id,
 			business_connection_id: this.source.business_connection_id,
 			message_thread_id: this.source.is_topic_message ? this.source.message_thread_id : undefined,
-			...params,
+			...(params || data),
 		});
 		// TODO: sending a message based on data from the context
 	}
