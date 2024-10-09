@@ -1,3 +1,4 @@
+import { UserDBContext } from '../../../database/instances';
 import { TelegramGetUserProfilePhotosParams, TelegramUser } from '../../../types';
 import { Context, ContextD } from '../../core';
 
@@ -31,6 +32,8 @@ export class UserContext extends Context<TelegramUser> {
 	public getProfilePhotos(params?: Partial<TelegramGetUserProfilePhotosParams>) {
 		return this.client.api.getUserProfilePhotos({ user_id: this.source.id, ...params });
 	}
+
+	public userDB: UserDBContext = this.state.userDB;
 
 	// TODO: implement getting chatMember
 }

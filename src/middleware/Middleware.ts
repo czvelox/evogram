@@ -1,5 +1,6 @@
 import { Evogram } from '../Client';
 import { TelegramUpdate } from '../types';
+import { UserDBMiddleware } from './middlewares/userDB.middleware';
 
 /**
  * Represents the context for middleware functions.
@@ -20,6 +21,10 @@ export type MiddlewareFunction = (ctx: MiddlewareContext, next: () => Promise<an
  * Manages the registration and execution of middleware functions for the Evogram client.
  */
 export class Middleware {
+	constructor() {
+		this.middlewares.push(UserDBMiddleware.middleware);
+	}
+
 	public static middlewares: MiddlewareFunction[] = [];
 	// Array to hold registered middleware functions
 	private middlewares: MiddlewareFunction[] = [];

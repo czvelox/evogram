@@ -1,5 +1,6 @@
 import { API } from './API';
 import { DatabaseManager } from './database';
+import { KeyboardManager } from './keyboard';
 import { Middleware } from './middleware';
 import { QuestionManager } from './question';
 import { Updates } from './updates';
@@ -8,6 +9,7 @@ interface EvogramParams {
 	token: string;
 	keyboardMode?: {
 		menuCommand: string;
+		menuKeyboard: string;
 	};
 }
 
@@ -18,7 +20,8 @@ export class Evogram {
 	public api = new API(this);
 	public middleware = new Middleware();
 	public updates = new Updates(this);
-	public database = new DatabaseManager(this.params.token.split(':')[0] || 'default');
+	public database = new DatabaseManager(this);
+	public keyboard = new KeyboardManager(this);
 	public question = new QuestionManager();
 
 	/**
