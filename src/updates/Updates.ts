@@ -1,7 +1,7 @@
-import { TelegramBusinessConnection, TelegramBusinessMessagesDeleted, TelegramChatBoostRemoved, TelegramChatBoostUpdated, TelegramChatJoinRequest, TelegramChatMemberUpdated, TelegramChosenInlineResult, TelegramInlineQuery, TelegramMessage, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramPreCheckoutQuery, TelegramShippingQuery, TelegramUpdateType } from '../types';
+import { TelegramBusinessConnection, TelegramBusinessMessagesDeleted, TelegramChatBoostRemoved, TelegramChatBoostUpdated, TelegramChatJoinRequest, TelegramChatMemberUpdated, TelegramChosenInlineResult, TelegramInlineQuery, TelegramMessage, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramPreCheckoutQuery, TelegramUpdateType } from '../types';
 import { Evogram } from '../Client';
 import { Polling } from '../transports';
-import { CallbackQueryContext, MessageContext, PollAnswerContext, PollContext, ServiceMessage } from '../contexts/migrated';
+import { CallbackQueryContext, MessageContext, PollAnswerContext, PollContext, ServiceMessage, ShippingQueryContext } from '../contexts/migrated';
 
 export type UpdateHandler<T> = (data: { context: T; client: Evogram }) => any;
 export type UpdateHandlerMap = { [updateName in TelegramUpdateType]?: UpdateHandler<any>[] };
@@ -32,7 +32,7 @@ export class Updates {
 	public on(update: 'inline_query', handler: UpdateHandler<TelegramInlineQuery>): this;
 	public on(update: 'chosen_inline_result', handler: UpdateHandler<TelegramChosenInlineResult>): this;
 	public on(update: 'callback_query', handler: UpdateHandler<CallbackQueryContext>): this;
-	public on(update: 'shipping_query', handler: UpdateHandler<TelegramShippingQuery>): this;
+	public on(update: 'shipping_query', handler: UpdateHandler<ShippingQueryContext>): this;
 	public on(update: 'pre_checkout_query', handler: UpdateHandler<TelegramPreCheckoutQuery>): this;
 	public on(update: 'poll', handler: UpdateHandler<PollContext>): this;
 	public on(update: 'poll_answer', handler: UpdateHandler<PollAnswerContext>): this;
