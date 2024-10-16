@@ -11,7 +11,6 @@ export class UserDBContext extends Context<{ id: number; created_at?: number; is
 
 	constructor(params: any) {
 		super(params);
-		console.log(typeof this.source.json_data);
 
 		try {
 			this.data = (typeof this.source.json_data === 'object' ? JSON.parse(this.source.json_data) : this.source.json_data?.toString()) || undefined;

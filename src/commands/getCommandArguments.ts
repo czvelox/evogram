@@ -13,7 +13,6 @@ export async function getCommandArguments(message: CommandContext, command: Comm
 	// Получаем уже сохранённые аргументы из истории
 	const savedArgs = Object.assign(
 		KeyboardManager.redirectHistory.get(message.user.id)?.reduce((acc, item) => {
-			console.log(item);
 			return Object.assign(acc, item.args || {});
 		}, {}) || {},
 		(message.callbackQuery?.data as Record<string, any>) || {}
@@ -22,8 +21,6 @@ export async function getCommandArguments(message: CommandContext, command: Comm
 	// Определяем, какие аргументы ещё не были запрошены
 	//@ts-ignore
 	const missingArgs = args.value.filter((arg: any) => !savedArgs[typeof arg === 'string' ? arg : arg.name]);
-
-	console.log({ missingArgs, savedArgs });
 
 	// Если все аргументы уже есть, возвращаем их
 	if (missingArgs.length === 0) return savedArgs;
@@ -50,7 +47,6 @@ export async function getCommandArguments(message: CommandContext, command: Comm
 			if (value) return { ...savedArgs, ...value };
 		} else if (type === 'stdin') {
 			const stdinValue = await getByQuestion(message, { ...args, value: missingArgs });
-			console.log({ stdinValue });
 			return { ...savedArgs, ...stdinValue };
 		}
 	}
