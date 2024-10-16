@@ -1,48 +1,52 @@
-import sqlite3 from 'sqlite3';
-import { Database, open } from 'sqlite';
-
+import { DataSource } from 'typeorm';
 import fs from 'fs';
 import path from 'path';
+import { CallbackDataEntity, UserEntity } from './entities';
 import { UserDBContext } from './instances';
 import { ContextManager, Evogram } from '..';
 
 export class DatabaseManager {
-	public db!: Database;
+	public db!: DataSource;
 
 	constructor(public client: Evogram) {}
 
 	async init() {
 		if (this.db) return this;
 
-		const dir = path.join(process.cwd(), '.evogram', this.client.params.token.split(':')[0] || 'default'); // Путь к директории .evogram/id
+		const dir = path.join(process.cwd(), '.evogram', this.client.params.token.split(':')[0] || 'default');
 		if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
-		this.db = await open({ filename: path.join(dir, 'database.db'), driver: sqlite3.cached.Database });
-		await this.createTable();
+		this.db = new DataSource({
+			type: 'sqlite',
+			database: path.join(dir, 'database.db'),
+			entities: [UserEntity, CallbackDataEntity],
+			synchronize: true, // Синхронизация создает таблицы, если их нет
+		});
 
+		await this.db.initialize();
 		return this;
 	}
 
-	private async createTable(): Promise<void> {
-		await this.db.exec(`
-            CREATE TABLE IF NOT EXISTS callback_data (
-                id TEXT PRIMARY KEY,
-                created_at INTEGER,
-                json_data TEXT
-            )
-        `);
-
-		await this.db.exec(`
-			CREATE TABLE IF NOT EXISTS users (
-				id INTEGER PRIMARY KEY,
-				created_at INTEGER,
-				is_owner INTEGER DEFAULT 0,
-				json_data TEXT
-			)
-		`);
+	// Получаем данные пользователя с использованием репозитория TypeORM
+	public async getUser(id: string | number): Promise<UserDBContext> {
+		const userRepository = this.db.getRepository(UserEntity);
+		const user = await userRepository.findOne({ where: { id: Number(id) } });
+		return ContextManager.getContext('UserDB', { client: this.client, source: user });
 	}
 
-	public async getUser(id: string | number): Promise<UserDBContext> {
-		return ContextManager.getContext('UserDB', { client: this.client, source: await this.db.get('SELECT * FROM users WHERE id = ?', Number(id)) });
+	// Пример метода для добавления пользователя
+	public async addUser(userData: Partial<UserEntity>): Promise<UserEntity> {
+		const repository = this.db.getRepository(UserEntity);
+		return await repository.save(repository.create(userData));
+	}
+
+	public async addCallbackData(data: Partial<CallbackDataEntity>) {
+		const repository = this.db.getRepository(CallbackDataEntity);
+		return await repository.save(repository.create(data));
+	}
+
+	public async getCallbackData(id: string) {
+		const repository = this.db.getRepository(CallbackDataEntity);
+		return await repository.findOne({ where: { id } });
 	}
 }

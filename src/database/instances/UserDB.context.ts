@@ -1,25 +1,37 @@
 import { Context, ContextD } from '../../contexts';
+import { UserEntity } from '../entities';
 
-// @ContextD('UserDB')
+@ContextD('UserDB')
 export class UserDBContext extends Context<{ id: number; created_at?: number; is_owner?: number; json_data?: string }> {
 	public id = this.source.id;
-	public createdAt = new Date(this.source.created_at || Date.now());
+	public createdAt = this.source.created_at ? new Date(this.source.created_at) : new Date();
 	public isOwner = Boolean(this.source.is_owner);
 
-	public data = JSON.parse(this.source.json_data || '{}');
+	public data: any;
 
-	public save() {
-		this.client.database.db.run(
-			`
-            INSERT INTO users (id, created_at, is_owner, json_data)
-            VALUES (?, ?, ?, ?)
-            ON CONFLICT(id) DO UPDATE SET
-                id = excluded.id,
-                created_at = excluded.created_at,
-                is_owner = excluded.is_owner,
-                json_data = excluded.json_data;
-        `,
-			[this.id, this.createdAt.getTime(), this.isOwner, JSON.stringify(this.data)]
-		);
+	constructor(params: any) {
+		super(params);
+		console.log(typeof this.source.json_data);
+
+		try {
+			this.data = (typeof this.source.json_data === 'object' ? JSON.parse(this.source.json_data) : this.source.json_data?.toString()) || undefined;
+		} catch {
+			this.data = this.source.json_data;
+		}
+	}
+
+	public async save() {
+		const userRepository = this.client.database.db.getRepository(UserEntity);
+		await userRepository
+			.createQueryBuilder()
+			.insert()
+			.values({
+				id: this.id,
+				created_at: this.createdAt.getTime(),
+				is_owner: Number(this.isOwner),
+				json_data: typeof this.data === 'object' ? JSON.stringify(this.data) : this.data?.toString(),
+			})
+			.orUpdate(['json_data'], ['id'])
+			.execute();
 	}
 }

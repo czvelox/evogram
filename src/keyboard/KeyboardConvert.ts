@@ -14,7 +14,7 @@ export async function KeyboardConvert(client: Evogram, params: EvogramInlineKeyb
 				const json = JSON.stringify({ ...button.json, onClick: button.onClick?.toString(), keyboard: button.keyboard });
 				id = createHash('md5').update(json).digest('hex');
 
-				client.database.db.run(`INSERT INTO callback_data (id, created_at, json_data) VALUES (?, ?, ?)`, [id, Date.now(), json]).catch(() => {});
+				if (!(await client.database.getCallbackData(id))) await client.database.addCallbackData({ id, created_at: Date.now(), json_data: json });
 			}
 
 			if (button.commandName || button.json || button.onlyForUser || button.onClick || button.keyboard || button.redirect) {

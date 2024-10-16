@@ -6,11 +6,13 @@ export class UserDBMiddleware {
 		let userID: number = Object.values(ctx).find((x) => x?.from?.id)?.from.id;
 		if (!userID) return next();
 
-		ctx.state.userDB = new UserDBContext({
-			client: ctx.client,
-			source: (await ctx.client.database.db.get('SELECT * FROM users WHERE id = ?', userID)) || { id: userID },
-			state: ctx.state,
-		});
+		ctx.state.userDB =
+			(await ctx.client.database.getUser(userID)) ||
+			new UserDBContext({
+				client: ctx.client,
+				source: { id: userID },
+				state: ctx.state,
+			});
 
 		await next();
 		ctx.state.userDB.save();

@@ -1,7 +1,7 @@
 import { CommandManager } from '../../commands/CommandManager';
 import { CallbackQueryContext, ContextManager } from '../../contexts';
 import { CommandContext } from '../../contexts/migrated';
-import { MiddlewareD } from '..';
+import { MiddlewareContext, MiddlewareD } from '..';
 import { getCommandArguments } from '../../commands';
 
 class CallbackDataMiddleware {
@@ -12,7 +12,7 @@ class CallbackDataMiddleware {
 
 		if (Number(userID) && Number(userID) !== ctx.callback_query.from.id) return;
 
-		if (id) ctx.callback_query.data = JSON.parse((await ctx.client.database.db.get('SELECT json_data FROM callback_data WHERE id = ?', id))?.json_data || '{}');
+		if (id) ctx.callback_query.data = JSON.parse((await ctx.client.database.getCallbackData(id))?.json_data || '{}');
 		const callbackQuery = new CallbackQueryContext({ client: ctx.client, source: ctx.callback_query, state: ctx.state });
 		// @ts-ignore
 		if (ctx.callback_query.data.onClick) eval(`(${ctx.callback_query.data.onClick})(callbackQuery)`), delete ctx.callback_query.data.onClick;
