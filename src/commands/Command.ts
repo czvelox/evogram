@@ -10,9 +10,10 @@ export abstract class Command {
 	 */
 	public isExecutable(context: CommandContext): boolean {
 		if (context.client.params.keyboardMode?.menuCommand && context.client.params.keyboardMode?.menuCommand !== this.params.name) return false;
+		if (!context.text) return false;
 
-		if (context.text?.startsWith(`/${this.params.name}`)) return true;
-		for (const alias of this.params.aliases || []) if (context.text?.startsWith(alias)) return true;
+		for (const item of [`/${this.params.name}`, ...this.params.aliases || []]) 
+			if (typeof item === 'string' ? (context.text.split(" ")[0] === item) : item.test(context.text)) return true;
 
 		return false;
 	}

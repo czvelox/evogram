@@ -43,7 +43,7 @@ export interface CommandDescription {
 export interface CommandParams {
 	/** Text of the command; 1-32 characters. Can contain only lowercase English letters, digits and underscores. */
 	name: string;
-	aliases?: string[];
+	aliases?: (string | RegExp)[];
 	args?: CommandArguments;
 	description?: CommandDescription[];
 	onlyFromKeyboard?: boolean;
