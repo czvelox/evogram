@@ -77,7 +77,11 @@ async function getByQuestion(message: CommandContext, args: CommandArguments) {
 		for (const value of args.value) {
 			object[typeof value === 'object' ? value.name : value] = await new Promise(async (resolve, reject) => {
 				//@ts-ignore
-				await message.send({ chat_id: message.chat.id, text: value.question || `The "${value.name || value}" parameter is required for the command to work. Send the value in the following message` });
+				await message.send({
+					chat_id: message.chat.id,
+					//@ts-ignore
+					text: value.question || `The "${value.name || value}" parameter is required for the command to work. Send the value in the following message`,
+				});
 				message.client.question.addQuestion(message.user.id, (msg) => {
 					if (message.client.params.keyboardMode) msg.delete();
 					resolve(msg.text);

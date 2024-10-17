@@ -1,4 +1,34 @@
-import { EmojiKey, TelegramChatActionType, TelegramForwardMessageParams, TelegramInputFile, TelegramInputPaidMedia, TelegramInputPollOption, TelegramMedia, TelegramMessage, TelegramPinChatMessageParams, TelegramPollOption, TelegramSendAnimationParams, TelegramSendAudioParams, TelegramSendContactParams, TelegramSendDiceParams, TelegramSendDocumentParams, TelegramSendGameParams, TelegramSendInvoiceParams, TelegramSendLocationParams, TelegramSendMediaGroupParams, TelegramSendMessageParams, TelegramSendPaidMediaParams, TelegramSendPhotoParams, TelegramSendPollParams, TelegramSendStickerParams, TelegramSendVenueParams, TelegramSendVideoNoteParams, TelegramSendVideoParams, TelegramSendVoiceParams, TelegramUnpinChatMessageParams } from '../../../types';
+import {
+	EmojiKey,
+	TelegramChatActionType,
+	TelegramForwardMessageParams,
+	TelegramInputFile,
+	TelegramInputPaidMedia,
+	TelegramInputPollOption,
+	TelegramMedia,
+	TelegramMessage,
+	TelegramPinChatMessageParams,
+	TelegramPollOption,
+	TelegramSendAnimationParams,
+	TelegramSendAudioParams,
+	TelegramSendContactParams,
+	TelegramSendDiceParams,
+	TelegramSendDocumentParams,
+	TelegramSendGameParams,
+	TelegramSendInvoiceParams,
+	TelegramSendLocationParams,
+	TelegramSendMediaGroupParams,
+	TelegramSendMessageParams,
+	TelegramSendPaidMediaParams,
+	TelegramSendPhotoParams,
+	TelegramSendPollParams,
+	TelegramSendStickerParams,
+	TelegramSendVenueParams,
+	TelegramSendVideoNoteParams,
+	TelegramSendVideoParams,
+	TelegramSendVoiceParams,
+	TelegramUnpinChatMessageParams,
+} from '../../../types';
 import { Context } from '../../core';
 import { MessageContext, IncomingMessageContext } from '../../migrated';
 
@@ -121,7 +151,11 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 * @returns A promise that resolves when the chat action has been sent.
 	 */
 	public sendAction(action: TelegramChatActionType) {
-		return this.client.api.sendChatAction({ chat_id: this.source.chat.id, message_thread_id: this.source.is_topic_message ? this.source.message_thread_id : undefined, action });
+		return this.client.api.sendChatAction({
+			chat_id: this.source.chat.id,
+			message_thread_id: this.source.is_topic_message ? this.source.message_thread_id : undefined,
+			action,
+		});
 	}
 
 	/**
@@ -224,7 +258,8 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendAnimation(animation: TelegramInputFile, params?: Partial<TelegramSendAnimationParams>): Promise<IncomingMessageContext>;
 	public sendAnimation(animationOrParams: any, params?: Partial<TelegramSendAnimationParams>): Promise<IncomingMessageContext> {
-		const { animation, ...restParams } = animationOrParams instanceof Object && 'animation' in animationOrParams ? animationOrParams : { animation: animationOrParams, ...params };
+		const { animation, ...restParams } =
+			animationOrParams instanceof Object && 'animation' in animationOrParams ? animationOrParams : { animation: animationOrParams, ...params };
 
 		return this.client.api.sendAnimation({ chat_id: this.source.chat.id, animation, ...restParams });
 	}
@@ -245,7 +280,11 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendMediaGroup(media: TelegramMedia[], params?: Partial<TelegramSendMediaGroupParams>): Promise<IncomingMessageContext[]>;
 	public sendMediaGroup(mediaOrParams: any, params?: Partial<TelegramSendMediaGroupParams>): Promise<IncomingMessageContext[]> {
-		const { media, ...restParams } = Array.isArray(mediaOrParams) ? { media: mediaOrParams, ...params } : mediaOrParams instanceof Object && 'media' in mediaOrParams ? mediaOrParams : { media: [], ...params };
+		const { media, ...restParams } = Array.isArray(mediaOrParams)
+			? { media: mediaOrParams, ...params }
+			: mediaOrParams instanceof Object && 'media' in mediaOrParams
+				? mediaOrParams
+				: { media: [], ...params };
 
 		return this.client.api.sendMediaGroup({ chat_id: this.source.chat.id, media, ...restParams });
 	}
@@ -276,7 +315,12 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendDice(emoji?: EmojiKey, params?: Partial<Omit<TelegramSendDiceParams, 'emoji'>>): Promise<IncomingMessageContext>;
 	public sendDice(emojiOrParams?: EmojiKey | Omit<TelegramSendDiceParams, 'chat_id'>, params?: Partial<TelegramSendDiceParams>): Promise<IncomingMessageContext> {
-		const { emoji, ...restParams } = typeof emojiOrParams === 'string' ? { emoji: emojiOrParams, ...params } : emojiOrParams instanceof Object ? { emoji: emojiOrParams.emoji, ...emojiOrParams } : { emoji: undefined, ...params };
+		const { emoji, ...restParams } =
+			typeof emojiOrParams === 'string'
+				? { emoji: emojiOrParams, ...params }
+				: emojiOrParams instanceof Object
+					? { emoji: emojiOrParams.emoji, ...emojiOrParams }
+					: { emoji: undefined, ...params };
 		//@ts-ignore
 		return this.client.api.sendDice({ chat_id: this.source.chat.id, emoji: emoji ? emojiMap[emoji] : undefined, ...restParams });
 	}
@@ -318,7 +362,15 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendPaidMedia(media: TelegramInputPaidMedia[], star_count: number, params?: Partial<TelegramSendPaidMediaParams>): Promise<IncomingMessageContext>;
 	public sendPaidMedia(mediaOrParams: any, star_count?: number, params?: Partial<TelegramSendPaidMediaParams>): Promise<IncomingMessageContext> {
-		const { media, star_count: paramStarCount, ...restParams } = Array.isArray(mediaOrParams) ? { media: mediaOrParams, ...params } : mediaOrParams instanceof Object && 'media' in mediaOrParams ? mediaOrParams : { media: [], ...params };
+		const {
+			media,
+			star_count: paramStarCount,
+			...restParams
+		} = Array.isArray(mediaOrParams)
+			? { media: mediaOrParams, ...params }
+			: mediaOrParams instanceof Object && 'media' in mediaOrParams
+				? mediaOrParams
+				: { media: [], ...params };
 
 		return this.client.api.sendPaidMedia({ chat_id: this.source.chat.id, media, star_count: star_count ?? paramStarCount, ...restParams });
 	}
@@ -340,7 +392,15 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendPoll(question: string, options: TelegramInputPollOption[], params?: Partial<TelegramSendPollParams>): Promise<IncomingMessageContext>;
 	public sendPoll(questionOrParams: any, options?: TelegramInputPollOption[], params?: Partial<TelegramSendPollParams>): Promise<IncomingMessageContext> {
-		const { question, options: optionsArray, ...restParams } = typeof questionOrParams === 'string' ? { question: questionOrParams, options: options, ...params } : questionOrParams instanceof Object && 'question' in questionOrParams ? questionOrParams : { question: '', options: [], ...params };
+		const {
+			question,
+			options: optionsArray,
+			...restParams
+		} = typeof questionOrParams === 'string'
+			? { question: questionOrParams, options: options, ...params }
+			: questionOrParams instanceof Object && 'question' in questionOrParams
+				? questionOrParams
+				: { question: '', options: [], ...params };
 
 		return this.client.api.sendPoll({ chat_id: this.source.chat.id, question, options: optionsArray, ...restParams });
 	}
@@ -392,7 +452,8 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendVideoNote(video_note: TelegramInputFile, params?: Partial<TelegramSendVideoNoteParams>): Promise<IncomingMessageContext>;
 	public sendVideoNote(paramsOrVideoNote: any, params?: Partial<TelegramSendVideoNoteParams>): Promise<IncomingMessageContext> {
-		const { video_note, ...restParams } = paramsOrVideoNote instanceof Object && 'video_note' in paramsOrVideoNote ? paramsOrVideoNote : { video_note: paramsOrVideoNote, ...params };
+		const { video_note, ...restParams } =
+			paramsOrVideoNote instanceof Object && 'video_note' in paramsOrVideoNote ? paramsOrVideoNote : { video_note: paramsOrVideoNote, ...params };
 
 		return this.client.api.sendVideoNote({ chat_id: this.source.chat.id, video_note, ...restParams });
 	}

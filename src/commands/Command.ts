@@ -12,8 +12,8 @@ export abstract class Command {
 		if (context.client.params.keyboardMode?.menuCommand && context.client.params.keyboardMode?.menuCommand !== this.params.name) return false;
 		if (!context.text) return false;
 
-		for (const item of [`/${this.params.name}`, ...this.params.aliases || []]) 
-			if (typeof item === 'string' ? (context.text.split(" ")[0] === item) : item.test(context.text)) return true;
+		for (const item of [`/${this.params.name}`, ...(this.params.aliases || [])])
+			if (typeof item === 'string' ? context.text.split(' ')[0] === item : item.test(context.text)) return true;
 
 		return false;
 	}

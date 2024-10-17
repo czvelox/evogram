@@ -3,9 +3,53 @@ import { EvogramInlineKeyboardButton } from '../keyboard';
 /**
  * Represents the possible types of updates in the Telegram.
  */
-export type TelegramUpdateType = 'service_message' | 'message' | 'edited_message' | 'channel_post' | 'edited_channel_post' | 'business_connection' | 'business_message' | 'edited_business_message' | 'deleted_business_messages' | 'message_reaction' | 'message_reaction_count' | 'inline_query' | 'chosen_inline_result' | 'callback_query' | 'shipping_query' | 'pre_checkout_query' | 'poll' | 'poll_answer' | 'my_chat_member' | 'chat_member' | 'chat_join_request' | 'chat_boost' | 'removed_chat_boost';
+export type TelegramUpdateType =
+	| 'service_message'
+	| 'message'
+	| 'edited_message'
+	| 'channel_post'
+	| 'edited_channel_post'
+	| 'business_connection'
+	| 'business_message'
+	| 'edited_business_message'
+	| 'deleted_business_messages'
+	| 'message_reaction'
+	| 'message_reaction_count'
+	| 'inline_query'
+	| 'chosen_inline_result'
+	| 'callback_query'
+	| 'shipping_query'
+	| 'pre_checkout_query'
+	| 'poll'
+	| 'poll_answer'
+	| 'my_chat_member'
+	| 'chat_member'
+	| 'chat_join_request'
+	| 'chat_boost'
+	| 'removed_chat_boost';
 
-export type TelegramServiceMessageType = 'boost_added' | 'proximity_alert_triggered' | 'forum_topic_created' | 'forum_topic_edited' | 'forum_topic_closed' | 'forum_topic_reopened' | 'general_forum_topic_hidden' | 'general_forum_topic_unhidden' | 'giveaway_created' | 'giveaway_completed' | 'video_chat_scheduled' | 'video_chat_started' | 'video_chat_ended' | 'video_chat_participants_invited' | 'web_app_data' | 'chat_background_set' | 'delete_chat_photo' | 'group_chat_created' | 'supergroup_chat_created' | 'channel_chat_created' | 'message_auto_delete_timer_changed';
+export type TelegramServiceMessageType =
+	| 'boost_added'
+	| 'proximity_alert_triggered'
+	| 'forum_topic_created'
+	| 'forum_topic_edited'
+	| 'forum_topic_closed'
+	| 'forum_topic_reopened'
+	| 'general_forum_topic_hidden'
+	| 'general_forum_topic_unhidden'
+	| 'giveaway_created'
+	| 'giveaway_completed'
+	| 'video_chat_scheduled'
+	| 'video_chat_started'
+	| 'video_chat_ended'
+	| 'video_chat_participants_invited'
+	| 'web_app_data'
+	| 'chat_background_set'
+	| 'delete_chat_photo'
+	| 'group_chat_created'
+	| 'supergroup_chat_created'
+	| 'channel_chat_created'
+	| 'message_auto_delete_timer_changed';
 /**
  * Represents the possible parse modes in Telegram.
  */
@@ -80,7 +124,18 @@ export type TelegramChatType = 'private' | 'group' | 'supergroup' | 'channel';
 /**
  * Represents the type of action to broadcast in a chat.
  */
-export type TelegramChatActionType = 'typing' | 'upload_photo' | 'record_video' | 'upload_video' | 'record_voice' | 'upload_voice' | 'upload_document' | 'choose_sticker' | 'find_location' | 'record_video_note' | 'upload_video_note';
+export type TelegramChatActionType =
+	| 'typing'
+	| 'upload_photo'
+	| 'record_video'
+	| 'upload_video'
+	| 'record_voice'
+	| 'upload_voice'
+	| 'upload_document'
+	| 'choose_sticker'
+	| 'find_location'
+	| 'record_video_note'
+	| 'upload_video_note';
 
 /**
  * Represents a reply markup in Telegram, which can be an inline keyboard markup,
@@ -3153,7 +3208,13 @@ export interface TelegramChatMemberUpdated {
  * - ChatMemberLeft
  * - ChatMemberBanned
  */
-export type TelegramChatMember = TelegramChatMemberOwner | TelegramChatMemberAdministrator | TelegramChatMemberMember | TelegramChatMemberRestricted | TelegramChatMemberLeft | TelegramChatMemberBanned;
+export type TelegramChatMember =
+	| TelegramChatMemberOwner
+	| TelegramChatMemberAdministrator
+	| TelegramChatMemberMember
+	| TelegramChatMemberRestricted
+	| TelegramChatMemberLeft
+	| TelegramChatMemberBanned;
 
 /**
  * Represents a chat member that owns the chat and has all administrator privileges.
@@ -3809,13 +3870,38 @@ export interface TelegramBotCommand {
  * - BotCommandScopeChatAdministrators
  * - BotCommandScopeChatMember
  */
-export type TelegramBotCommandScope = TelegramBotCommandScopeDefault | TelegramBotCommandScopeAllPrivateChats | TelegramBotCommandScopeAllGroupChats | TelegramBotCommandScopeAllChatAdministrators | TelegramBotCommandScopeChat | TelegramBotCommandScopeChatAdministrators | TelegramBotCommandScopeChatMember;
+export type TelegramBotCommandScope =
+	| TelegramBotCommandScopeDefault
+	| TelegramBotCommandScopeAllPrivateChats
+	| TelegramBotCommandScopeAllGroupChats
+	| TelegramBotCommandScopeAllChatAdministrators
+	| TelegramBotCommandScopeChat
+	| TelegramBotCommandScopeChatAdministrators
+	| TelegramBotCommandScopeChatMember;
 
 /**
  * Determines the list of commands for a particular user viewing the bot menu.
  * The first list of commands which is set is returned.
  */
-export type TelegramCommandScopeList = 'botCommandScopeChatLanguage' | 'botCommandScopeChat' | 'botCommandScopeAllPrivateChatsLanguage' | 'botCommandScopeAllPrivateChats' | 'botCommandScopeDefaultLanguage' | 'botCommandScopeDefault' | 'botCommandScopeChatMemberLanguage' | 'botCommandScopeChatMember' | 'botCommandScopeChatAdministratorsLanguage' | 'botCommandScopeChatAdministrators' | 'botCommandScopeChatLanguage' | 'botCommandScopeChat' | 'botCommandScopeAllChatAdministratorsLanguage' | 'botCommandScopeAllChatAdministrators' | 'botCommandScopeAllGroupChatsLanguage' | 'botCommandScopeAllGroupChats' | 'botCommandScopeDefaultLanguage' | 'botCommandScopeDefault';
+export type TelegramCommandScopeList =
+	| 'botCommandScopeChatLanguage'
+	| 'botCommandScopeChat'
+	| 'botCommandScopeAllPrivateChatsLanguage'
+	| 'botCommandScopeAllPrivateChats'
+	| 'botCommandScopeDefaultLanguage'
+	| 'botCommandScopeDefault'
+	| 'botCommandScopeChatMemberLanguage'
+	| 'botCommandScopeChatMember'
+	| 'botCommandScopeChatAdministratorsLanguage'
+	| 'botCommandScopeChatAdministrators'
+	| 'botCommandScopeChatLanguage'
+	| 'botCommandScopeChat'
+	| 'botCommandScopeAllChatAdministratorsLanguage'
+	| 'botCommandScopeAllChatAdministrators'
+	| 'botCommandScopeAllGroupChatsLanguage'
+	| 'botCommandScopeAllGroupChats'
+	| 'botCommandScopeDefaultLanguage'
+	| 'botCommandScopeDefault';
 
 /**
  * Represents the default scope of bot commands.
@@ -7782,7 +7868,27 @@ export interface InlineQueryResultsButton {
  * Note: All URLs passed in inline query results will be available to end users
  * and therefore must be assumed to be public.
  */
-export type TelegramInlineQueryResult = TelegramInlineQueryResultCachedAudio | TelegramInlineQueryResultCachedDocument | TelegramInlineQueryResultCachedGif | TelegramInlineQueryResultCachedMpeg4Gif | TelegramInlineQueryResultCachedPhoto | TelegramInlineQueryResultCachedSticker | TelegramInlineQueryResultCachedVideo | TelegramInlineQueryResultCachedVoice | TelegramInlineQueryResultArticle | TelegramInlineQueryResultAudio | TelegramInlineQueryResultContact | TelegramInlineQueryResultGame | TelegramInlineQueryResultDocument | TelegramInlineQueryResultGif | TelegramInlineQueryResultLocation | TelegramInlineQueryResultMpeg4Gif | TelegramInlineQueryResultPhoto | TelegramInlineQueryResultVenue | TelegramInlineQueryResultVideo | TelegramInlineQueryResultVoice;
+export type TelegramInlineQueryResult =
+	| TelegramInlineQueryResultCachedAudio
+	| TelegramInlineQueryResultCachedDocument
+	| TelegramInlineQueryResultCachedGif
+	| TelegramInlineQueryResultCachedMpeg4Gif
+	| TelegramInlineQueryResultCachedPhoto
+	| TelegramInlineQueryResultCachedSticker
+	| TelegramInlineQueryResultCachedVideo
+	| TelegramInlineQueryResultCachedVoice
+	| TelegramInlineQueryResultArticle
+	| TelegramInlineQueryResultAudio
+	| TelegramInlineQueryResultContact
+	| TelegramInlineQueryResultGame
+	| TelegramInlineQueryResultDocument
+	| TelegramInlineQueryResultGif
+	| TelegramInlineQueryResultLocation
+	| TelegramInlineQueryResultMpeg4Gif
+	| TelegramInlineQueryResultPhoto
+	| TelegramInlineQueryResultVenue
+	| TelegramInlineQueryResultVideo
+	| TelegramInlineQueryResultVoice;
 
 /**
  * Represents a link to an article or web page.
@@ -9007,7 +9113,12 @@ export interface TelegramInlineQueryResultCachedAudio {
 /**
  * This object represents the content of a message to be sent as a result of an inline query.
  */
-export type TelegramInputMessageContent = TelegramInputTextMessageContent | TelegramInputLocationMessageContent | TelegramInputVenueMessageContent | TelegramInputContactMessageContent | TelegramInputInvoiceMessageContent;
+export type TelegramInputMessageContent =
+	| TelegramInputTextMessageContent
+	| TelegramInputLocationMessageContent
+	| TelegramInputVenueMessageContent
+	| TelegramInputContactMessageContent
+	| TelegramInputInvoiceMessageContent;
 
 /**
  * Represents the content of a text message to be sent as the result of an inline query.
@@ -9817,7 +9928,16 @@ export interface TelegramSetPassportDataErrors {
  * - PassportElementErrorTranslationFiles
  * - PassportElementErrorUnspecified
  */
-export type TelegramPassportElementError = TelegramPassportElementErrorDataField | TelegramPassportElementErrorFrontSide | TelegramPassportElementErrorReverseSide | TelegramPassportElementErrorSelfie | TelegramPassportElementErrorFile | TelegramPassportElementErrorFiles | TelegramPassportElementErrorTranslationFile | TelegramPassportElementErrorTranslationFiles | TelegramPassportElementErrorUnspecified;
+export type TelegramPassportElementError =
+	| TelegramPassportElementErrorDataField
+	| TelegramPassportElementErrorFrontSide
+	| TelegramPassportElementErrorReverseSide
+	| TelegramPassportElementErrorSelfie
+	| TelegramPassportElementErrorFile
+	| TelegramPassportElementErrorFiles
+	| TelegramPassportElementErrorTranslationFile
+	| TelegramPassportElementErrorTranslationFiles
+	| TelegramPassportElementErrorUnspecified;
 
 /**
  * Represents an issue in one of the data fields that was provided by the user. The error is considered resolved when the field's value changes.
@@ -9966,7 +10086,16 @@ export interface TelegramPassportElementErrorTranslationFile {
 	/**
 	 * Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”.
 	 */
-	type: 'passport' | 'driver_license' | 'identity_card' | 'internal_passport' | 'utility_bill' | 'bank_statement' | 'rental_agreement' | 'passport_registration' | 'temporary_registration';
+	type:
+		| 'passport'
+		| 'driver_license'
+		| 'identity_card'
+		| 'internal_passport'
+		| 'utility_bill'
+		| 'bank_statement'
+		| 'rental_agreement'
+		| 'passport_registration'
+		| 'temporary_registration';
 	/**
 	 * Base64-encoded file hash.
 	 */
@@ -9988,7 +10117,16 @@ export interface TelegramPassportElementErrorTranslationFiles {
 	/**
 	 * Type of element of the user's Telegram Passport which has the issue, one of “passport”, “driver_license”, “identity_card”, “internal_passport”, “utility_bill”, “bank_statement”, “rental_agreement”, “passport_registration”, “temporary_registration”.
 	 */
-	type: 'passport' | 'driver_license' | 'identity_card' | 'internal_passport' | 'utility_bill' | 'bank_statement' | 'rental_agreement' | 'passport_registration' | 'temporary_registration';
+	type:
+		| 'passport'
+		| 'driver_license'
+		| 'identity_card'
+		| 'internal_passport'
+		| 'utility_bill'
+		| 'bank_statement'
+		| 'rental_agreement'
+		| 'passport_registration'
+		| 'temporary_registration';
 	/**
 	 * List of base64-encoded file hashes.
 	 */
@@ -10295,7 +10433,11 @@ export interface TelegramStarTransaction {
  * Currently, it can be one of: TelegramTransactionPartnerUser, TelegramTransactionPartnerFragment,
  * TelegramTransactionPartnerTelegramAds, TelegramTransactionPartnerOther.
  */
-export type TelegramTransactionPartner = TelegramTransactionPartnerUser | TelegramTransactionPartnerFragment | TelegramTransactionPartnerTelegramAds | TelegramTransactionPartnerOther;
+export type TelegramTransactionPartner =
+	| TelegramTransactionPartnerUser
+	| TelegramTransactionPartnerFragment
+	| TelegramTransactionPartnerTelegramAds
+	| TelegramTransactionPartnerOther;
 
 /**
  * Describes a transaction with a user.

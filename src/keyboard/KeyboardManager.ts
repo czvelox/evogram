@@ -22,7 +22,8 @@ export class KeyboardManager {
 				KeyboardManager.redirectHistory.set(userID, redirectHistory);
 			}
 
-			if (this.client.params.keyboardMode!.menuKeyboard === keyboardID) KeyboardManager.redirectHistory.set(userID, [{ redirect: this.client.params.keyboardMode!.menuKeyboard, args }]);
+			if (this.client.params.keyboardMode!.menuKeyboard === keyboardID)
+				KeyboardManager.redirectHistory.set(userID, [{ redirect: this.client.params.keyboardMode!.menuKeyboard, args }]);
 			redirectHistory = KeyboardManager.redirectHistory.get(userID)!;
 		}
 

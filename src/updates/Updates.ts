@@ -1,4 +1,17 @@
-import { TelegramBusinessConnection, TelegramChatBoostRemoved, TelegramChatBoostUpdated, TelegramChatJoinRequest, TelegramChatMemberUpdated, TelegramChosenInlineResult, TelegramInlineQuery, TelegramMessage, TelegramMessageReactionCountUpdated, TelegramMessageReactionUpdated, TelegramPreCheckoutQuery, TelegramUpdateType } from '../types';
+import {
+	TelegramBusinessConnection,
+	TelegramChatBoostRemoved,
+	TelegramChatBoostUpdated,
+	TelegramChatJoinRequest,
+	TelegramChatMemberUpdated,
+	TelegramChosenInlineResult,
+	TelegramInlineQuery,
+	TelegramMessage,
+	TelegramMessageReactionCountUpdated,
+	TelegramMessageReactionUpdated,
+	TelegramPreCheckoutQuery,
+	TelegramUpdateType,
+} from '../types';
 import { Evogram } from '../Client';
 import { Polling } from '../transports';
 import { BusinessMessagesDeletedContext, CallbackQueryContext, MessageContext, PollAnswerContext, PollContext, ServiceMessage, ShippingQueryContext } from '../contexts/migrated';
@@ -23,7 +36,10 @@ export class Updates {
 	 * 	    message.send("Hello, world!");
 	 * 	});
 	 */
-	public on(update: 'message' | 'edited_message' | 'channel_post' | 'edited_channel_post' | 'business_message' | 'edited_business_message', handler: UpdateHandler<MessageContext>): this;
+	public on(
+		update: 'message' | 'edited_message' | 'channel_post' | 'edited_channel_post' | 'business_message' | 'edited_business_message',
+		handler: UpdateHandler<MessageContext>
+	): this;
 	public on(update: 'service_message', handler: UpdateHandler<ServiceMessage>): this;
 	public on(update: 'business_connection', handler: UpdateHandler<TelegramBusinessConnection>): this;
 	public on(update: 'deleted_business_messages', handler: UpdateHandler<BusinessMessagesDeletedContext>): this;

@@ -17,7 +17,10 @@ class CallbackDataMiddleware {
 		// @ts-ignore
 		if (ctx.callback_query.data.onClick) eval(`(${ctx.callback_query.data.onClick})(callbackQuery)`), delete ctx.callback_query.data.onClick;
 
-		if (redirect && !ctx.callback_query.data.keyboard) await callbackQuery.message.edit(callbackQuery.message.text!, { reply_markup: { inline_keyboard: await ctx.client.keyboard.get(redirect, ctx.callback_query.from.id, ctx.callback_query.data) } });
+		if (redirect && !ctx.callback_query.data.keyboard)
+			await callbackQuery.message.edit(callbackQuery.message.text!, {
+				reply_markup: { inline_keyboard: await ctx.client.keyboard.get(redirect, ctx.callback_query.from.id, ctx.callback_query.data) },
+			});
 
 		if (commandName) {
 			const command = CommandManager.commands.find((command) => command.params.name === commandName);

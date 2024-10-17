@@ -21,7 +21,8 @@ export abstract class EventTransport {
 
 		const updateContext = ContextManager.getContext<UpdateContext>('Update', { client: this.client, source: data, state: data.state });
 
-		// @ts-ignore
-		if (Object.keys(this.client.updates.handlers).find((x) => x === updateContext.name)) for (const handler of this.client.updates.handlers[updateContext.name]) await handler({ context: updateContext[updateContext.name], client: this.client });
+		if (Object.keys(this.client.updates.handlers).find((x) => x === updateContext.name))
+			// @ts-ignore
+			for (const handler of this.client.updates.handlers[updateContext.name]) await handler({ context: updateContext[updateContext.name], client: this.client });
 	}
 }

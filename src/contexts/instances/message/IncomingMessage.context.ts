@@ -15,7 +15,8 @@ export class IncomingMessageContext extends MessageContext {
 		if (params && !params.text) params.text = text;
 		else if (!params) params = typeof text === 'string' ? { text } : text;
 
-		const type: 'caption' | 'text' = this.source.photo || this.source.video || this.source.document || this.source.animation || this.source.audio || this.source.voice ? 'caption' : 'text';
+		const type: 'caption' | 'text' =
+			this.source.photo || this.source.video || this.source.document || this.source.animation || this.source.audio || this.source.voice ? 'caption' : 'text';
 		//@ts-ignore
 		return this.client.api[type === 'text' ? 'editMessageText' : 'editMessageCaption']({
 			chat_id: this.source.chat.id,

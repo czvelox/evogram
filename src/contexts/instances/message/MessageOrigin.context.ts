@@ -1,4 +1,11 @@
-import { TelegramChat, TelegramMessageOrigin, TelegramMessageOriginChannel, TelegramMessageOriginChat, TelegramMessageOriginHiddenUser, TelegramMessageOriginUser } from '../../../types';
+import {
+	TelegramChat,
+	TelegramMessageOrigin,
+	TelegramMessageOriginChannel,
+	TelegramMessageOriginChat,
+	TelegramMessageOriginHiddenUser,
+	TelegramMessageOriginUser,
+} from '../../../types';
 import { Context, ContextD } from '../../core';
 import * as Contexts from '../../migrated';
 

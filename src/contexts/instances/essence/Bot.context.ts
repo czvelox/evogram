@@ -1,4 +1,13 @@
-import { TelegramBotCommand, TelegramDeleteMyCommandsParams, TelegramGetChatMenuButtonParams, TelegramGetMyCommandsParams, TelegramGetMyDefaultAdministratorRightsParams, TelegramSetChatMenuButtonParams, TelegramSetMyCommandsParams, TelegramSetMyDefaultAdministratorRightsParams } from '../../../types';
+import {
+	TelegramBotCommand,
+	TelegramDeleteMyCommandsParams,
+	TelegramGetChatMenuButtonParams,
+	TelegramGetMyCommandsParams,
+	TelegramGetMyDefaultAdministratorRightsParams,
+	TelegramSetChatMenuButtonParams,
+	TelegramSetMyCommandsParams,
+	TelegramSetMyDefaultAdministratorRightsParams,
+} from '../../../types';
 import { ContextD } from '../../core';
 import { UserContext } from '../../migrated';
 
