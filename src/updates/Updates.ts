@@ -1,20 +1,27 @@
+import { Evogram } from '../Client';
+import {
+	BusinessMessagesDeletedContext,
+	CallbackQueryContext,
+	ChosenInlineResultContext,
+	MessageContext,
+	PollAnswerContext,
+	PollContext,
+	ServiceMessage,
+	ShippingQueryContext,
+} from '../contexts/migrated';
+import { Polling } from '../transports';
 import {
 	TelegramBusinessConnection,
 	TelegramChatBoostRemoved,
 	TelegramChatBoostUpdated,
 	TelegramChatJoinRequest,
 	TelegramChatMemberUpdated,
-	TelegramChosenInlineResult,
 	TelegramInlineQuery,
-	TelegramMessage,
 	TelegramMessageReactionCountUpdated,
 	TelegramMessageReactionUpdated,
 	TelegramPreCheckoutQuery,
 	TelegramUpdateType,
 } from '../types';
-import { Evogram } from '../Client';
-import { Polling } from '../transports';
-import { BusinessMessagesDeletedContext, CallbackQueryContext, MessageContext, PollAnswerContext, PollContext, ServiceMessage, ShippingQueryContext } from '../contexts/migrated';
 
 export type UpdateHandler<T> = (data: { context: T; client: Evogram }) => any;
 export type UpdateHandlerMap = { [updateName in TelegramUpdateType]?: UpdateHandler<any>[] };
@@ -46,7 +53,7 @@ export class Updates {
 	public on(update: 'message_reaction', handler: UpdateHandler<TelegramMessageReactionUpdated>): this;
 	public on(update: 'message_reaction_count', handler: UpdateHandler<TelegramMessageReactionCountUpdated>): this;
 	public on(update: 'inline_query', handler: UpdateHandler<TelegramInlineQuery>): this;
-	public on(update: 'chosen_inline_result', handler: UpdateHandler<TelegramChosenInlineResult>): this;
+	public on(update: 'chosen_inline_result', handler: UpdateHandler<ChosenInlineResultContext>): this;
 	public on(update: 'callback_query', handler: UpdateHandler<CallbackQueryContext>): this;
 	public on(update: 'shipping_query', handler: UpdateHandler<ShippingQueryContext>): this;
 	public on(update: 'pre_checkout_query', handler: UpdateHandler<TelegramPreCheckoutQuery>): this;
