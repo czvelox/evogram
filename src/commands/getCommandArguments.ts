@@ -20,7 +20,9 @@ export async function getCommandArguments(message: CommandContext, command: Comm
 
 	// Определяем, какие аргументы ещё не были запрошены
 	//@ts-ignore
-	const missingArgs = args.value.filter((arg: any) => !savedArgs[typeof arg === 'string' ? arg : arg.name]);
+	const missingArgs = args.value.filter((arg) =>
+		!savedArgs[typeof arg === 'string' ? arg : arg.name] && !(typeof arg === 'string' ? arg : arg.name).endsWith('?') && typeof arg === 'object' ? !arg.default : false
+	);
 
 	// Если все аргументы уже есть, возвращаем их
 	if (missingArgs.length === 0) return savedArgs;
