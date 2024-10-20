@@ -1,3 +1,4 @@
+import { CommandManager } from '../../../commands';
 import { TelegramSendMessageParams } from '../../../types';
 import { ContextD } from '../../core';
 import { MessageContext, CallbackQueryContext, IncomingMessageContext } from '../../migrated';
@@ -12,5 +13,9 @@ export class CommandContext extends IncomingMessageContext {
 	public send(data: any, params?: any): Promise<IncomingMessageContext> {
 		//@ts-ignore
 		return this.state.origin === 'callbackQuery' ? this.edit(data, params) : super.send(data, params);
+	}
+
+	public redirect(commandName: string, args: Record<string, any>) {
+		CommandManager.commands.find((x) => x.params.name === commandName)?.execute(this, { args });
 	}
 }
