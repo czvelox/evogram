@@ -2,6 +2,7 @@ import { Evogram } from '../Client';
 import {
 	BusinessMessagesDeletedContext,
 	CallbackQueryContext,
+	ChatJoinRequestContext,
 	ChosenInlineResultContext,
 	MessageContext,
 	PollAnswerContext,
@@ -14,7 +15,6 @@ import {
 	TelegramBusinessConnection,
 	TelegramChatBoostRemoved,
 	TelegramChatBoostUpdated,
-	TelegramChatJoinRequest,
 	TelegramChatMemberUpdated,
 	TelegramInlineQuery,
 	TelegramMessageReactionCountUpdated,
@@ -60,7 +60,7 @@ export class Updates {
 	public on(update: 'poll', handler: UpdateHandler<PollContext>): this;
 	public on(update: 'poll_answer', handler: UpdateHandler<PollAnswerContext>): this;
 	public on(update: 'my_chat_member' | 'chat_member', handler: UpdateHandler<TelegramChatMemberUpdated>): this;
-	public on(update: 'chat_join_request', handler: UpdateHandler<TelegramChatJoinRequest>): this;
+	public on(update: 'chat_join_request', handler: UpdateHandler<ChatJoinRequestContext>): this;
 	public on(update: 'chat_boost', handler: UpdateHandler<TelegramChatBoostUpdated>): this;
 	public on(update: 'removed_chat_boost', handler: UpdateHandler<TelegramChatBoostRemoved>): this;
 	public on(update: TelegramUpdateType, handler: (data: any) => void): this {

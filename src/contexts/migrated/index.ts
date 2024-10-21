@@ -3,6 +3,7 @@ export { CallbackQueryContext } from '../instances/updates';
 export { ShippingQueryContext } from '../instances/updates';
 export { BusinessMessagesDeletedContext } from '../instances/updates';
 export { ChosenInlineResultContext } from '../instances/updates';
+export { ChatJoinRequestContext } from '../instances/updates';
 
 export { UserContext } from '../instances/essence';
 export { BotContext } from '../instances/essence';
