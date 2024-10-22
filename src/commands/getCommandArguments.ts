@@ -32,10 +32,12 @@ export async function getCommandArguments(message: CommandContext, command: Comm
 		const splitSpace = text.split(' ');
 
 		if (['parameterized', 'space', 'fulltext'].includes(type) && !message.text.match(/\/\S+(@\S+)?\s\S+/)) continue;
-		else if (type === 'space' && argsType.includes('parameterized') && text.split('--').length > 1) continue;
-		else if (type === 'space' && missingArgs.length > splitSpace.length) continue;
-		else if (type === 'stdin' && message.text.match(/\/\S+(@\S+)?\s\S+/)) continue;
-		else if (type === 'parameterized' && text.split('--').length < 2) continue;
+		else if (!message.callbackQuery) {
+			if (type === 'space' && argsType.includes('parameterized') && text.split('--').length > 1) continue;
+			else if (type === 'space' && missingArgs.length > splitSpace.length) continue;
+			else if (type === 'stdin' && message.text.match(/\/\S+(@\S+)?\s\S+/)) continue;
+			else if (type === 'parameterized' && text.split('--').length < 2) continue;
+		}
 
 		//@ts-ignore
 		if (type === 'space') {
@@ -48,6 +50,7 @@ export async function getCommandArguments(message: CommandContext, command: Comm
 			const value = getByParameterized(text);
 			if (value) return { ...savedArgs, ...value };
 		} else if (type === 'stdin') {
+			console.log(2);
 			const stdinValue = await getByQuestion(message, { ...args, value: missingArgs });
 			return { ...savedArgs, ...stdinValue };
 		}
