@@ -13,7 +13,6 @@ import {
 	TelegramBotDescription,
 	TelegramBotName,
 	TelegramBotShortDescription,
-	TelegramBusinessConnection,
 	TelegramChat,
 	TelegramChatAdministratorRights,
 	TelegramChatInviteLink,
@@ -139,7 +138,7 @@ import {
 	TelegramUserProfilePhotos,
 	TelegramWebhookInfo,
 } from '..';
-import { IncomingMessageContext, BotContext, PollContext, UpdateContext } from '../contexts/migrated';
+import { BotContext, BusinessConnectionContext, IncomingMessageContext, PollContext, UpdateContext } from '../contexts/migrated';
 import { ApiWorker } from './API.worker';
 
 /**
@@ -892,8 +891,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#getbusinessconnection)
 	 */
-	public getBusinessConnection(): Promise<TelegramBusinessConnection> {
-		return this.call('getBusinessConnection', undefined);
+	public getBusinessConnection(): Promise<BusinessConnectionContext> {
+		return this.getContext('getBusinessConnection', {}, 'BusinessConnection');
 	}
 
 	/**

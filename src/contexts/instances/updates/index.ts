@@ -4,3 +4,4 @@ export * from './ShippingQuery.context';
 export * from './BusinessMessagesDeleted.context';
 export * from './ChosenInlineResult.context';
 export * from './ChatJoinRequest.context';
+export * from './BusinessConnection.context';

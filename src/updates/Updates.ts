@@ -1,5 +1,6 @@
 import { Evogram } from '../Client';
 import {
+	BusinessConnectionContext,
 	BusinessMessagesDeletedContext,
 	CallbackQueryContext,
 	ChatJoinRequestContext,
@@ -12,7 +13,6 @@ import {
 } from '../contexts/migrated';
 import { Polling } from '../transports';
 import {
-	TelegramBusinessConnection,
 	TelegramChatBoostRemoved,
 	TelegramChatBoostUpdated,
 	TelegramChatMemberUpdated,
@@ -48,7 +48,7 @@ export class Updates {
 		handler: UpdateHandler<MessageContext>
 	): this;
 	public on(update: 'service_message', handler: UpdateHandler<ServiceMessage>): this;
-	public on(update: 'business_connection', handler: UpdateHandler<TelegramBusinessConnection>): this;
+	public on(update: 'business_connection', handler: UpdateHandler<BusinessConnectionContext>): this;
 	public on(update: 'deleted_business_messages', handler: UpdateHandler<BusinessMessagesDeletedContext>): this;
 	public on(update: 'message_reaction', handler: UpdateHandler<TelegramMessageReactionUpdated>): this;
 	public on(update: 'message_reaction_count', handler: UpdateHandler<TelegramMessageReactionCountUpdated>): this;
