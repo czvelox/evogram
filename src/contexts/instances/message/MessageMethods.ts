@@ -52,7 +52,7 @@ export class MessageMethods extends Context<TelegramMessage> {
 			chat_id: this.source.chat.id,
 			business_connection_id: this.source.business_connection_id,
 			message_thread_id: this.source.is_topic_message ? this.source.message_thread_id : undefined,
-			...(params || data),
+			...(params || typeof data === 'object' ? data : {}),
 		});
 		// TODO: sending a message based on data from the context
 	}
