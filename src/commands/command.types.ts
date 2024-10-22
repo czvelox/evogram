@@ -29,7 +29,7 @@ export interface CommandArguments {
 	 */
 	method: CommandArgumentType | CommandArgumentType[];
 	// prettier-ignore
-	value: (string | { name: string, default?: ((context: CommandContext) => any) | string | number | Record<string, any>, question?: string | Omit<TelegramSendMessageParams, 'chat_id'> })[];
+	value: (string | { name: string, default?: ((context: CommandContext) => any) | string | number | Record<string, any>, question?: string | Omit<TelegramSendMessageParams, 'chat_id'> | (() => string | Omit<TelegramSendMessageParams, 'chat_id'>) })[];
 }
 
 export interface CommandDescription {

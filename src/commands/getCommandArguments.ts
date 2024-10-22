@@ -75,17 +75,24 @@ function getByParameterized(text: string) {
 	return Object.assign(...split.map((x) => ({ [x.split('=')[0]]: x.split('=')[1]?.trim() })));
 }
 
-async function getByQuestion(message: CommandContext, args: CommandArguments) {
+async function getByQuestion(message: CommandContext, args: any) {
 	try {
 		let object: Record<string, any> = {};
 
 		for (const value of args.value) {
 			object[typeof value === 'object' ? value.name : value] = await new Promise(async (resolve, reject) => {
+				let question =
+					typeof value === 'object' ? (typeof value.question === 'object' ? value.question : typeof value.question === 'function' ? value.question() : null) : null;
+
+				if (question === null) question = { text: `The "${value.name || value}" parameter is required for the command to work. Send the value in the following message` };
+				else if (typeof question === 'string') question = { text: question };
+
 				//@ts-ignore
 				await message.send({
 					chat_id: message.chat.id,
+					// prettier-ignore
 					//@ts-ignore
-					text: value.question || `The "${value.name || value}" parameter is required for the command to work. Send the value in the following message`,
+					...question,
 				});
 				message.client.question.addQuestion(message.user.id, (msg) => {
 					if (message.client.params.keyboardMode) msg.delete();
