@@ -21,7 +21,7 @@ class CallbackDataMiddleware {
 			const data = await ctx.client.keyboard.get(redirect, ctx.callback_query.from.id, ctx.callback_query.data);
 			await callbackQuery.message.edit(callbackQuery.message.text!, {
 				reply_markup: { inline_keyboard: data.keyboard },
-				...data.params,
+				...(typeof data.params === 'function' ? data.params() : data.params),
 			});
 		}
 

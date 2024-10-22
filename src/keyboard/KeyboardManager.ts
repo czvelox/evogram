@@ -5,7 +5,7 @@ import { KeyboardConvert } from './KeyboardConvert';
 export type RedirectHistory = { redirect: string; args?: Record<string, any> }[];
 export type KeyboardEntry = {
 	keyboard: EvogramInlineKeyboardButton[][];
-	params?: Omit<TelegramSendMessageParams, 'chat_id'>;
+	params?: Omit<TelegramSendMessageParams, 'chat_id'> | (() => Omit<TelegramSendMessageParams, 'chat_id'>);
 };
 
 export class KeyboardManager {
