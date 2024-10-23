@@ -12,6 +12,8 @@ export class KeyboardManager {
 	public static keyboards: Map<string, KeyboardEntry> = new Map();
 	public static redirectHistory: Map<number, RedirectHistory> = new Map();
 
+	public static backButtonText = '← Back';
+
 	constructor(private client: Evogram) {}
 
 	public async get(keyboardID: string, userID?: number, args?: Record<string, any>): Promise<KeyboardEntry> {
@@ -37,7 +39,7 @@ export class KeyboardManager {
 		// Clone the keyboard and add the back button if there's a navigation history
 		const keyboardWithBack = [
 			...keyboardEntry.keyboard,
-			...(redirectHistory.length > 1 ? [[{ text: '← Back', redirect: redirectHistory[redirectHistory.length - 2].redirect }]] : []),
+			...(redirectHistory.length > 1 ? [[{ text: KeyboardManager.backButtonText, redirect: redirectHistory[redirectHistory.length - 2].redirect }]] : []),
 		];
 		return { keyboard: await KeyboardConvert(this.client, keyboardWithBack), params: keyboardEntry.params };
 	}
