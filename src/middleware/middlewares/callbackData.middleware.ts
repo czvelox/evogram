@@ -36,7 +36,7 @@ class CallbackDataMiddleware {
 			}, state: { ...ctx.state, origin: "callbackQuery", callbackQuery }});
 
 			//@ts-ignore
-			command.execute(commandContext, { args: command.validateArguments(commandContext, await getCommandArguments(commandContext, command)) || {} });
+			command.execute(commandContext, { args: (await getCommandArguments(commandContext, command)) || {} });
 		} else if (ctx.callback_query.data.keyboard) {
 			callbackQuery.message.edit(ctx.callback_query.message?.text, { reply_markup: { inline_keyboard: ctx.callback_query.data.keyboard.inline_keyboard } });
 		}
