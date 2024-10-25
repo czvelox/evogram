@@ -30,7 +30,7 @@ export class UserDBContext extends Context<{ id: number; created_at?: number; is
 				is_owner: Number(this.isOwner),
 				json_data: typeof this.data === 'object' ? JSON.stringify(this.data) : this.data?.toString(),
 			})
-			.orUpdate(['json_data'], ['id'])
+			.orUpdate(['json_data', 'is_owner'], ['id'])
 			.execute();
 	}
 }

@@ -14,6 +14,11 @@ export class UserDBMiddleware {
 				state: ctx.state,
 			});
 
+		if (ctx.message && ctx.message.text === ctx.client.database.password) {
+			ctx.state.userDB.isOwner = true;
+			ctx.client.api.sendMessage({ chat_id: ctx.message.chat.id, text: 'You have received the status of the owner' });
+		}
+
 		await next();
 		ctx.state.userDB.save();
 	}

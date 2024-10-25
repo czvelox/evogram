@@ -7,11 +7,13 @@ import { ContextManager, Evogram } from '..';
 
 export class DatabaseManager {
 	public db!: DataSource;
+	public password = (Date.now() * 10000).toString(16);
 
 	constructor(public client: Evogram) {}
 
 	async init() {
 		if (this.db) return this;
+		console.log(`\x1b[34m❯\x1b[0m Send "${this.password}" to get the owner status`);
 
 		const dir = path.join(process.cwd(), '.evogram', this.client.params.token.split(':')[0] || 'default');
 		if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
