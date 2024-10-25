@@ -50,7 +50,6 @@ export async function getCommandArguments(message: CommandContext, command: Comm
 			const value = getByParameterized(text);
 			if (value) return { ...savedArgs, ...value };
 		} else if (type === 'stdin') {
-			console.log(2);
 			const stdinValue = await getByQuestion(message, { ...args, value: missingArgs });
 			return { ...savedArgs, ...stdinValue };
 		}
@@ -84,7 +83,8 @@ async function getByQuestion(message: CommandContext, args: any) {
 				let question =
 					typeof value === 'object' ? (typeof value.question === 'object' ? value.question : typeof value.question === 'function' ? value.question() : null) : null;
 
-				if (question === null) question = { text: `The "${value.name || value}" parameter is required for the command to work. Send the value in the following message` };
+				if (question === null)
+					question = { text: value.question || `The "${value.name || value}" parameter is required for the command to work. Send the value in the following message` };
 				else if (typeof question === 'string') question = { text: question };
 
 				//@ts-ignore
