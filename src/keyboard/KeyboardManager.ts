@@ -1,11 +1,15 @@
-import { Evogram, TelegramSendMessageParams } from '..';
+import { CommandContext, CommandExecuteData, Evogram, TelegramSendMessageParams } from '..';
 import { EvogramInlineKeyboardButton } from './keyboard.interface';
 import { KeyboardConvert } from './KeyboardConvert';
 
 export type RedirectHistory = { redirect: string; args?: Record<string, any> }[];
 export type KeyboardEntry = {
-	keyboard: EvogramInlineKeyboardButton[][];
-	params?: Omit<TelegramSendMessageParams, 'chat_id'> | (() => Omit<TelegramSendMessageParams, 'chat_id'>);
+	keyboard:
+		| EvogramInlineKeyboardButton[][]
+		| ((context: CommandContext, data?: CommandExecuteData) => EvogramInlineKeyboardButton[][] | Promise<EvogramInlineKeyboardButton[][]>);
+	params?:
+		| Omit<TelegramSendMessageParams, 'chat_id'>
+		| ((context: CommandContext, data?: CommandExecuteData) => Omit<TelegramSendMessageParams, 'chat_id'> | Promise<Omit<TelegramSendMessageParams, 'chat_id'>>);
 };
 
 export class KeyboardManager {
@@ -16,11 +20,17 @@ export class KeyboardManager {
 
 	constructor(private client: Evogram) {}
 
-	public async get(keyboardID: string, userID?: number, args?: Record<string, any>): Promise<KeyboardEntry> {
+	public async get(
+		context: CommandContext,
+		keyboardID: string,
+		args?: Record<string, any>
+	): Promise<{ keyboard: EvogramInlineKeyboardButton[][]; params?: Omit<TelegramSendMessageParams, 'chat_id'> }> {
+		const userID = context.user.id;
+
 		if (typeof args === 'string') args = undefined;
 		let redirectHistory: RedirectHistory = KeyboardManager.redirectHistory.get(userID!) || [{ redirect: this.client.params.keyboardMode!.menuKeyboard, args }];
 
-		if (userID) {
+		if (userID && redirectHistory[redirectHistory.length - 1]?.redirect !== keyboardID) {
 			if (redirectHistory[redirectHistory.length - 2]?.redirect !== keyboardID) {
 				KeyboardManager.redirectHistory.set(userID, [...redirectHistory, { redirect: keyboardID, args }]);
 			} else if (redirectHistory.length > 1) {
@@ -38,9 +48,12 @@ export class KeyboardManager {
 
 		// Clone the keyboard and add the back button if there's a navigation history
 		const keyboardWithBack = [
-			...keyboardEntry.keyboard,
+			...(typeof keyboardEntry.keyboard === 'function' ? await keyboardEntry.keyboard(context, args && { args }) : keyboardEntry.keyboard),
 			...(redirectHistory.length > 1 ? [[{ text: KeyboardManager.backButtonText, redirect: redirectHistory[redirectHistory.length - 2].redirect }]] : []),
 		];
-		return { keyboard: await KeyboardConvert(this.client, keyboardWithBack), params: keyboardEntry.params };
+		return {
+			keyboard: await KeyboardConvert(this.client, keyboardWithBack),
+			params: typeof keyboardEntry.params === 'function' ? await keyboardEntry.params(context, args && { args }) : keyboardEntry.params,
+		};
 	}
 }

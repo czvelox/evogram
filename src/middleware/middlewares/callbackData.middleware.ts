@@ -17,23 +17,23 @@ class CallbackDataMiddleware {
 		// @ts-ignore
 		if (ctx.callback_query.data.onClick) eval(`(${ctx.callback_query.data.onClick})(callbackQuery)`), delete ctx.callback_query.data.onClick;
 
+		// prettier-ignore
+		const commandContext = ContextManager.getContext<CommandContext>("Command", { client: ctx.client, source: {
+			...callbackQuery.message.source,
+			from: callbackQuery.source.from
+		}, state: { ...ctx.state, origin: "callbackQuery", callbackQuery }});
+
 		if (redirect && !ctx.callback_query.data.keyboard) {
-			const data = await ctx.client.keyboard.get(redirect, ctx.callback_query.from.id, ctx.callback_query.data);
+			const data = await ctx.client.keyboard.get(commandContext, redirect, ctx.callback_query.data);
 			await callbackQuery.message.edit(callbackQuery.message.text!, {
 				reply_markup: { inline_keyboard: data.keyboard },
-				...(typeof data.params === 'function' ? data.params() : data.params),
+				...data.params,
 			});
 		}
 
 		if (commandName) {
 			const command = CommandManager.commands.find((command) => command.params.name === commandName);
 			if (!command) return next();
-
-			// prettier-ignore
-			const commandContext = ContextManager.getContext<CommandContext>("Command", { client: ctx.client, source: {
-				...callbackQuery.message.source,
-				from: callbackQuery.source.from
-			}, state: { ...ctx.state, origin: "callbackQuery", callbackQuery }});
 
 			//@ts-ignore
 			command.execute(commandContext, { args: (await getCommandArguments(commandContext, command)) || {} });
