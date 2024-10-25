@@ -32,7 +32,7 @@ class CallbackDataMiddleware {
 		}
 
 		if (commandName) {
-			const command = CommandManager.commands.find((command) => command.params.name === commandName);
+			const command = CommandManager.commands.find((command) => command.params.name === commandName && (command.params?.onlyForOwner ? ctx.state.userDB.isOwner : true));
 			if (!command) return next();
 
 			//@ts-ignore
