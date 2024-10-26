@@ -20,7 +20,7 @@ class CommandMiddleware {
 
 		if (command === ctx.client.params.keyboardMode?.menuCommand)
 			KeyboardManager.redirectHistory.set(ctx.message.from!.id, [{ redirect: ctx.client.params.keyboardMode!.menuCommand }]);
-		if (command) command.execute(commandContext, { args: (await getCommandArguments(commandContext, command)) || {} });
+		if (command) await command.execute(commandContext, { args: (await getCommandArguments(commandContext, command)) || {} });
 
 		return next();
 	}
