@@ -29,6 +29,7 @@ import {
 	TelegramSendVoiceParams,
 	TelegramUnpinChatMessageParams,
 } from '../../../types';
+import { TemplateUtil } from '../../../utils';
 import { Context } from '../../core';
 import { MessageContext, IncomingMessageContext } from '../../migrated';
 
@@ -55,6 +56,10 @@ export class MessageMethods extends Context<TelegramMessage> {
 			...(params || typeof data === 'object' ? data : {}),
 		});
 		// TODO: sending a message based on data from the context
+	}
+
+	public sendTemplate(templateName: string, payload?: Record<string, any>, params?: Omit<Omit<TelegramSendMessageParams, 'chat_id'>, 'text'>) {
+		return this.send(Object.assign(TemplateUtil.getTemplate(templateName, Object.assign({}, this, payload)), params));
 	}
 
 	/**
