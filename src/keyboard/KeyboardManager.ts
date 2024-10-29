@@ -2,7 +2,7 @@ import { CommandContext, CommandExecuteData, Evogram, TelegramSendMessageParams 
 import { EvogramInlineKeyboardButton } from './keyboard.interface';
 import { KeyboardConvert } from './KeyboardConvert';
 
-export type RedirectHistory = { redirect: string; args?: Record<string, any> }[];
+export type RedirectHistory = { redirect: string; args?: Record<string, any>; commandName?: string }[];
 export type KeyboardEntry = {
 	keyboard:
 		| EvogramInlineKeyboardButton[][]
@@ -23,7 +23,8 @@ export class KeyboardManager {
 	public async get(
 		context: CommandContext,
 		keyboardID: string,
-		args?: Record<string, any>
+		args?: Record<string, any>,
+		commandName?: string
 	): Promise<{ keyboard: EvogramInlineKeyboardButton[][]; params?: Omit<TelegramSendMessageParams, 'chat_id'> }> {
 		const userID = context.user.id;
 
@@ -32,14 +33,14 @@ export class KeyboardManager {
 
 		if (userID && redirectHistory[redirectHistory.length - 1]?.redirect !== keyboardID) {
 			if (redirectHistory[redirectHistory.length - 2]?.redirect !== keyboardID) {
-				KeyboardManager.redirectHistory.set(userID, [...redirectHistory, { redirect: keyboardID, args }]);
+				KeyboardManager.redirectHistory.set(userID, [...redirectHistory, { redirect: keyboardID, args, commandName }]);
 			} else if (redirectHistory.length > 1) {
 				redirectHistory.pop();
 				KeyboardManager.redirectHistory.set(userID, redirectHistory);
 			}
 
 			if (this.client.params.keyboardMode!.menuKeyboard === keyboardID)
-				KeyboardManager.redirectHistory.set(userID, [{ redirect: this.client.params.keyboardMode!.menuKeyboard, args }]);
+				KeyboardManager.redirectHistory.set(userID, [{ redirect: this.client.params.keyboardMode!.menuKeyboard, args, commandName }]);
 			redirectHistory = KeyboardManager.redirectHistory.get(userID)!;
 		}
 
@@ -47,10 +48,12 @@ export class KeyboardManager {
 		if (!keyboardEntry) throw new Error(`Keyboard with ID "${keyboardID}" not found.`);
 
 		// Clone the keyboard and add the back button if there's a navigation history
+		// prettier-ignore
 		const keyboardWithBack = [
 			...(typeof keyboardEntry.keyboard === 'function' ? await keyboardEntry.keyboard(context, args && { args }) : keyboardEntry.keyboard),
-			...(redirectHistory.length > 1 ? [[{ text: KeyboardManager.backButtonText, redirect: redirectHistory[redirectHistory.length - 2].redirect }]] : []),
+			...(redirectHistory.length > 1 ? [[{ text: KeyboardManager.backButtonText, redirect: redirectHistory[redirectHistory.length - 2].redirect, commandName: redirectHistory[redirectHistory.length - 2].commandName }]] : []),
 		];
+
 		return {
 			keyboard: await KeyboardConvert(this.client, keyboardWithBack),
 			params: typeof keyboardEntry.params === 'function' ? await keyboardEntry.params(context, args && { args }) : keyboardEntry.params,

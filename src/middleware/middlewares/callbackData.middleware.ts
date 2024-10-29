@@ -23,8 +23,8 @@ class CallbackDataMiddleware {
 			from: callbackQuery.source.from
 		}, state: { ...ctx.state, origin: "callbackQuery", callbackQuery }});
 
-		if (redirect && !ctx.callback_query.data.keyboard) {
-			const data = await ctx.client.keyboard.get(commandContext, redirect, ctx.callback_query.data);
+		if (redirect && !ctx.callback_query.data.keyboard && !commandName) {
+			const data = await ctx.client.keyboard.get(commandContext, redirect, ctx.callback_query.data, commandName);
 			await callbackQuery.message.edit(callbackQuery.message.text!, {
 				reply_markup: { inline_keyboard: data.keyboard },
 				...data.params,
