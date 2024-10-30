@@ -33,7 +33,7 @@ export class UserContext extends Context<TelegramUser> {
 		return this.client.api.getUserProfilePhotos({ user_id: this.source.id, ...params });
 	}
 
-	public userDB: UserDBContext = this.state.userDB;
+	public userDB: UserDBContext = this.state?.userDB;
 
 	// TODO: implement getting chatMember
 }
