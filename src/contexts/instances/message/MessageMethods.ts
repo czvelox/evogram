@@ -125,8 +125,8 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 *
 	 * @returns A promise that resolves when the message has been successfully deleted.
 	 */
-	public delete() {
-		return this.client.api.deleteMessage({ chat_id: this.source.chat.id, message_id: this.source.message_id });
+	public delete(timeout?: number) {
+		return setTimeout(() => this.client.api.deleteMessage({ chat_id: this.source.chat.id, message_id: this.source.message_id }), timeout);
 	}
 
 	/**
