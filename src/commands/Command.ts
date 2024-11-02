@@ -9,7 +9,9 @@ export abstract class Command {
 	 * @param message - The incoming message.
 	 */
 	public isExecutable(context: CommandContext): boolean {
-		if (context.client.params.keyboardMode?.menuCommand && context.client.params.keyboardMode?.menuCommand !== this.params.name) return false;
+		if (this.params.onlyFromKeyboard && !context.callbackQuery) return false;
+		if (this.params.onlyFromKeyboard !== false && context.client.params.keyboardMode?.menuCommand && context.client.params.keyboardMode?.menuCommand !== this.params.name)
+			return false;
 		if (!context.text) return false;
 		if (this.params.onlyForOwner && !context.user.userDB.isOwner) return false;
 

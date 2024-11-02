@@ -32,7 +32,7 @@ export class KeyboardManager {
 		if (typeof args === 'string') args = undefined;
 		let redirectHistory: RedirectHistory = KeyboardManager.redirectHistory.get(userID!) || [{ redirect: this.client.params.keyboardMode!.menuKeyboard, args }];
 
-		if (userID && redirectHistory[redirectHistory.length - 1]?.redirect !== keyboardID) {
+		if (userID && redirectHistory[redirectHistory.length - 1]?.redirect !== keyboardID && !noBack) {
 			if (redirectHistory[redirectHistory.length - 2]?.redirect !== keyboardID) {
 				KeyboardManager.redirectHistory.set(userID, [...redirectHistory, { redirect: keyboardID, args, commandName }]);
 			} else if (redirectHistory.length > 1) {
