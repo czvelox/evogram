@@ -11,6 +11,21 @@ interface EvogramParams {
 		menuCommand: string;
 		menuKeyboard: string;
 	};
+	/**
+	 * Flood control settings to prevent message overload.
+	 * Can be either:
+	 * - `true` to enable sequential processing, where the next message is processed only after the previous one completes.
+	 * - An object with a `delay` property to enforce a time-based delay between messages.
+	 */
+	floodControl?:
+		| boolean // If true, the bot will wait for the previous message to complete before handling the next
+		| {
+				/**
+				 * Time delay in milliseconds between processing each message. Used to prevent flooding
+				 * based on timing if `floodControl` is an object.
+				 */
+				delay: number;
+		  };
 }
 
 /** Represents the main client for the Evogram framework. */
