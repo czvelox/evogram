@@ -24,7 +24,8 @@ export class KeyboardManager {
 		context: CommandContext,
 		keyboardID: string,
 		args?: Record<string, any>,
-		commandName?: string
+		commandName?: string,
+		noBack?: boolean
 	): Promise<{ keyboard: EvogramInlineKeyboardButton[][]; params?: Omit<TelegramSendMessageParams, 'chat_id'> }> {
 		const userID = context.user.id;
 
@@ -51,12 +52,18 @@ export class KeyboardManager {
 		// prettier-ignore
 		const keyboardWithBack = [
 			...(typeof keyboardEntry.keyboard === 'function' ? await keyboardEntry.keyboard(context, args && { args }) : keyboardEntry.keyboard),
-			...(redirectHistory.length > 1 ? [[{ text: KeyboardManager.backButtonText, redirect: redirectHistory[redirectHistory.length - 2].redirect, commandName: redirectHistory[redirectHistory.length - 2].commandName }]] : []),
+			...(redirectHistory.length > 1 && !noBack ? [[{ text: KeyboardManager.backButtonText, isBackButton: true }]] : []),
 		];
 
 		return {
 			keyboard: await KeyboardConvert(this.client, keyboardWithBack),
 			params: typeof keyboardEntry.params === 'function' ? await keyboardEntry.params(context, args && { args }) : keyboardEntry.params,
 		};
+	}
+
+	public getBack(context: CommandContext) {
+		const redirectHistory = KeyboardManager.redirectHistory.get(context.user.id);
+		const data = (redirectHistory || [])[redirectHistory && redirectHistory?.length > 1 ? redirectHistory.length - 2 : 0];
+		return this.get(context, data?.redirect || this.client.params.keyboardMode!.menuKeyboard, data?.args, data?.commandName);
 	}
 }

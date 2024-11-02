@@ -8,7 +8,7 @@ class CallbackDataMiddleware {
 	@MiddlewareD()
 	async middleware(ctx: any, next: any) {
 		if (!ctx.callback_query || !ctx.callback_query.data || !ctx.callback_query.data.startsWith('cdm')) return next();
-		const [commandName, userID, id, redirect] = ctx.callback_query.data.split('cdm ')[1].split(';');
+		const [commandName, userID, id, redirect, isBackButton] = ctx.callback_query.data.split('cdm ')[1].split(';');
 
 		if (Number(userID) && Number(userID) !== ctx.callback_query.from.id) return;
 
@@ -23,8 +23,10 @@ class CallbackDataMiddleware {
 			from: callbackQuery.source.from
 		}, state: { ...ctx.state, origin: "callbackQuery", callbackQuery }});
 
-		if (redirect && !ctx.callback_query.data.keyboard && !commandName) {
-			const data = await ctx.client.keyboard.get(commandContext, redirect, ctx.callback_query.data, commandName);
+		if ((redirect || isBackButton) && !ctx.callback_query.data.keyboard && !commandName) {
+			const data = Boolean(isBackButton)
+				? await ctx.client.keyboard.getBack(commandContext)
+				: await ctx.client.keyboard.get(commandContext, redirect, ctx.callback_query.data, commandName);
 			await callbackQuery.message.edit(callbackQuery.message.text!, {
 				reply_markup: { inline_keyboard: data.keyboard },
 				...data.params,
@@ -36,7 +38,7 @@ class CallbackDataMiddleware {
 			if (!command) return next();
 
 			//@ts-ignore
-			command.execute(commandContext, { args: (await getCommandArguments(commandContext, command)) || {} });
+			await command.execute(commandContext, { args: (await getCommandArguments(commandContext, command)) || {} });
 		} else if (ctx.callback_query.data.keyboard) {
 			callbackQuery.message.edit(ctx.callback_query.message?.text, { reply_markup: { inline_keyboard: ctx.callback_query.data.keyboard.inline_keyboard } });
 		}

@@ -17,8 +17,8 @@ export async function KeyboardConvert(client: Evogram, params: EvogramInlineKeyb
 				if (!(await client.database.getCallbackData(id))) await client.database.addCallbackData({ id, created_at: Date.now(), json_data: json });
 			}
 
-			if (button.commandName || button.json || button.onlyForUser || button.onClick || button.keyboard || button.redirect) {
-				callback_data = `cdm ${button.commandName || ''};${button.onlyForUser || ''};${id || ''};${button.redirect || ''}`;
+			if (button.commandName || button.onlyForUser || button.redirect || button.isBackButton) {
+				callback_data = `cdm ${button.commandName || ''};${button.onlyForUser || ''};${id || ''};${button.redirect || ''};${Number(button.isBackButton) || ''}`;
 			}
 
 			//@ts-ignore

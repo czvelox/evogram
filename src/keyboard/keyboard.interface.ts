@@ -14,4 +14,5 @@ export interface EvogramInlineKeyboardButton extends TelegramInlineKeyboardButto
 	onClick?: (context: CallbackQueryContext) => any;
 
 	keyboard?: EvogramInlineKeyboardButton[][];
+	isBackButton?: boolean;
 }
