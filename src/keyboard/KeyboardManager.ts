@@ -30,7 +30,9 @@ export class KeyboardManager {
 		const userID = context.user.id;
 
 		if (typeof args === 'string') args = undefined;
-		let redirectHistory: RedirectHistory = KeyboardManager.redirectHistory.get(userID!) || [{ redirect: this.client.params.keyboardMode!.menuKeyboard, args }];
+		let redirectHistory: RedirectHistory =
+			KeyboardManager.redirectHistory.get(userID!) ||
+			(this.client.params.keyboardMode?.menuKeyboard ? [{ redirect: this.client.params.keyboardMode.menuKeyboard, args }] : []);
 
 		if (userID && redirectHistory[redirectHistory.length - 1]?.redirect !== keyboardID && !noBack) {
 			if (redirectHistory[redirectHistory.length - 2]?.redirect !== keyboardID) {
@@ -40,8 +42,8 @@ export class KeyboardManager {
 				KeyboardManager.redirectHistory.set(userID, redirectHistory);
 			}
 
-			if (this.client.params.keyboardMode!.menuKeyboard === keyboardID)
-				KeyboardManager.redirectHistory.set(userID, [{ redirect: this.client.params.keyboardMode!.menuKeyboard, args, commandName }]);
+			if (this.client.params.keyboardMode?.menuKeyboard === keyboardID)
+				KeyboardManager.redirectHistory.set(userID, [{ redirect: this.client.params.keyboardMode.menuKeyboard, args, commandName }]);
 			redirectHistory = KeyboardManager.redirectHistory.get(userID)!;
 		}
 
