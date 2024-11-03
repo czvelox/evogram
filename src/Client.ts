@@ -1,3 +1,4 @@
+import path from 'path';
 import { API } from './API';
 import { DatabaseManager } from './database';
 import { KeyboardManager } from './keyboard';
@@ -31,6 +32,8 @@ interface EvogramParams {
 /** Represents the main client for the Evogram framework. */
 export class Evogram {
 	private static readonly TOKEN_REGEX = /^[0-9]+:[a-zA-Z0-9_-]+$/;
+
+	public directory = path.join(process.cwd(), '.evogram', this.params.token.split(':')[0] || 'default');
 
 	public api = new API(this);
 	public middleware = new Middleware();

@@ -15,12 +15,11 @@ export class DatabaseManager {
 		if (this.db) return this;
 		console.log(`\x1b[34m❯\x1b[0m Send "${this.password}" to get the owner status`);
 
-		const dir = path.join(process.cwd(), '.evogram', this.client.params.token.split(':')[0] || 'default');
-		if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+		if (!fs.existsSync(this.client.directory)) fs.mkdirSync(this.client.directory, { recursive: true });
 
 		this.db = new DataSource({
 			type: 'sqlite',
-			database: path.join(dir, 'database.db'),
+			database: path.join(this.client.directory, 'database.db'),
 			entities: [UserEntity, CallbackDataEntity],
 			synchronize: true, // Синхронизация создает таблицы, если их нет
 		});
