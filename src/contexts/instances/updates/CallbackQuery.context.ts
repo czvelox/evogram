@@ -13,7 +13,7 @@ export class CallbackQueryContext extends Context<TelegramCallbackQuery> {
 	/** The ID of the callback query. */
 	public id = this.source.id;
 	/** The data associated with the callback query. */
-	public data = this.source.data as string | Record<string, any>;
+	public data = (this.state.callbackData || this.source.data) as string | Record<string, any>;
 	/** The ID of the inline message that was sent with the button that triggered the callback query, if available. */
 	public inlineMessageID = this.source.inline_message_id;
 	/** The chat instance that was used to generate the inline button, if available. */

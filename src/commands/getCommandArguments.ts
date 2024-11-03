@@ -15,7 +15,7 @@ export async function getCommandArguments(message: CommandContext, command: Comm
 		KeyboardManager.redirectHistory.get(message.user.id)?.reduce((acc, item) => {
 			return Object.assign(acc, item.args || {});
 		}, {}) || {},
-		(typeof message.callbackQuery?.data === 'object' ? (message.callbackQuery?.data as Record<string, any>) : {}) || {}
+		(typeof message.state.callbackData === 'object' ? (message.state.callbackData as Record<string, any>) : {}) || {}
 	);
 
 	// Определяем, какие аргументы ещё не были запрошены
