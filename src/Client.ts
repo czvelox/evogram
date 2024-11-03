@@ -2,6 +2,7 @@ import path from 'path';
 import { API } from './API';
 import { DatabaseManager } from './database';
 import { KeyboardManager } from './keyboard';
+import { LoggerManager } from './logger';
 import { Middleware } from './middleware';
 import { QuestionManager } from './question';
 import { Updates } from './updates';
@@ -27,6 +28,7 @@ interface EvogramParams {
 				 */
 				delay: number;
 		  };
+	logLevel?: string;
 }
 
 /** Represents the main client for the Evogram framework. */
@@ -41,6 +43,7 @@ export class Evogram {
 	public database = new DatabaseManager(this);
 	public keyboard = new KeyboardManager(this);
 	public question = new QuestionManager();
+	public logger = new LoggerManager(this, this.params.logLevel);
 
 	/**
 	 * Creates an instance of the Evogram client.
