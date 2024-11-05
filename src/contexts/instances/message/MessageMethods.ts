@@ -77,7 +77,7 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendQuestion(params: Omit<TelegramSendMessageParams, 'chat_id'>, callback: (message: MessageContext) => void): Promise<IncomingMessageContext>;
 	public async sendQuestion(data: any, callback: any): Promise<IncomingMessageContext> {
-		this.client.question.addQuestion(data.chat_id || this.source.chat.id, callback);
+		this.client.question.addQuestion(this.source.from?.id!, callback);
 		return this.send(data);
 	}
 
