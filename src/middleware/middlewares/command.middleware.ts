@@ -41,8 +41,6 @@ class CommandMiddleware {
 				await command.execute(commandContext, { args });
 			}
 
-			return next();
-
 			// Обработка callback-запросов
 		} else if (ctx.callback_query) {
 			logger.info(`Received callback query from user: ${ctx.callback_query?.from?.id}`, meta);
@@ -72,5 +70,7 @@ class CommandMiddleware {
 				await command.execute(commandContext, { args });
 			}
 		}
+
+		return next();
 	}
 }
