@@ -10,11 +10,15 @@ export async function KeyboardConvert(client: Evogram, params: EvogramInlineKeyb
 			let id,
 				callback_data = button.callback_data;
 
-			if (button.json || button.keyboard || button.onClick) {
-				const json = JSON.stringify({ ...button.json, onClick: button.onClick?.toString(), keyboard: button.keyboard });
-				id = createHash('md5').update(json).digest('hex');
+			if (button.payload || button.keyboard || button.onClick) {
+				const payload = JSON.stringify({
+					...(typeof button.payload === 'object' ? button.payload : { payload: button.payload }),
+					onClick: button.onClick?.toString(),
+					keyboard: button.keyboard,
+				});
+				id = createHash('md5').update(payload).digest('hex');
 
-				if (!(await client.database.getCallbackData(id))) await client.database.addCallbackData({ id, created_at: Date.now(), json_data: json });
+				if (!(await client.database.getCallbackData(id))) await client.database.addCallbackData({ id, created_at: Date.now(), payload });
 			}
 
 			if (button.commandName || button.onlyForUser || button.redirect || button.isBackButton) {

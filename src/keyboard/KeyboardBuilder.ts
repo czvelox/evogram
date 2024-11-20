@@ -85,7 +85,7 @@ export class KeyboardBuilder {
 			paginationButtons.push({
 				text: '« Previous',
 				commandName, // Command for navigating to the previous page
-				json: { page: currentPage - 1 },
+				payload: { page: currentPage - 1 },
 			});
 		}
 
@@ -94,7 +94,7 @@ export class KeyboardBuilder {
 			paginationButtons.push({
 				text: 'Next »',
 				commandName, // Command for navigating to the next page
-				json: { page: currentPage + 1 },
+				payload: { page: currentPage + 1 },
 			});
 		}
 

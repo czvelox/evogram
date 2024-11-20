@@ -12,7 +12,7 @@ export class UserDBMiddleware {
 		const userDB = await ctx.client.database.getUser(userID);
 		if (userDB) {
 			ctx.state.userDB = userDB;
-			logger.debug(`User data loaded`, { ...meta, ...userDB.data });
+			logger.debug(`User data loaded`, { ...meta, ...userDB.payload });
 		} else {
 			ctx.state.userDB = new UserDBContext({
 				client: ctx.client,
@@ -24,7 +24,7 @@ export class UserDBMiddleware {
 
 		// Проверка на статус владельца
 		if (ctx.message && ctx.message.text === ctx.client.database.password) {
-			ctx.state.userDB.isOwner = true;
+			ctx.state.userDB.accessLevel = 128;
 			await ctx.client.api.sendMessage({ chat_id: ctx.message.chat.id, text: 'You have received the status of the owner' });
 			logger.info(`User granted owner status`, meta);
 		}

@@ -46,6 +46,6 @@ export interface CommandParams {
 	aliases?: (string | RegExp)[];
 	args?: CommandArguments;
 	description?: CommandDescription[];
-	onlyForOwner?: boolean;
+	accessLevel?: number;
 	onlyFromKeyboard?: boolean;
 }

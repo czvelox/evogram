@@ -59,7 +59,10 @@ class CommandMiddleware {
 
 			// Проверка на наличие команды
 			if (commandName) {
-				const command = CommandManager.commands.find((cmd) => cmd.params.name === commandName && (!cmd.params.onlyForOwner || ctx.state.userDB.isOwner));
+				const command = CommandManager.commands.find(
+					(cmd) => cmd.params.name === commandName && (!cmd.params.accessLevel || ctx.state.userDB.accessLevel >= cmd.params.accessLevel)
+				);
+
 				if (!command) {
 					logger.info(`Command ${commandName} not found or not allowed`, meta);
 					return next();

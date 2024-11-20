@@ -1,7 +1,7 @@
 import { CommandContext, MessageContext } from '../contexts/migrated';
-import { KeyboardManager } from '../keyboard';
+import { KeyboardConvert, KeyboardManager } from '../keyboard';
 import { Command } from './Command';
-import { CommandArguments } from './command.types';
+import { CommandArguments, CommandArgumentType } from './command.types';
 
 export async function getCommandArguments(message: CommandContext, command: Command): Promise<any> {
 	if (!command.params?.args || !message.text) return {};
@@ -15,14 +15,15 @@ export async function getCommandArguments(message: CommandContext, command: Comm
 		KeyboardManager.redirectHistory.get(message.user.id)?.reduce((acc, item) => {
 			return Object.assign(acc, item.args || {});
 		}, {}) || {},
-		(typeof message.state.callbackData === 'object' ? (message.state.callbackData as Record<string, any>) : {}) || {}
+		(typeof message.state.callbackData === 'object' ? (message.state.callbackData as Record<string, any>) : {}) || {},
+		...args.value.map((arg) =>
+			typeof arg === 'object' ? (arg.default ? (typeof arg.default === 'function' ? { [arg.name]: arg.default(message) } : { [arg.name]: arg.default }) : {}) : {}
+		)
 	);
 
 	// Определяем, какие аргументы ещё не были запрошены
 	//@ts-ignore
-	const missingArgs = args.value.filter((arg) =>
-		!savedArgs[typeof arg === 'string' ? arg : arg.name] && !(typeof arg === 'string' ? arg : arg.name).endsWith('?') && typeof arg === 'object' ? !arg.default : false
-	);
+	const missingArgs = args.value.filter((arg) => !savedArgs[typeof arg === 'string' ? arg : arg.name] && !(typeof arg === 'string' ? arg : arg.name).endsWith('?'));
 
 	// Если все аргументы уже есть, возвращаем их
 	if (missingArgs.length === 0) return savedArgs;

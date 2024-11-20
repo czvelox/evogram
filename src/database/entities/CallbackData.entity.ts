@@ -9,5 +9,5 @@ export class CallbackDataEntity {
 	created_at!: number;
 
 	@Column({ type: 'text' })
-	json_data!: string;
+	payload!: string;
 }

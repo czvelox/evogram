@@ -13,7 +13,7 @@ export abstract class Command {
 		if (this.params.onlyFromKeyboard !== false && context.client.params.keyboardMode?.menuCommand && context.client.params.keyboardMode?.menuCommand !== this.params.name)
 			return false;
 		if (!context.text) return false;
-		if (this.params.onlyForOwner && !context.user.userDB.isOwner) return false;
+		if (this.params.accessLevel && context.user.userDB.accessLevel < this.params.accessLevel) return false;
 
 		for (const item of [`/${this.params.name}`, ...(this.params.aliases || [])])
 			if (typeof item === 'string' ? context.text.split(' ')[0] === item : item.test(context.text)) return true;

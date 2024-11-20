@@ -33,7 +33,12 @@ class CallbackDataMiddleware {
 		if (id) {
 			const callbackData = await ctx.client.database.getCallbackData(id);
 
-			ctx.state.callbackData = JSON.parse(callbackData?.json_data || '{}');
+			try {
+				ctx.state.callbackData = JSON.parse(callbackData?.payload || '{}');
+			} catch {
+				ctx.state.callbackData = callbackData?.payload;
+			}
+
 			logger.info(`Loaded callback data from database for ID ${id}`, meta);
 			logger.debug(`Callback data loaded: ${JSON.stringify(ctx.state.callbackData)}`, meta);
 		}

@@ -10,7 +10,7 @@ export interface EvogramInlineKeyboardButton extends TelegramInlineKeyboardButto
 	/** The button will only be available for the specified user context or user ID. */
 	onlyForUser?: UserContext | number;
 
-	json?: Record<string, any>;
+	payload?: any;
 	onClick?: (context: CallbackQueryContext) => any;
 
 	keyboard?: EvogramInlineKeyboardButton[][];

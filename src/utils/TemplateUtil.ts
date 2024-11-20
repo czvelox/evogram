@@ -1,6 +1,7 @@
 import fs from 'fs';
 import yaml from 'js-yaml';
 import { TelegramSendMessageParams } from '../types';
+import { KeyboardManager } from '../keyboard';
 
 export interface Template {
 	text: string;
@@ -22,8 +23,17 @@ export class TemplateUtil {
 
 	public static getTemplate(path: string, params?: Record<string, any>): TelegramSendMessageParams {
 		const template: any = this.findNestedTemplate(path);
+		if (!template) throw new Error(`Passed template "${path}" does not exist`);
 
-		const text = template.text || template.caption ? this.interpolate(template.text || template.caption, params).replace(/ {2}/g, '') : undefined;
+		if (template.keyboard) {
+			const { keyboard, params } = KeyboardManager.keyboards.get(template.keyboard)!;
+			template.reply_markup = {
+				//@ts-ignore
+				inline_keyboard: typeof keyboard === 'function' ? keyboard(undefined, params) : keyboard,
+			};
+		}
+
+		const text = template.text || template.caption ? this.interpolate(template.text || template.caption, params).replace(/ {2}/g, ' ') : undefined;
 		return { ...template, [template.text ? 'text' : 'caption']: text } as TelegramSendMessageParams;
 	}
 

@@ -2,22 +2,13 @@ import { Context, ContextD } from '../../contexts';
 import { UserEntity } from '../entities';
 
 @ContextD('UserDB')
-export class UserDBContext extends Context<{ id: number; created_at?: number; is_owner?: number; json_data?: string }> {
+export class UserDBContext<T extends Record<string, any> = any> extends Context<Partial<UserEntity> & { id: number }> {
 	public id = this.source.id;
 	public createdAt = this.source.created_at ? new Date(this.source.created_at) : new Date();
-	public isOwner = Boolean(this.source.is_owner);
+	public lastActivity = this.source.last_activity || Date.now();
+	public accessLevel = this.source.access_level || 0;
 
-	public data: any;
-
-	constructor(params: any) {
-		super(params);
-
-		try {
-			this.data = JSON.parse(this.source.json_data!);
-		} catch {
-			this.data = this.source.json_data;
-		}
-	}
+	public payload: T = (this.source.payload as T) || this.structure(this.source as UserEntity);
 
 	public async save() {
 		const userRepository = this.client.database.db.getRepository(UserEntity);
@@ -27,10 +18,15 @@ export class UserDBContext extends Context<{ id: number; created_at?: number; is
 			.values({
 				id: this.id,
 				created_at: this.createdAt.getTime(),
-				is_owner: Number(this.isOwner),
-				json_data: typeof this.data === 'object' ? JSON.stringify(this.data) : this.data?.toString(),
+				access_level: this.accessLevel,
+				payload: this.payload,
+				last_activity: this.lastActivity,
 			})
-			.orUpdate(['json_data', 'is_owner'], ['id'])
+			.orUpdate(['payload', 'access_level', 'last_activity'], ['id'])
 			.execute();
+	}
+
+	structure(entity: UserEntity): T {
+		return {} as T;
 	}
 }

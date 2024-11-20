@@ -8,9 +8,12 @@ export class UserEntity {
 	@Column({ type: 'integer' })
 	created_at!: number;
 
-	@Column({ type: 'integer', default: 0 })
-	is_owner!: number;
+	@Column({ type: 'tinyint', default: 0 })
+	access_level!: number;
 
-	@Column({ type: 'text', nullable: true })
-	json_data?: string;
+	@Column({ type: 'json', nullable: true })
+	payload?: Record<string, any>;
+
+	@Column({ type: 'integer' })
+	last_activity!: number;
 }
