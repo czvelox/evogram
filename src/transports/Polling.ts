@@ -25,6 +25,8 @@ export class Polling extends EventTransport {
 		this.state = EventTransportState.Disabled;
 	}
 
+	private lastUpdateTime = Date.now();
+
 	/**
 	 * Worker function for long-polling updates.
 	 * @param {TelegramGetUpdatesParams} [params={}] - Optional parameters for updates.
@@ -32,6 +34,12 @@ export class Polling extends EventTransport {
 	private async worker(params: TelegramGetUpdatesParams = {}) {
 		while (this.state === EventTransportState.Enabled) {
 			try {
+				if (Date.now() - this.lastUpdateTime > 60000) {
+					this.lastUpdateTime = Date.now();
+					this.worker(params);
+					return console.log('⏳ Restarting worker due to inactivity...');
+				} else this.lastUpdateTime = Date.now();
+
 				// Fetch updates from the Telegram API
 				const updates = await this.client.api.getUpdates(params);
 				if (!updates || updates.length === 0) continue;
