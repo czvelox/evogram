@@ -86,8 +86,7 @@ export class ApiWorker {
 			// Returning the API response data
 			return response.data.result;
 		} catch (error: any) {
-			// Handling errors if any
-			if (error.code !== 'ECONNRESET') console.error('Error occurred while making API call:', error);
+			if (axios.isAxiosError(error)) throw { method, params: mergedParams, error: error.response?.data };
 		}
 	}
 
