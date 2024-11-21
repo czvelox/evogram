@@ -1,3 +1,4 @@
+import { KeyboardManager } from '../../../keyboard';
 import {
 	EmojiKey,
 	TelegramChatActionType,
@@ -53,13 +54,25 @@ export class MessageMethods extends Context<TelegramMessage> {
 			chat_id: this.source.chat.id,
 			business_connection_id: this.source.business_connection_id,
 			message_thread_id: this.source.is_topic_message ? this.source.message_thread_id : undefined,
-			...(params || typeof data === 'object' ? data : {}),
+			...(params || (typeof data === 'object' ? data : {})),
 		});
 		// TODO: sending a message based on data from the context
 	}
 
 	public sendTemplate(templateName: string, payload?: Record<string, any>, params?: Omit<Omit<TelegramSendMessageParams, 'chat_id'>, 'text'>) {
 		return this.send(Object.assign(TemplateUtil.getTemplate(templateName, Object.assign({}, this, payload)), params));
+	}
+
+	public sendKeyboard(keyboardID: string, args?: Record<string, any>, noBack: boolean = false) {
+		const { keyboard, params } = new KeyboardManager(this.client).get({
+			context: this.state.commandContext,
+			keyboardID,
+			commandName: this.state.command?.params.name,
+			args,
+			noBack,
+		});
+
+		return this.send({ ...(params as TelegramSendMessageParams), reply_markup: { inline_keyboard: keyboard } });
 	}
 
 	/**

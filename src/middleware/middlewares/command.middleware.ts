@@ -38,6 +38,8 @@ class CommandMiddleware {
 			if (command) {
 				const args = (await getCommandArguments(commandContext, command)) || {};
 				logger.info(`Executing command: ${command.params.name}`, meta, { args });
+
+				ctx.state.command = command;
 				await command.execute(commandContext, { args });
 			}
 
@@ -70,6 +72,8 @@ class CommandMiddleware {
 
 				const args = (await getCommandArguments(commandContext, command)) || {};
 				logger.info(`Executing callback command: ${command.params.name}`, meta, { args });
+
+				ctx.state.command = command;
 				await command.execute(commandContext, { args });
 			}
 		}
