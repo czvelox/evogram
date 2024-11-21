@@ -1,10 +1,12 @@
 import { CallbackQueryContext, ContextManager } from '../../contexts';
 import { CommandContext } from '../../contexts/migrated';
-import { MiddlewareD } from '..';
+import { MiddlewareContext, MiddlewareD } from '..';
+import { KeyboardConvert } from '../../keyboard';
+import { TelegramMessage } from '../../types';
 
 class CallbackDataMiddleware {
 	@MiddlewareD()
-	async middleware(ctx: any, next: any) {
+	async middleware(ctx: MiddlewareContext, next: any) {
 		// Получаем логгер для аккаунта
 		const logger = ctx.client.logger.getAccountLogger(Object.values<any>(ctx).find((x) => x?.from?.id)?.from.id),
 			meta = { source: 'CallbackData Middleware' };
@@ -76,12 +78,12 @@ class CallbackDataMiddleware {
 		// Редактирование сообщения для кнопки "Назад" или редиректа
 		if ((redirect || isBackButton) && !ctx.state.callbackData?.keyboard && !commandName) {
 			const data = Boolean(isBackButton)
-				? await ctx.client.keyboard.getBack(commandContext)
-				: await ctx.client.keyboard.get(commandContext, redirect, ctx.state.callbackData, commandName);
+				? ctx.client.keyboard.getBack(commandContext)
+				: ctx.client.keyboard.get({ context: commandContext, keyboardID: redirect, args: ctx.state.callbackData });
 
 			await callbackQuery.message.edit(callbackQuery.message.text!, {
-				reply_markup: { inline_keyboard: data.keyboard },
 				...data.params,
+				reply_markup: { inline_keyboard: await KeyboardConvert(ctx.client, data.keyboard) },
 			});
 			logger.info(`Message edited for ${isBackButton ? 'back button' : 'redirect'}${redirect ? `: ${redirect}` : ``}`, meta);
 			logger.debug(`Edited message with data: ${JSON.stringify(data)}`, meta);
@@ -89,9 +91,10 @@ class CallbackDataMiddleware {
 
 		// Редактирование сообщения с клавиатурой
 		if (ctx.state.callbackData?.keyboard) {
-			callbackQuery.message.edit(ctx.callback_query.message?.text, {
+			callbackQuery.message.edit((ctx.callback_query.message as TelegramMessage)?.text || 'No text', {
 				reply_markup: { inline_keyboard: ctx.state.callbackData.keyboard.inline_keyboard },
 			});
+
 			logger.info('Message edited with provided inline keyboard', meta);
 			logger.debug(`Inline keyboard data: ${JSON.stringify(ctx.state.callbackData.keyboard.inline_keyboard)}`, meta);
 		}
