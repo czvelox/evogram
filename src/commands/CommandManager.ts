@@ -4,14 +4,10 @@ import { CommandContext, MessageContext } from '../contexts';
 import { Command } from './Command';
 
 export class CommandManager {
-	constructor(private client: Evogram) {
-		setTimeout(() => this.setBotCommands, 10000);
-	}
-
 	public static commands: Command[] = [];
 
 	/** Sets the bot commands for the client. */
-	public setBotCommands() {
+	public static async setBotCommands(client: Evogram) {
 		const commands: TelegramSetMyCommandsParams[] = [];
 		// Iterate through all the commands in the CommandManager.
 		// If a command has a description...
@@ -22,11 +18,11 @@ export class CommandManager {
 				for (const [, { text, language }] of command.params.description.entries())
 					commands.find((x) => x.language_code === language)
 						? // Push the current command to that language's command list.
-							commands.find((x) => x.language_code === language)?.commands.push({ command: command.params.name, description: text })
+							commands.find((x) => x.language_code === language)?.commands.push({ command: command.params.name.toLocaleLowerCase(), description: text })
 						: // Otherwise, create a new object for that language with the current command.
-							commands.push({ language_code: language, commands: [{ command: command.params.name, description: text }] });
+							commands.push({ language_code: language, commands: [{ command: command.params.name.toLowerCase(), description: text }] });
 
-		for (const item of commands) this.client.api.setMyCommands(item);
+		for (const item of commands) await client.api.setMyCommands(item);
 	}
 
 	/**
