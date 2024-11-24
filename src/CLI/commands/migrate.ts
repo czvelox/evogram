@@ -12,8 +12,8 @@ export const migrateCommand = new Command('migrate')
 	.action(async (path) => {
 		// Define the migration and generated file paths
 		const migrationPath = path || join(process.cwd(), 'src/contexts');
-		const generatedFilePath = join(process.cwd(), 'node_modules/evogram/lib/contexts/migrated/index.d.ts');
-		const backupFilePath = join(process.cwd(), 'node_modules/evogram/lib/contexts/migrated/index.backup.d.ts');
+		const generatedFilePath = join(process.cwd(), 'node_modules/evogram/lib/migrated/index.d.ts');
+		const backupFilePath = join(process.cwd(), 'node_modules/evogram/lib/migrated/index.backup.d.ts');
 
 		// Check if migration path exists
 		if (!existsSync(migrationPath)) return console.error(`Error: The directory "${migrationPath}" does not exist.`);
