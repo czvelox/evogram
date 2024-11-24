@@ -1,4 +1,4 @@
-import { CommandContext } from '../contexts/migrated';
+import { CommandContext } from '../migrated';
 import { CommandExecuteData, CommandParams } from './command.types';
 
 export abstract class Command {

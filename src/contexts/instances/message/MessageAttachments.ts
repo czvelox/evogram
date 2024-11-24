@@ -1,6 +1,6 @@
 import { Context } from '../../core';
 import { TelegramMessage } from '../../../types';
-import { LocationContext, PollContext, VenueContext } from '../../migrated';
+import { LocationContext, PollContext, VenueContext } from '../../../migrated';
 
 /**
  * MessageAttachments handles the various types of media and attachments

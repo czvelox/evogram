@@ -2,7 +2,7 @@ import { getCommandArguments } from '../../commands';
 import { CommandManager } from '../../commands/CommandManager';
 import { MiddlewareContext, MiddlewareD } from '../';
 import { KeyboardManager } from '../../keyboard';
-import { CallbackQueryContext, CommandContext, MessageContext } from '../../contexts/migrated';
+import { CallbackQueryContext, CommandContext, MessageContext } from '../../migrated';
 import { ContextManager } from '../../contexts';
 
 class CommandMiddleware {

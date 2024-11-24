@@ -1,6 +1,6 @@
 import { Context } from '../../core';
 import { TelegramMessage } from '../../../types';
-import { MessageContext, UserContext } from '../../migrated';
+import { MessageContext, UserContext } from '../../../migrated';
 
 /**
  * MessageUpdate handles updates related to a specific Telegram message,

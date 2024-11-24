@@ -9,7 +9,7 @@ import {
 	TelegramSetMyDefaultAdministratorRightsParams,
 } from '../../../types';
 import { ContextD } from '../../core';
-import { UserContext } from '../../migrated';
+import { UserContext } from '../../../migrated';
 
 @ContextD('Bot')
 export class BotContext extends UserContext {

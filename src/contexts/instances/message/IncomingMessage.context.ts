@@ -1,6 +1,6 @@
 import { TelegramEditMessageTextParams } from '../../../types';
 import { ContextD } from '../../core';
-import { BotContext } from '../../migrated';
+import { BotContext } from '../../../migrated';
 import { MessageContext } from './Message.context';
 
 @ContextD('IncomingMessage')

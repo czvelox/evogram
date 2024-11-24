@@ -1,5 +1,5 @@
 import { CallbackQueryContext, ContextManager } from '../../contexts';
-import { CommandContext } from '../../contexts/migrated';
+import { CommandContext } from '../../migrated';
 import { MiddlewareContext, MiddlewareD } from '..';
 import { KeyboardConvert } from '../../keyboard';
 import { TelegramMessage } from '../../types';

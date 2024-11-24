@@ -1,6 +1,6 @@
 import { TelegramChat, TelegramChatInviteLink, TelegramChatJoinRequest } from '../../../types';
 import { Context, ContextD } from '../../core';
-import { UserContext } from '../../migrated';
+import { UserContext } from '../../../migrated';
 
 @ContextD('ChatJoinRequest')
 export class ChatJoinRequestContext extends Context<TelegramChatJoinRequest> {

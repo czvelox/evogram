@@ -1,6 +1,6 @@
 import { TelegramBusinessConnection } from '../../../types';
 import { Context, ContextD } from '../../core';
-import { UserContext } from '../../migrated';
+import { UserContext } from '../../../migrated';
 
 @ContextD('BusinessConnection')
 export class BusinessConnectionContext extends Context<TelegramBusinessConnection> {

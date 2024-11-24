@@ -1,4 +1,4 @@
-import { CommandContext } from '../contexts/migrated';
+import { CommandContext } from '../migrated';
 import { CommandExecuteData, Evogram, TelegramSendMessageParams } from '..';
 import { EvogramInlineKeyboardButton } from './keyboard.interface';
 

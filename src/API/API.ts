@@ -138,7 +138,7 @@ import {
 	TelegramUserProfilePhotos,
 	TelegramWebhookInfo,
 } from '..';
-import { BotContext, BusinessConnectionContext, IncomingMessageContext, PollContext, UpdateContext } from '../contexts/migrated';
+import { BotContext, BusinessConnectionContext, IncomingMessageContext, PollContext, UpdateContext } from '../migrated';
 import { ApiWorker } from './API.worker';
 
 /**

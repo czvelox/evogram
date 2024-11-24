@@ -32,7 +32,7 @@ import {
 } from '../../../types';
 import { TemplateUtil } from '../../../utils';
 import { Context } from '../../core';
-import { MessageContext, IncomingMessageContext } from '../../migrated';
+import { MessageContext, IncomingMessageContext } from '../../../migrated';
 
 export class MessageMethods extends Context<TelegramMessage> {
 	/**

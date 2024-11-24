@@ -10,7 +10,7 @@ import {
 	PollContext,
 	ServiceMessage,
 	ShippingQueryContext,
-} from '../contexts/migrated';
+} from '../migrated';
 import { Polling } from '../transports';
 import {
 	TelegramChatBoostRemoved,

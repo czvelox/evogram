@@ -1,6 +1,6 @@
 import { TelegramChat, TelegramMessageEntity } from '../../../types';
 import { ContextD } from '../../core';
-import { MessageOriginContext, UserContext } from '../../migrated';
+import { MessageOriginContext, UserContext } from '../../../migrated';
 import { MessageAttachments } from './MessageAttachments';
 import { MessageMethods } from './MessageMethods';
 import { ReplyContext } from './MessageReply.context';

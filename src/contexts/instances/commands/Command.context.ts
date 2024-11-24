@@ -1,7 +1,7 @@
 import { CommandManager } from '../../../commands';
 import { TelegramSendMessageParams } from '../../../types';
 import { ContextD } from '../../core';
-import { MessageContext, CallbackQueryContext, IncomingMessageContext } from '../../migrated';
+import { MessageContext, CallbackQueryContext, IncomingMessageContext } from '../../../migrated';
 
 @ContextD('Command')
 export class CommandContext extends IncomingMessageContext {

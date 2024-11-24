@@ -1,6 +1,6 @@
 import { TelegramChosenInlineResult } from '../../../types';
 import { Context, ContextD } from '../../core';
-import { LocationContext, UserContext } from '../../migrated';
+import { LocationContext, UserContext } from '../../../migrated';
 
 @ContextD('ChosenInlineResult')
 export class ChosenInlineResultContext extends Context<TelegramChosenInlineResult> {

@@ -1,7 +1,7 @@
 import { IncomingMessage } from 'http';
 import { TelegramAnswerCallbackQueryParams, TelegramCallbackQuery } from '../../../types';
 import { Context, ContextD } from '../../core';
-import { IncomingMessageContext, UserContext } from '../../migrated';
+import { IncomingMessageContext, UserContext } from '../../../migrated';
 
 @ContextD('CallbackQuery')
 export class CallbackQueryContext extends Context<TelegramCallbackQuery> {

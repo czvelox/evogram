@@ -1,4 +1,4 @@
-import { CommandContext, MessageContext } from '../contexts/migrated';
+import { CommandContext, MessageContext } from '../migrated';
 import { KeyboardConvert, KeyboardManager } from '../keyboard';
 import { Command } from './Command';
 import { CommandArguments, CommandArgumentType } from './command.types';

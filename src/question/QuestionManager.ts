@@ -1,4 +1,4 @@
-import { MessageContext } from '../contexts/migrated';
+import { MessageContext } from '../migrated';
 
 export class QuestionManager {
 	/**

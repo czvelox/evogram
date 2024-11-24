@@ -1,6 +1,6 @@
 import { Context, ContextD } from '../../core';
 import { TelegramAnswerShippingQueryParams, TelegramShippingQuery } from '../../../types';
-import { UserContext } from '../../migrated';
+import { UserContext } from '../../../migrated';
 
 @ContextD('ShippingQuery')
 export class ShippingQueryContext extends Context<TelegramShippingQuery> {

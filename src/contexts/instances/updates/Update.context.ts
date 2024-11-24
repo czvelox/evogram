@@ -1,6 +1,6 @@
 import { TelegramUpdate, TelegramUpdateType } from '../../../types';
 import { Context, ContextD, ContextParams } from '../../core';
-import { PollAnswerContext, PollContext } from '../../migrated';
+import { PollAnswerContext, PollContext } from '../../../migrated';
 
 @ContextD('Update')
 export class UpdateContext extends Context<TelegramUpdate> {

@@ -1,4 +1,4 @@
-import { CallbackQueryContext, UserContext } from '../contexts/migrated';
+import { CallbackQueryContext, UserContext } from '../migrated';
 import { TelegramInlineKeyboardButton } from '../types';
 /**
  * Interface extending TelegramInlineKeyboardButton with additional properties.

@@ -1,4 +1,4 @@
-import type { CallbackQueryContext, CommandContext, MessageContext } from '../contexts/migrated';
+import type { CallbackQueryContext, CommandContext, MessageContext } from '../migrated';
 import type { TelegramSendMessageParams } from '../types';
 
 export type CommandArgumentsStdin = Record<string, MessageContext>;

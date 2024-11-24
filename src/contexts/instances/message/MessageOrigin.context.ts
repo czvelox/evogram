@@ -7,7 +7,7 @@ import {
 	TelegramMessageOriginUser,
 } from '../../../types';
 import { Context, ContextD } from '../../core';
-import * as Contexts from '../../migrated';
+import * as Contexts from '../../../migrated';
 
 /**
  * MessageOriginContext handles the source information of a message's origin,

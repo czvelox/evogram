@@ -1,7 +1,7 @@
 import { TelegramTextQuote } from '../../../types';
 import { Context, ContextD, ContextParams } from '../../core';
 import { TelegramMessage } from '../../../types';
-import * as Contexts from '../../migrated';
+import * as Contexts from '../../../migrated';
 
 export class ReplyContext extends Context<TelegramMessage> {
 	public story = this.source.reply_to_story;

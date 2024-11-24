@@ -1,6 +1,6 @@
 import { TelegramVenue } from '../../../types';
 import { Context, ContextD } from '../../core';
-import { LocationContext } from '../../migrated';
+import { LocationContext } from '../../../migrated';
 
 @ContextD('Venue')
 export class VenueContext extends Context<TelegramVenue> {
