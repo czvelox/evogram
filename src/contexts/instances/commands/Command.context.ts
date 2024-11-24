@@ -12,7 +12,7 @@ export class CommandContext extends IncomingMessageContext {
 	public send(params: Omit<TelegramSendMessageParams, 'chat_id'>): Promise<IncomingMessageContext>;
 	public send(data: any, params?: any): Promise<IncomingMessageContext> {
 		//@ts-ignore
-		return this.state.origin === 'callbackQuery' ? this.edit(data, params) : super.send(data, params);
+		return this.state.origin === 'callbackQuery' && this.client.params.keyboardMode ? this.edit(data, params) : super.send(data, params);
 	}
 
 	public redirect(commandName: string, args: Record<string, any>) {
