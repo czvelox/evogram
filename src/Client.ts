@@ -6,6 +6,7 @@ import { LoggerManager } from './logger';
 import { Middleware } from './middleware';
 import { QuestionManager } from './question';
 import { Updates } from './updates';
+import { DataSourceOptions } from 'typeorm';
 
 interface EvogramParams {
 	token: string;
@@ -13,6 +14,8 @@ interface EvogramParams {
 		menuCommand: string;
 		menuKeyboard: string;
 	};
+
+	database?: DataSourceOptions;
 	/**
 	 * Flood control settings to prevent message overload.
 	 * Can be either:

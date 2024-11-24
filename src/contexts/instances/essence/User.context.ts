@@ -1,4 +1,4 @@
-import { UserDBContext } from '../../../database/instances';
+import { UserDBContext } from '../../../migrated/';
 import { TelegramGetUserProfilePhotosParams, TelegramUser } from '../../../types';
 import { Context, ContextD } from '../../core';
 

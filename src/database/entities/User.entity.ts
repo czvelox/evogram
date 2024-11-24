@@ -1,19 +1,26 @@
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('users')
 export class UserEntity {
-	@PrimaryGeneratedColumn()
-	id!: number;
+	@PrimaryGeneratedColumn('increment')
+	id!: any;
 
 	@Column({ type: 'integer' })
-	created_at!: number;
+	user_id!: number;
 
-	@Column({ type: 'tinyint', default: 0 })
-	access_level!: number;
+	@Column({ type: 'integer' })
+	created_at: number = Date.now();
+
+	@Column({ type: 'tinyint' })
+	access_level: number = 0;
 
 	@Column({ type: 'json', nullable: true })
-	payload?: Record<string, any>;
+	payload: Record<string, any> = {};
 
 	@Column({ type: 'integer' })
-	last_activity!: number;
+	last_activity: number = Date.now();
+
+	constructor(id: number) {
+		this.user_id = id;
+	}
 }

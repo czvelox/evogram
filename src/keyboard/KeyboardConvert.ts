@@ -18,7 +18,7 @@ export async function KeyboardConvert(client: Evogram, params: EvogramInlineKeyb
 				});
 				id = createHash('md5').update(payload).digest('hex');
 
-				if (!(await client.database.getCallbackData(id))) await client.database.addCallbackData({ id, created_at: Date.now(), payload });
+				if (!(await client.database.getCallbackData(id))) await client.database.addCallbackData({ button_id: id, payload });
 			}
 
 			if (button.commandName || button.onlyForUser || button.redirect || button.isBackButton) {

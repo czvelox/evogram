@@ -1,12 +1,12 @@
-import { Entity, PrimaryColumn, Column } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, PrimaryColumn } from 'typeorm';
 
 @Entity('callback_data')
 export class CallbackDataEntity {
-	@PrimaryColumn()
-	id!: string;
+	@PrimaryGeneratedColumn('increment')
+	id!: any;
 
-	@Column({ type: 'integer' })
-	created_at!: number;
+	@Column({ type: 'text' })
+	button_id!: string;
 
 	@Column({ type: 'text' })
 	payload!: string;

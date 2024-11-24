@@ -16,7 +16,7 @@ export class UserDBMiddleware {
 		} else {
 			ctx.state.userDB = new UserDBContext({
 				client: ctx.client,
-				source: { id: userID },
+				source: { user_id: userID },
 				state: ctx.state,
 			});
 			logger.info(`No user data found; created new UserDBContext`, meta);
