@@ -1,4 +1,4 @@
-import { getCommandArguments } from '../../commands';
+import { Command, getCommandArguments } from '../../commands';
 import { CommandManager } from '../../commands/CommandManager';
 import { MiddlewareContext, MiddlewareD } from '../';
 import { KeyboardManager } from '../../keyboard';
@@ -40,7 +40,11 @@ class CommandMiddleware {
 				logger.info(`Executing command: ${command.params.name}`, meta, { args });
 
 				ctx.state.command = command;
-				await command.execute(commandContext, { args });
+				try {
+					await command.execute(commandContext, { args });
+				} catch (error: any) {
+					await (command.onError || Command.onError)(commandContext, error);
+				}
 			}
 
 			// Обработка callback-запросов
@@ -51,7 +55,7 @@ class CommandMiddleware {
 				return next();
 			}
 
-			const [commandName] = ctx.callback_query?.data.split('cdm ')[1].split(';');
+			// const [commandName] = ctx.callback_query?.data.split('cdm ')[1].split(';');
 			const callbackQuery = ContextManager.getContext<CallbackQueryContext>('CallbackQuery', { client: ctx.client, source: ctx.callback_query, state: ctx.state });
 			const commandContext = ContextManager.getContext<CommandContext>('Command', {
 				client: ctx.client,
@@ -59,22 +63,18 @@ class CommandMiddleware {
 				state: { ...ctx.state, origin: 'callbackQuery', callbackQuery },
 			});
 
-			// Проверка на наличие команды
-			if (commandName) {
-				const command = CommandManager.commands.find(
-					(cmd) => cmd.params.name === commandName && (!cmd.params.accessLevel || ctx.state.userDB.accessLevel >= cmd.params.accessLevel)
-				);
+			const command = CommandManager.getCommand(commandContext);
+			if (!command) return next();
 
-				if (!command) {
-					logger.info(`Command ${commandName} not found or not allowed`, meta);
-					return next();
-				}
+			const args = (await getCommandArguments(commandContext, command)) || {};
+			logger.info(`Executing callback command: ${command.params.name}`, meta, { args });
 
-				const args = (await getCommandArguments(commandContext, command)) || {};
-				logger.info(`Executing callback command: ${command.params.name}`, meta, { args });
+			ctx.state.command = command;
 
-				ctx.state.command = command;
+			try {
 				await command.execute(commandContext, { args });
+			} catch (error: any) {
+				await (command.onError || Command.onError)(commandContext, error);
 			}
 		}
 
