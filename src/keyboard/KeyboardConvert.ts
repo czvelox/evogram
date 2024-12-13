@@ -21,7 +21,7 @@ export async function KeyboardConvert(client: Evogram, params: EvogramInlineKeyb
 				if (!(await client.database.getCallbackData(id))) await client.database.addCallbackData({ button_id: id, payload });
 			}
 
-			if (button.commandName || button.onlyForUser || button.redirect || button.isBackButton) {
+			if (id || button.commandName || button.onlyForUser || button.redirect || button.isBackButton) {
 				callback_data = `cdm ${button.commandName || ''};${button.onlyForUser || ''};${id || ''};${button.redirect || ''};${Number(button.isBackButton) || ''}`;
 			}
 
