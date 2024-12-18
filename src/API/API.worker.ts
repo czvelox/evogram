@@ -45,12 +45,12 @@ export class ApiWorker {
 
 		// Iterate through each key-value pair in the parameters object
 		for (let [key, value] of Object.entries(params)) {
-			if (typeof value === 'object') {
-				// Serialize the reply_markup object to JSON string
-				formData.append(key, JSON.stringify(value));
-			} else if (Buffer.isBuffer(value)) {
+			if (Buffer.isBuffer(value)) {
 				// Append the Buffer to FormData, specifying a default filename "file.data"
 				formData.append(key, new Blob([value]), 'file.data');
+			} else if (typeof value === 'object') {
+				// Serialize the reply_markup object to JSON string
+				formData.append(key, JSON.stringify(value));
 			} else if (typeof value === 'string' && fs.existsSync(value)) {
 				// Read the file content, create a Blob, and append it to FormData, specifying a default filename "file.data"
 				formData.append(key, new Blob([fs.readFileSync(value)]), params.filename || 'file.data');
