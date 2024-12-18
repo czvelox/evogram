@@ -1,5 +1,5 @@
 import type { CallbackQueryContext, CommandContext, MessageContext } from '../migrated';
-import type { TelegramSendMessageParams } from '../types';
+import type { TelegramBotCommandScope, TelegramSendMessageParams } from '../types';
 
 export type CommandArgumentsStdin = Record<string, MessageContext>;
 export type CommandExecuteData = { args: Record<string, any> };
@@ -46,6 +46,7 @@ export interface CommandParams {
 	aliases?: (string | RegExp)[];
 	args?: CommandArguments;
 	description?: CommandDescription[];
+	scope?: TelegramBotCommandScope;
 	accessLevel?: number;
 	onlyFromKeyboard?: boolean;
 }

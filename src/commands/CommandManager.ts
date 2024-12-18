@@ -20,7 +20,7 @@ export class CommandManager {
 						? // Push the current command to that language's command list.
 							commands.find((x) => x.language_code === language)?.commands.push({ command: command.params.name.toLocaleLowerCase(), description: text })
 						: // Otherwise, create a new object for that language with the current command.
-							commands.push({ language_code: language, commands: [{ command: command.params.name.toLowerCase(), description: text }] });
+							commands.push({ language_code: language, commands: [{ command: command.params.name.toLowerCase(), description: text }], scope: command.params.scope });
 
 		for (const item of commands) await client.api.setMyCommands(item);
 	}
