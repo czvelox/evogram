@@ -15,13 +15,15 @@ export class CommandManager {
 			if (command.params.description)
 				// Iterate through each language and text pair in the command's description.
 				// If there's already a command set for the current language...
+				// prettier-ignore
 				for (const [, { text, language }] of command.params.description.entries())
-					commands.find((x) => x.language_code === language)
-						? // Push the current command to that language's command list.
-							commands.find((x) => x.language_code === language)?.commands.push({ command: command.params.name.toLocaleLowerCase(), description: text })
-						: // Otherwise, create a new object for that language with the current command.
-							commands.push({ language_code: language, commands: [{ command: command.params.name.toLowerCase(), description: text }], scope: command.params.scope });
+					commands.find((x) => x.language_code === language && JSON.stringify(x.scope) === JSON.stringify(command.params.scope))
+						? commands.find((x) => x.language_code === language && JSON.stringify(x.scope) === JSON.stringify(command.params.scope))?.commands.push({ command: command.params.name.toLocaleLowerCase(), description: text })
+						: commands.find(x => x.scope && JSON.stringify(x.scope) === JSON.stringify(command.params.scope)) 
+							? commands.find(x => x.scope && JSON.stringify(x.scope) === JSON.stringify(command.params.scope))?.commands.push({ command: command.params.name.toLocaleLowerCase(), description: text })
+							: commands.push({ language_code: language, commands: [{ command: command.params.name.toLowerCase(), description: text }], scope: command.params.scope });
 
+		console.log(commands);
 		for (const item of commands) await client.api.setMyCommands(item);
 	}
 
