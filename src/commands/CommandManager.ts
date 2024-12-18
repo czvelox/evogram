@@ -23,7 +23,6 @@ export class CommandManager {
 							? commands.find(x => x.scope && JSON.stringify(x.scope) === JSON.stringify(command.params.scope))?.commands.push({ command: command.params.name.toLocaleLowerCase(), description: text })
 							: commands.push({ language_code: language, commands: [{ command: command.params.name.toLowerCase(), description: text }], scope: command.params.scope });
 
-		console.log(commands);
 		for (const item of commands) await client.api.setMyCommands(item);
 	}
 
