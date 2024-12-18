@@ -27,7 +27,7 @@ export class SmartButton {
 	}
 
 	public get command(): Command | undefined {
-		return CommandManager.commands.find((x) => x.params.name === this.commandName);
+		return this.client.commands.commands.find((x) => x.params.name === this.commandName);
 	}
 
 	#buttonData: any;

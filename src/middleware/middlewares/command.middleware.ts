@@ -27,7 +27,7 @@ class CommandMiddleware {
 				source: ctx.message,
 				state: { ...ctx.state, origin: 'message', message },
 			});
-			const command = CommandManager.getCommand(commandContext);
+			const command = ctx.client.commands.getCommand(commandContext);
 
 			// Логирование команды и клавиатурного режима
 			if (ctx.client.params.keyboardMode?.menuCommand !== undefined && command?.params.name === ctx.client.params.keyboardMode?.menuCommand) {
@@ -63,7 +63,7 @@ class CommandMiddleware {
 				state: { ...ctx.state, origin: 'callbackQuery', callbackQuery },
 			});
 
-			const command = CommandManager.getCommand(commandContext);
+			const command = ctx.client.commands.getCommand(commandContext);
 			if (!command) return next();
 
 			const args = (await getCommandArguments(commandContext, command)) || {};

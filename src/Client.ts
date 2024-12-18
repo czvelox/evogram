@@ -7,6 +7,7 @@ import { Middleware } from './middleware';
 import { QuestionManager } from './question';
 import { Updates } from './updates';
 import { DataSourceOptions } from 'typeorm';
+import { CommandManager } from './commands';
 
 interface EvogramParams {
 	token: string;
@@ -47,6 +48,7 @@ export class Evogram {
 	public keyboard = new KeyboardManager(this);
 	public question = new QuestionManager();
 	public logger = new LoggerManager(this, this.params.logLevel);
+	public commands = new CommandManager(this);
 
 	/**
 	 * Creates an instance of the Evogram client.

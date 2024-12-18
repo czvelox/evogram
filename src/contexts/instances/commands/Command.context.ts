@@ -16,6 +16,6 @@ export class CommandContext extends IncomingMessageContext {
 	}
 
 	public redirect(commandName: string, args: Record<string, any>) {
-		CommandManager.commands.find((x) => x.params.name === commandName)?.execute(this, { args });
+		this.client.commands.commands.find((x) => x.params.name === commandName)?.execute(this, { args });
 	}
 }
