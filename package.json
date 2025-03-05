@@ -1,6 +1,6 @@
 {
 	"name": "evogram",
-	"version": "1.7.1",
+	"version": "1.7.2",
 	"description": "Telegram Bot Framework",
 	"main": "./lib/index.js",
 	"repository": "https://github.com/evogram/evogram.git",
