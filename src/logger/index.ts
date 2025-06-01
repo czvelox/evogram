@@ -1,1 +1,1 @@
-export * from './LoggerManager';
+export * from './Logger';

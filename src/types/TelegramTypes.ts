@@ -141,7 +141,11 @@ export type TelegramChatActionType =
  * Represents a reply markup in Telegram, which can be an inline keyboard markup,
  * a reply keyboard markup, a reply keyboard remove markup, or a force reply markup.
  */
-export type TelegramReplyMarkup = TelegramInlineKeyboardMarkup | TelegramReplyKeyboardMarkup | TelegramReplyKeyboardRemove | TelegramForceReply;
+export type TelegramReplyMarkup =
+	| TelegramInlineKeyboardMarkup
+	| TelegramReplyKeyboardMarkup
+	| TelegramReplyKeyboardRemove
+	| TelegramForceReply;
 
 /**
  * Represents a media item in Telegram, which can be an audio, document, photo, or video.
@@ -1452,7 +1456,11 @@ export interface TelegramReplyParameters {
  * - MessageOriginChat
  * - MessageOriginChannel
  */
-export type TelegramMessageOrigin = TelegramMessageOriginUser | TelegramMessageOriginHiddenUser | TelegramMessageOriginChat | TelegramMessageOriginChannel;
+export type TelegramMessageOrigin =
+	| TelegramMessageOriginUser
+	| TelegramMessageOriginHiddenUser
+	| TelegramMessageOriginChat
+	| TelegramMessageOriginChannel;
 
 /**
  * Interface describing the origin of a message when it was originally sent by a known user.
@@ -3884,24 +3892,14 @@ export type TelegramBotCommandScope =
  * The first list of commands which is set is returned.
  */
 export type TelegramCommandScopeList =
-	| 'botCommandScopeChatLanguage'
-	| 'botCommandScopeChat'
-	| 'botCommandScopeAllPrivateChatsLanguage'
-	| 'botCommandScopeAllPrivateChats'
-	| 'botCommandScopeDefaultLanguage'
-	| 'botCommandScopeDefault'
-	| 'botCommandScopeChatMemberLanguage'
-	| 'botCommandScopeChatMember'
-	| 'botCommandScopeChatAdministratorsLanguage'
-	| 'botCommandScopeChatAdministrators'
-	| 'botCommandScopeChatLanguage'
-	| 'botCommandScopeChat'
-	| 'botCommandScopeAllChatAdministratorsLanguage'
-	| 'botCommandScopeAllChatAdministrators'
-	| 'botCommandScopeAllGroupChatsLanguage'
-	| 'botCommandScopeAllGroupChats'
-	| 'botCommandScopeDefaultLanguage'
-	| 'botCommandScopeDefault';
+	| 'default'
+	| 'all_private_chats'
+	| 'all_group_chats'
+	| 'all_chat_administrators'
+	| 'chat'
+	| 'chat_administrators'
+	| 'chat_member'
+	| string;
 
 /**
  * Represents the default scope of bot commands.
@@ -4269,7 +4267,12 @@ export interface TelegramResponseParameters {
  * Represents the content of a media message to be sent.
  * It should be one of InputMediaAnimation, InputMediaDocument, InputMediaAudio, InputMediaPhoto, InputMediaVideo.
  */
-export type TelegramInputMedia = TelegramInputMediaAnimation | TelegramInputMediaDocument | TelegramInputMediaAudio | TelegramInputMediaPhoto | TelegramInputMediaVideo;
+export type TelegramInputMedia =
+	| TelegramInputMediaAnimation
+	| TelegramInputMediaDocument
+	| TelegramInputMediaAudio
+	| TelegramInputMediaPhoto
+	| TelegramInputMediaVideo;
 
 /**
  * Represents a photo to be sent.
@@ -4577,6 +4580,11 @@ export type TelegramInputFile = string | Buffer;
  */
 export interface TelegramSendMessageParams {
 	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
+	/**
 	 * Unique identifier of the message effect to be added to the message; for private chats only
 	 */
 	message_effect_id?: string;
@@ -4637,6 +4645,11 @@ export interface TelegramSendMessageParams {
 	 * Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
@@ -4672,6 +4685,11 @@ export interface TelegramForwardMessageParams {
 	 * Yes. Message identifier in the chat specified in from_chat_id.
 	 */
 	message_id: number;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
@@ -4773,6 +4791,11 @@ export interface TelegramCopyMessageParams {
 	 * instructions to remove reply keyboard or to force a reply from the user.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
@@ -4819,6 +4842,11 @@ export interface TelegramCopyMessagesParams {
  * Use this method to send photos. On success, the sent Message is returned.
  */
 export interface TelegramSendPhotoParams {
+	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
 	/**
 	 * Pass True, if the caption must be shown above the message media
 	 */
@@ -4889,12 +4917,22 @@ export interface TelegramSendPhotoParams {
 	 * instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
  * Use this method to send audio files, if you want Telegram clients to display them in the music player. Your audio must be in the .MP3 or .M4A format. On success, the sent Message is returned. Bots can currently send audio files of up to 50 MB in size, this limit may be changed in the future.
  */
 export interface TelegramSendAudioParams {
+	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
 	/**
 	 * Unique identifier of the message effect to be added to the message; for private chats only
 	 */
@@ -4974,12 +5012,22 @@ export interface TelegramSendAudioParams {
 	 * Optional. Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
  * Use this method to send general files. On success, the sent Message is returned. Bots can currently send files of any type of up to 50 MB in size, this limit may be changed in the future.
  */
 export interface TelegramSendDocumentParams {
+	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
 	/**
 	 * Unique identifier of the message effect to be added to the message; for private chats only
 	 */
@@ -5050,12 +5098,22 @@ export interface TelegramSendDocumentParams {
 	 * Optional. Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard, instructions to remove a reply keyboard or to force a reply from the user. Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
  * Represents parameters for sending a video in Telegram.
  */
 export interface TelegramSendVideoParams {
+	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
 	/**
 	 * Pass True, if the caption must be shown above the message media
 	 */
@@ -5155,12 +5213,22 @@ export interface TelegramSendVideoParams {
 	 * Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
  * Represents parameters for sending an animation in Telegram.
  */
 export interface TelegramSendAnimationParams {
+	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
 	/**
 	 * Pass True, if the caption must be shown above the message media
 	 */
@@ -5255,12 +5323,22 @@ export interface TelegramSendAnimationParams {
 	 * Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
  * Represents parameters for sending a voice message in Telegram.
  */
 export interface TelegramSendVoiceParams {
+	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
 	/**
 	 * Unique identifier of the message effect to be added to the message; for private chats only
 	 */
@@ -5330,12 +5408,22 @@ export interface TelegramSendVoiceParams {
 	 * Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
  * Represents parameters for sending a video note in Telegram.
  */
 export interface TelegramSendVideoNoteParams {
+	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
 	/**
 	 * Unique identifier of the message effect to be added to the message; for private chats only
 	 */
@@ -5399,6 +5487,11 @@ export interface TelegramSendVideoNoteParams {
 	 * Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
@@ -5450,6 +5543,11 @@ export interface TelegramSendMediaGroupParams {
  * Represents parameters for sending a location in Telegram.
  */
 export interface TelegramSendLocationParams {
+	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
 	/**
 	 * Unique identifier of the message effect to be added to the message; for private chats only
 	 */
@@ -5523,12 +5621,22 @@ export interface TelegramSendLocationParams {
 	 * Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
  * Represents parameters for sending information about a venue in Telegram.
  */
 export interface TelegramSendVenueParams {
+	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
 	/**
 	 * Unique identifier of the message effect to be added to the message; for private chats only
 	 */
@@ -5611,6 +5719,11 @@ export interface TelegramSendVenueParams {
 	 * Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
@@ -5679,6 +5792,11 @@ export interface TelegramSendContactParams {
 	 * Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
@@ -5792,6 +5910,11 @@ export interface TelegramSendPollParams {
 	 * A JSON-serialized list of special entities that appear in the poll question. It can be specified instead of question_parse_mode
 	 */
 	question_entities?: TelegramMessageEntity[];
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
@@ -5847,6 +5970,11 @@ export interface TelegramSendDiceParams {
 	 * Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Optional. Additional payload for the message.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
@@ -6898,6 +7026,11 @@ export interface TelegramGetMyDefaultAdministratorRightsParams {
  */
 export interface TelegramEditMessageTextParams {
 	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
+	/**
 	 * Unique identifier of the business connection on behalf of which the message to be edited was sent
 	 */
 	business_connection_id?: string;
@@ -6944,6 +7077,11 @@ export interface TelegramEditMessageTextParams {
  * On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
  */
 export interface TelegramEditMessageCaptionParams {
+	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
 	/**
 	 * Unique identifier of the business connection on behalf of which the message to be edited was sent
 	 */
@@ -6995,6 +7133,11 @@ export interface TelegramEditMessageCaptionParams {
  * On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
  */
 export interface TelegramEditMessageMediaParams {
+	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
 	/**
 	 * Unique identifier of the business connection on behalf of which the message to be edited was sent
 	 */
@@ -7119,6 +7262,11 @@ export interface TelegramStopMessageLiveLocationParams {
  * On success, if the edited message is not an inline message, the edited Message is returned, otherwise True is returned.
  */
 export interface TelegramEditMessageReplyMarkupParams {
+	/**
+	 * Optional. If True, the message will not have a back button.
+	 */
+	noBackButton?: boolean;
+
 	/**
 	 * Unique identifier of the business connection on behalf of which the message to be edited was sent
 	 */
@@ -7428,6 +7576,13 @@ export interface TelegramSendStickerParams {
 	 * Not supported for messages sent on behalf of a business account.
 	 */
 	reply_markup?: TelegramReplyMarkup;
+
+	/**
+	 * Additional interface options. A JSON-serialized object for an inline keyboard, custom reply keyboard,
+	 * instructions to remove reply keyboard or to force a reply from the user.
+	 * Not supported for messages sent on behalf of a business account.
+	 */
+	payload?: Record<string, any>;
 }
 
 /**
@@ -7771,12 +7926,12 @@ export interface TelegramInlineQuery {
 	 * The chat type should be always known for requests sent from official clients
 	 * and most third-party clients, unless the request was sent from a secret chat
 	 */
-	chat_type?: string;
+	chat_type?: TelegramChatType;
 
 	/**
 	 * Sender location, only for bots that request user location
 	 */
-	location?: Location;
+	location?: TelegramLocation;
 }
 
 /**
@@ -10282,7 +10437,11 @@ export interface TelegramInputPollOption {
 }
 
 /** This object describes the type of a background. Currently, it can be one of */
-export type TelegramBackgroundType = TelegramBackgroundTypeFill | TelegramBackgroundTypeWallpaper | TelegramBackgroundTypePattern | TelegramBackgroundTypeChatTheme;
+export type TelegramBackgroundType =
+	| TelegramBackgroundTypeFill
+	| TelegramBackgroundTypeWallpaper
+	| TelegramBackgroundTypePattern
+	| TelegramBackgroundTypeChatTheme;
 
 /** This object represents a chat background. */
 export interface TelegramChatBackground {
@@ -10499,7 +10658,10 @@ export interface TelegramTransactionPartnerOther {
  * Currently, it can be one of: TelegramRevenueWithdrawalStatePending,
  * TelegramRevenueWithdrawalStateSucceeded, TelegramRevenueWithdrawalStateFailed.
  */
-export type TelegramRevenueWithdrawalState = TelegramRevenueWithdrawalStatePending | TelegramRevenueWithdrawalStateSucceeded | TelegramRevenueWithdrawalStateFailed;
+export type TelegramRevenueWithdrawalState =
+	| TelegramRevenueWithdrawalStatePending
+	| TelegramRevenueWithdrawalStateSucceeded
+	| TelegramRevenueWithdrawalStateFailed;
 
 /**
  * The withdrawal is in progress.

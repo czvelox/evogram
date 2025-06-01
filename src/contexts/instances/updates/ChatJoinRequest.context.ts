@@ -1,13 +1,13 @@
 import { TelegramChat, TelegramChatInviteLink, TelegramChatJoinRequest } from '../../../types';
 import { Context, ContextD } from '../../core';
-import { UserContext } from '../../../migrated';
+import { ChatContext, UserContext } from '../../../migrated';
 
 @ContextD('ChatJoinRequest')
 export class ChatJoinRequestContext extends Context<TelegramChatJoinRequest> {
 	/** User that sent the join request. */
 	public user = this.getContext<UserContext>({ key: 'User', source: this.source.from });
 	/** Chat to which the request was sent. */
-	public chat = this.getContext<TelegramChat>({ key: 'Chat', source: this.source.chat });
+	public chat = this.getContext<ChatContext>({ key: 'Chat', source: this.source.chat });
 	/** Optional. Chat invite link that was used by the user to send the join request. */
 	public inviteLink = this.getContext<TelegramChatInviteLink | undefined>({ key: 'ChatInviteLink', source: this.source.invite_link });
 

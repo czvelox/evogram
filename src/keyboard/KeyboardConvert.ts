@@ -1,32 +1,42 @@
-import { createHash } from 'crypto';
 import { Evogram } from '../Client';
 import { EvogramInlineKeyboardButton } from './keyboard.interface';
 
+export const inlineKeyboardTypes = ['switch_inline_query', 'switch_inline_query_current_chat'];
 export async function KeyboardConvert(client: Evogram, params: EvogramInlineKeyboardButton[][]): Promise<EvogramInlineKeyboardButton[][]> {
 	const inline_keyboard = [];
 	for (const row of params) {
 		inline_keyboard.push([]);
 		for (const button of row) {
-			let id,
-				callback_data = button.callback_data;
+			let id;
 
-			if (button.payload || button.keyboard || button.onClick) {
-				const payload = JSON.stringify({
-					...(typeof button.payload === 'object' ? button.payload : { payload: button.payload }),
-					onClick: button.onClick?.toString(),
-					keyboard: button.keyboard,
-				});
-				id = createHash('md5').update(payload).digest('hex');
-
-				if (!(await client.database.getCallbackData(id))) await client.database.addCallbackData({ button_id: id, payload });
-			}
-
-			if (id || button.commandName || button.onlyForUser || button.redirect || button.isBackButton) {
-				callback_data = `cdm ${button.commandName || ''};${button.onlyForUser || ''};${id || ''};${button.redirect || ''};${Number(button.isBackButton) || ''}`;
+			//@ts-ignore
+			if (['command', 'redirect', 'onlyForUser', 'isBackButton', 'payload'].find((x) => button[x])) {
+				id = (
+					await client.database.addCallbackData({
+						keyboard: button.keyboard,
+						payload: button.payload,
+						onClick: button.onClick?.toString(),
+						//@ts-ignore
+						command: button.command?.name || button.command,
+						onlyForUser: button.onlyForUser?.toString(),
+						redirect: button.redirect,
+						isBackButton: button.isBackButton,
+					})
+				).button_id;
 			}
 
 			//@ts-ignore
-			inline_keyboard[inline_keyboard.length - 1].push({ ...button, callback_data });
+			if (inlineKeyboardTypes.find((x) => button[x])) {
+				//@ts-ignore
+				inline_keyboard[inline_keyboard.length - 1].push({
+					...button,
+					//@ts-ignore
+					[inlineKeyboardTypes.find((x) => button[x])]: (id || '') + button[inlineKeyboardTypes.find((x) => button[x])] || '',
+				});
+			} else {
+				//@ts-ignore
+				inline_keyboard[inline_keyboard.length - 1].push({ ...button, callback_data: id ? `cdm ${id}` : button.callback_data });
+			}
 		}
 	}
 	return inline_keyboard;

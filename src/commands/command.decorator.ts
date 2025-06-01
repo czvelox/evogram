@@ -3,8 +3,13 @@ import { CommandInstance, CommandManager } from './CommandManager';
 
 export function CommandD(params: CommandParams): any;
 export function CommandD(name: string): any;
-export function CommandD(data: string | CommandParams): any {
+export function CommandD(): any;
+export function CommandD(data?: string | CommandParams): any {
 	return function (ctor: CommandInstance) {
-		CommandManager.commands.push({ instance: ctor, params: typeof data === 'object' ? { ...data, name: data.name.toLowerCase() } : { name: data.toLowerCase() } });
+		const name = typeof data === 'object' ? data?.name?.toLowerCase() : data?.toLowerCase();
+
+		//@ts-ignore
+		ctor.params = Object.assign(typeof data === 'object' ? { ...data, name } : { name }, !name ? { onlyFromKeyboard: true } : {});
+		CommandManager.commands.push(ctor);
 	};
 }

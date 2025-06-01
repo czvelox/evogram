@@ -1,4 +1,3 @@
-import { KeyboardManager } from '../../../keyboard';
 import {
 	EmojiKey,
 	TelegramChatActionType,
@@ -59,20 +58,12 @@ export class MessageMethods extends Context<TelegramMessage> {
 		// TODO: sending a message based on data from the context
 	}
 
-	public sendTemplate(templateName: string, payload?: Record<string, any>, params?: Omit<Omit<TelegramSendMessageParams, 'chat_id'>, 'text'>) {
+	public sendTemplate(
+		templateName: string,
+		payload?: Record<string, any>,
+		params?: Omit<Omit<TelegramSendMessageParams, 'chat_id'>, 'text'>
+	) {
 		return this.send(Object.assign(TemplateUtil.getTemplate(templateName, Object.assign({}, this, payload)), params));
-	}
-
-	public sendKeyboard(keyboardID: string, args?: Record<string, any>, noBack: boolean = false) {
-		const { keyboard, params } = new KeyboardManager(this.client).get({
-			context: this.state.commandContext,
-			keyboardID,
-			commandName: this.state.command?.params.name,
-			args,
-			noBack,
-		});
-
-		return this.send({ ...(params as TelegramSendMessageParams), reply_markup: { inline_keyboard: keyboard } });
 	}
 
 	/**
@@ -88,7 +79,10 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 * @param callback A function to handle the response.
 	 * @returns A promise that resolves to the message context.
 	 */
-	public sendQuestion(params: Omit<TelegramSendMessageParams, 'chat_id'>, callback: (message: MessageContext) => void): Promise<IncomingMessageContext>;
+	public sendQuestion(
+		params: Omit<TelegramSendMessageParams, 'chat_id'>,
+		callback: (message: MessageContext) => void
+	): Promise<IncomingMessageContext>;
 	public async sendQuestion(data: any, callback: any): Promise<IncomingMessageContext> {
 		this.client.question.addQuestion(this.source.from?.id!, callback);
 		return this.send(data);
@@ -139,7 +133,16 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 * @returns A promise that resolves when the message has been successfully deleted.
 	 */
 	public delete(timeout?: number) {
-		return setTimeout(() => this.client.api.deleteMessage({ chat_id: this.source.chat.id, message_id: this.source.message_id }), timeout);
+		return new Promise<Boolean>((res, rej) =>
+			setTimeout(
+				() =>
+					this.client.api
+						.deleteMessage({ chat_id: this.source.chat.id, message_id: this.source.message_id })
+						.then(res)
+						.catch(rej),
+				timeout
+			)
+		);
 	}
 
 	/**
@@ -192,7 +195,8 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendPhoto(photo: TelegramInputFile, params?: Partial<TelegramSendPhotoParams>): Promise<IncomingMessageContext>;
 	public sendPhoto(photoOrParams: any, params?: Partial<TelegramSendPhotoParams>): Promise<IncomingMessageContext> {
-		const { photo, ...restParams } = photoOrParams instanceof Object && 'photo' in photoOrParams ? photoOrParams : { photo: photoOrParams, ...params };
+		const { photo, ...restParams } =
+			photoOrParams instanceof Object && 'photo' in photoOrParams ? photoOrParams : { photo: photoOrParams, ...params };
 
 		return this.client.api.sendPhoto({ chat_id: this.source.chat.id, photo, ...restParams });
 	}
@@ -213,7 +217,8 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendVideo(video: TelegramInputFile, params?: Partial<TelegramSendVideoParams>): Promise<IncomingMessageContext>;
 	public sendVideo(videoOrParams: any, params?: Partial<TelegramSendVideoParams>): Promise<IncomingMessageContext> {
-		const { video, ...restParams } = videoOrParams instanceof Object && 'video' in videoOrParams ? videoOrParams : { video: videoOrParams, ...params };
+		const { video, ...restParams } =
+			videoOrParams instanceof Object && 'video' in videoOrParams ? videoOrParams : { video: videoOrParams, ...params };
 
 		return this.client.api.sendVideo({ chat_id: this.source.chat.id, video, ...restParams });
 	}
@@ -234,7 +239,8 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendAudio(audio: TelegramInputFile, params?: Partial<TelegramSendAudioParams>): Promise<IncomingMessageContext>;
 	public sendAudio(audioOrParams: any, params?: Partial<TelegramSendAudioParams>): Promise<IncomingMessageContext> {
-		const { audio, ...restParams } = audioOrParams instanceof Object && 'audio' in audioOrParams ? audioOrParams : { audio: audioOrParams, ...params };
+		const { audio, ...restParams } =
+			audioOrParams instanceof Object && 'audio' in audioOrParams ? audioOrParams : { audio: audioOrParams, ...params };
 
 		return this.client.api.sendAudio({ chat_id: this.source.chat.id, audio, ...restParams });
 	}
@@ -255,7 +261,10 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendDocument(document: TelegramInputFile, params?: Partial<TelegramSendDocumentParams>): Promise<IncomingMessageContext>;
 	public sendDocument(documentOrParams: any, params?: Partial<TelegramSendDocumentParams>): Promise<IncomingMessageContext> {
-		const { document, ...restParams } = documentOrParams instanceof Object && 'document' in documentOrParams ? documentOrParams : { document: documentOrParams, ...params };
+		const { document, ...restParams } =
+			documentOrParams instanceof Object && 'document' in documentOrParams
+				? documentOrParams
+				: { document: documentOrParams, ...params };
 
 		return this.client.api.sendDocument({ chat_id: this.source.chat.id, document, ...restParams });
 	}
@@ -277,7 +286,9 @@ export class MessageMethods extends Context<TelegramMessage> {
 	public sendAnimation(animation: TelegramInputFile, params?: Partial<TelegramSendAnimationParams>): Promise<IncomingMessageContext>;
 	public sendAnimation(animationOrParams: any, params?: Partial<TelegramSendAnimationParams>): Promise<IncomingMessageContext> {
 		const { animation, ...restParams } =
-			animationOrParams instanceof Object && 'animation' in animationOrParams ? animationOrParams : { animation: animationOrParams, ...params };
+			animationOrParams instanceof Object && 'animation' in animationOrParams
+				? animationOrParams
+				: { animation: animationOrParams, ...params };
 
 		return this.client.api.sendAnimation({ chat_id: this.source.chat.id, animation, ...restParams });
 	}
@@ -332,7 +343,10 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 * @returns A promise that resolves to the message context.
 	 */
 	public sendDice(emoji?: EmojiKey, params?: Partial<Omit<TelegramSendDiceParams, 'emoji'>>): Promise<IncomingMessageContext>;
-	public sendDice(emojiOrParams?: EmojiKey | Omit<TelegramSendDiceParams, 'chat_id'>, params?: Partial<TelegramSendDiceParams>): Promise<IncomingMessageContext> {
+	public sendDice(
+		emojiOrParams?: EmojiKey | Omit<TelegramSendDiceParams, 'chat_id'>,
+		params?: Partial<TelegramSendDiceParams>
+	): Promise<IncomingMessageContext> {
 		const { emoji, ...restParams } =
 			typeof emojiOrParams === 'string'
 				? { emoji: emojiOrParams, ...params }
@@ -378,8 +392,16 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 * @param params Optional parameters for sending the paid media.
 	 * @returns A promise that resolves to the message context.
 	 */
-	public sendPaidMedia(media: TelegramInputPaidMedia[], star_count: number, params?: Partial<TelegramSendPaidMediaParams>): Promise<IncomingMessageContext>;
-	public sendPaidMedia(mediaOrParams: any, star_count?: number, params?: Partial<TelegramSendPaidMediaParams>): Promise<IncomingMessageContext> {
+	public sendPaidMedia(
+		media: TelegramInputPaidMedia[],
+		star_count: number,
+		params?: Partial<TelegramSendPaidMediaParams>
+	): Promise<IncomingMessageContext>;
+	public sendPaidMedia(
+		mediaOrParams: any,
+		star_count?: number,
+		params?: Partial<TelegramSendPaidMediaParams>
+	): Promise<IncomingMessageContext> {
 		const {
 			media,
 			star_count: paramStarCount,
@@ -390,7 +412,12 @@ export class MessageMethods extends Context<TelegramMessage> {
 				? mediaOrParams
 				: { media: [], ...params };
 
-		return this.client.api.sendPaidMedia({ chat_id: this.source.chat.id, media, star_count: star_count ?? paramStarCount, ...restParams });
+		return this.client.api.sendPaidMedia({
+			chat_id: this.source.chat.id,
+			media,
+			star_count: star_count ?? paramStarCount,
+			...restParams,
+		});
 	}
 
 	/**
@@ -408,8 +435,16 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 * @param params Optional parameters for sending the poll.
 	 * @returns A promise that resolves to the message context.
 	 */
-	public sendPoll(question: string, options: TelegramInputPollOption[], params?: Partial<TelegramSendPollParams>): Promise<IncomingMessageContext>;
-	public sendPoll(questionOrParams: any, options?: TelegramInputPollOption[], params?: Partial<TelegramSendPollParams>): Promise<IncomingMessageContext> {
+	public sendPoll(
+		question: string,
+		options: TelegramInputPollOption[],
+		params?: Partial<TelegramSendPollParams>
+	): Promise<IncomingMessageContext>;
+	public sendPoll(
+		questionOrParams: any,
+		options?: TelegramInputPollOption[],
+		params?: Partial<TelegramSendPollParams>
+	): Promise<IncomingMessageContext> {
 		const {
 			question,
 			options: optionsArray,
@@ -439,7 +474,8 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendSticker(sticker: TelegramInputFile, params?: Partial<TelegramSendStickerParams>): Promise<IncomingMessageContext>;
 	public sendSticker(stickerOrParams: any, params?: Partial<TelegramSendStickerParams>): Promise<IncomingMessageContext> {
-		const { sticker, ...restParams } = stickerOrParams instanceof Object && 'sticker' in stickerOrParams ? stickerOrParams : { sticker: stickerOrParams, ...params };
+		const { sticker, ...restParams } =
+			stickerOrParams instanceof Object && 'sticker' in stickerOrParams ? stickerOrParams : { sticker: stickerOrParams, ...params };
 
 		return this.client.api.sendSticker({ chat_id: this.source.chat.id, sticker, ...restParams });
 	}
@@ -471,7 +507,9 @@ export class MessageMethods extends Context<TelegramMessage> {
 	public sendVideoNote(video_note: TelegramInputFile, params?: Partial<TelegramSendVideoNoteParams>): Promise<IncomingMessageContext>;
 	public sendVideoNote(paramsOrVideoNote: any, params?: Partial<TelegramSendVideoNoteParams>): Promise<IncomingMessageContext> {
 		const { video_note, ...restParams } =
-			paramsOrVideoNote instanceof Object && 'video_note' in paramsOrVideoNote ? paramsOrVideoNote : { video_note: paramsOrVideoNote, ...params };
+			paramsOrVideoNote instanceof Object && 'video_note' in paramsOrVideoNote
+				? paramsOrVideoNote
+				: { video_note: paramsOrVideoNote, ...params };
 
 		return this.client.api.sendVideoNote({ chat_id: this.source.chat.id, video_note, ...restParams });
 	}
@@ -492,8 +530,18 @@ export class MessageMethods extends Context<TelegramMessage> {
 	 */
 	public sendVoice(voice: TelegramInputFile, params?: Partial<TelegramSendVoiceParams>): Promise<IncomingMessageContext>;
 	public sendVoice(paramsOrVoice: any, params?: Partial<TelegramSendVoiceParams>): Promise<IncomingMessageContext> {
-		const { voice, ...restParams } = paramsOrVoice instanceof Object && 'voice' in paramsOrVoice ? paramsOrVoice : { voice: paramsOrVoice, ...params };
+		const { voice, ...restParams } =
+			paramsOrVoice instanceof Object && 'voice' in paramsOrVoice ? paramsOrVoice : { voice: paramsOrVoice, ...params };
 
 		return this.client.api.sendVoice({ chat_id: this.source.chat.id, voice, ...restParams });
+	}
+
+	/**
+	 * Retrieves the database message associated with the current message.
+	 *
+	 * @returns A promise that resolves to the database message context.
+	 */
+	public getMessageDB() {
+		return this.client.database.message.getMessage(this.source.chat.id, this.source.message_id);
 	}
 }

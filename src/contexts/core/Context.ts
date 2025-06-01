@@ -1,5 +1,7 @@
+import _ from 'lodash';
 import { Evogram } from '../../Client';
 import { ContextManager } from './ContextManager';
+import { API } from '../../API';
 
 /**
  * Type definition for the parameters used in the `Context` constructor.
@@ -22,6 +24,7 @@ export class Context<T> {
 	readonly #client: Evogram; // Holds the client instance (of type `Evogram`)
 	readonly #source: T; // Holds the source data of generic type `T`
 	readonly #state: any; // Holds additional state data
+	#stateProxy: any = null; // Приватное поле для прокси
 
 	/**
 	 * Constructs a new `Context` instance.
@@ -34,7 +37,7 @@ export class Context<T> {
 		// Initialize the private fields with the provided parameters
 		this.#client = client;
 		this.#source = source;
-		this.#state = state;
+		this.#state = state || {};
 	}
 
 	/**
@@ -61,10 +64,24 @@ export class Context<T> {
 	 * @returns The state data, which could be of any type (unknown).
 	 */
 	public get state(): any {
-		return this.#state;
+		if (!this.#stateProxy && typeof this.#state === 'object' && this.#state !== null) {
+			const handler = {
+				set: (target: any, prop: PropertyKey, value: any) => {
+					target[prop] = value;
+					this.#client.api.state[prop] = value;
+					return true;
+				},
+			};
+			this.#stateProxy = new Proxy(this.#state, handler);
+		}
+		return this.#stateProxy || this.#state;
 	}
 
 	protected getContext<T>(params: { key: string; source: any; state?: unknown }): T {
-		return ContextManager.getContext(params.key, { client: this.#client, ...params, state: Object.assign(this.#state || {}, params.state) });
+		return ContextManager.getContext(params.key, {
+			client: this.#client,
+			...params,
+			state: Object.assign(this.#state || {}, params.state),
+		});
 	}
 }

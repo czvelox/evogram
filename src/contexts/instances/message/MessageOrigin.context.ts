@@ -8,6 +8,7 @@ import {
 } from '../../../types';
 import { Context, ContextD } from '../../core';
 import * as Contexts from '../../../migrated';
+import { ChatContext } from '../../../migrated';
 
 /**
  * MessageOriginContext handles the source information of a message's origin,
@@ -58,7 +59,7 @@ export class MessageOriginHiddenUserContext extends Context<TelegramMessageOrigi
 @ContextD('MessageOriginChat')
 export class MessageOriginChatContext extends Context<TelegramMessageOriginChat> {
 	/** Retrieves the context for the chat from which the message was sent. */
-	public chat = this.getContext<TelegramChat>({ key: 'Chat', source: this.source.sender_chat });
+	public chat = this.getContext<ChatContext>({ key: 'Chat', source: this.source.sender_chat });
 
 	/** The signature of the message's author, if available */
 	public signature = this.source.author_signature;
@@ -73,7 +74,7 @@ export class MessageOriginChannelContext extends Context<TelegramMessageOriginCh
 	public messageID = this.source.message_id;
 
 	/** Retrieves the context for the chat (channel) from which the message was sent. */
-	public chat = this.getContext<TelegramChat>({ key: 'Chat', source: this.source.chat });
+	public chat = this.getContext<ChatContext>({ key: 'Chat', source: this.source.chat });
 
 	/** The signature of the message's author, if available */
 	public signature = this.source.author_signature;

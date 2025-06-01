@@ -1,6 +1,6 @@
 import { TelegramChat, TelegramMessageEntity } from '../../../types';
 import { ContextD } from '../../core';
-import { MessageOriginContext, UserContext } from '../../../migrated';
+import { ChatContext, MessageOriginContext, UserContext } from '../../../migrated';
 import { MessageAttachments } from './MessageAttachments';
 import { MessageMethods } from './MessageMethods';
 import { ReplyContext } from './MessageReply.context';
@@ -51,10 +51,10 @@ export class MessageContext extends MessageMethods {
 	public viaBot = this.getContext<UserContext | undefined>({ key: 'User', source: this.source.via_bot });
 
 	/** The chat where the message was sent. */
-	public chat = this.getContext<TelegramChat>({ key: 'Chat', source: this.source.chat });
+	public chat = this.getContext<ChatContext>({ key: 'Chat', source: this.source.chat });
 
 	/** The chat that forwarded the message, if different from the sender. */
-	public senderChat = this.getContext<TelegramChat | undefined>({ key: 'Chat', source: this.source.sender_chat });
+	public senderChat = this.getContext<ChatContext | undefined>({ key: 'Chat', source: this.source.sender_chat });
 
 	/** The message to which this message is a reply. */
 	public replyMessage = new ReplyContext(this);

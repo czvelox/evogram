@@ -5,6 +5,7 @@ import {
 	CallbackQueryContext,
 	ChatJoinRequestContext,
 	ChosenInlineResultContext,
+	InlineQueryContext,
 	MessageContext,
 	PollAnswerContext,
 	PollContext,
@@ -52,7 +53,7 @@ export class Updates {
 	public on(update: 'deleted_business_messages', handler: UpdateHandler<BusinessMessagesDeletedContext>): this;
 	public on(update: 'message_reaction', handler: UpdateHandler<TelegramMessageReactionUpdated>): this;
 	public on(update: 'message_reaction_count', handler: UpdateHandler<TelegramMessageReactionCountUpdated>): this;
-	public on(update: 'inline_query', handler: UpdateHandler<TelegramInlineQuery>): this;
+	public on(update: 'inline_query', handler: UpdateHandler<InlineQueryContext>): this;
 	public on(update: 'chosen_inline_result', handler: UpdateHandler<ChosenInlineResultContext>): this;
 	public on(update: 'callback_query', handler: UpdateHandler<CallbackQueryContext>): this;
 	public on(update: 'shipping_query', handler: UpdateHandler<ShippingQueryContext>): this;

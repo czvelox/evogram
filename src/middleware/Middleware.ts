@@ -1,5 +1,7 @@
 import { Evogram } from '../Client';
 import { TelegramUpdate } from '../types';
+import { ChatDBMiddleware } from './middlewares/chatDB.middleware';
+import { FloodControlMiddleware } from './middlewares/floodControl.middleware';
 import { UserDBMiddleware } from './middlewares/userDB.middleware';
 
 /**
@@ -22,7 +24,9 @@ export type MiddlewareFunction = (ctx: MiddlewareContext, next: () => Promise<an
  */
 export class Middleware {
 	constructor() {
+		this.middlewares.push(FloodControlMiddleware.middleware);
 		this.middlewares.push(UserDBMiddleware.middleware);
+		this.middlewares.push(ChatDBMiddleware.middleware);
 	}
 
 	public static middlewares: MiddlewareFunction[] = [];

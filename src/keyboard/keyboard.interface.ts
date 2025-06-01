@@ -1,3 +1,4 @@
+import { CommandInstance } from '../commands';
 import { CallbackQueryContext, UserContext } from '../migrated';
 import { TelegramInlineKeyboardButton } from '../types';
 /**
@@ -5,7 +6,7 @@ import { TelegramInlineKeyboardButton } from '../types';
  */
 export interface EvogramInlineKeyboardButton extends TelegramInlineKeyboardButton {
 	/** The specified command will be called when the button is pressed. */
-	commandName?: string;
+	command?: CommandInstance | string;
 	redirect?: string;
 	/** The button will only be available for the specified user context or user ID. */
 	onlyForUser?: UserContext | number;
@@ -15,4 +16,6 @@ export interface EvogramInlineKeyboardButton extends TelegramInlineKeyboardButto
 
 	keyboard?: EvogramInlineKeyboardButton[][];
 	isBackButton?: boolean;
+
+	[x: string]: any;
 }

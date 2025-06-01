@@ -5,7 +5,7 @@ import * as Contexts from '../../../migrated';
 
 export class ReplyContext extends Context<TelegramMessage> {
 	public story = this.source.reply_to_story;
-	public message = this.getContext<Contexts.MessageReplyContext | undefined>({ key: 'MessageReply', source: this.source.reply_to_message, state: this.source.quote });
+	public message = this.getContext<Contexts.MessageContext>({ key: 'Message', source: this.source.reply_to_message });
 	public origin = this.getContext<Contexts.MessageOriginContext | undefined>({ key: 'MessageOrigin', source: this.source.forward_origin });
 
 	// prettier-ignore

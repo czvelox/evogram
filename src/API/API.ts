@@ -70,6 +70,7 @@ import {
 	TelegramHideGeneralForumTopicParams,
 	TelegramLeaveChatParams,
 	TelegramMenuButton,
+	TelegramMessage,
 	TelegramMessageId,
 	TelegramPinChatMessageParams,
 	TelegramPromoteChatMemberParams,
@@ -153,7 +154,10 @@ export class API extends ApiWorker {
 	 */
 	public async getUpdates(params?: TelegramGetUpdatesParams): Promise<UpdateContext[]> {
 		const data = await this.call('getUpdates', params);
-		return data?.map((update: TelegramUpdate) => ContextManager.getContext('Update', { client: this.client, source: update })) || [];
+		return (
+			data?.map((update: TelegramUpdate) => ContextManager.getContext('Update', { client: this.client.clone(), source: update })) ||
+			[]
+		);
 	}
 
 	/**
@@ -389,7 +393,6 @@ export class API extends ApiWorker {
 	public sendPoll(params: TelegramSendPollParams): Promise<IncomingMessageContext> {
 		return this.getContext('sendPoll', params, 'IncomingMessage');
 	}
-
 	/**
 	 * Use this method to send an animated emoji that will display a random value.
 	 *
@@ -544,7 +547,7 @@ export class API extends ApiWorker {
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#createchatinvitelink)
 	 */
 	public createChatInviteLink(params: TelegramCreateChatInviteLinkParams): Promise<TelegramChatInviteLink> {
-		return this.call('createChatInviteLink');
+		return this.call('createChatInviteLink', params);
 	}
 
 	/**
@@ -1013,7 +1016,9 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#getmydefaultadministratorrights)
 	 */
-	public getMyDefaultAdministratorRights(params?: TelegramGetMyDefaultAdministratorRightsParams): Promise<TelegramChatAdministratorRights> {
+	public getMyDefaultAdministratorRights(
+		params?: TelegramGetMyDefaultAdministratorRightsParams
+	): Promise<TelegramChatAdministratorRights> {
 		return this.call('getMyDefaultAdministratorRights', params);
 	}
 
@@ -1097,7 +1102,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#deletemessage)
 	 */
-	public deleteMessage(params: TelegramDeleteMessageParams): Promise<boolean> {
+	public async deleteMessage(params: TelegramDeleteMessageParams): Promise<boolean> {
+		await this.client.database.message.deleteMessages([params.message_id]);
 		return this.call('deleteMessage', params);
 	}
 
@@ -1107,7 +1113,8 @@ export class API extends ApiWorker {
 	 *
 	 * [Telegram Documentation](https://core.telegram.org/bots/api#deletemessages)
 	 */
-	public deleteMessages(params: TelegramDeleteMessagesParams): Promise<boolean> {
+	public async deleteMessages(params: TelegramDeleteMessagesParams): Promise<boolean> {
+		await this.client.database.message.deleteMessages(params.message_ids);
 		return this.call('deleteMessages', params);
 	}
 

@@ -2,6 +2,12 @@ import { MessageContext } from '../migrated';
 
 export class QuestionManager {
 	/**
+	 * The priority of the question manager.
+	 * @default 'command'
+	 */
+	public priority: 'command' | 'question' = 'command';
+
+	/**
 	 * An object containing user IDs that are currently waiting for a response.
 	 * Each key is a user ID, and each value is a callback function.
 	 */

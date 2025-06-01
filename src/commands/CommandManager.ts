@@ -1,10 +1,10 @@
-import type { TelegramSetMyCommandsParams } from '../types';
+import type { TelegramBotCommandScope, TelegramCommandScopeList, TelegramSetMyCommandsParams } from '../types';
 import { Evogram } from '../Client';
 import { CommandContext } from '../contexts';
 import { Command } from './Command';
 import { CommandParams } from './command.types';
 
-export type CommandInstance = new (client: Evogram, params?: CommandParams) => Command;
+export type CommandInstance = new (client: Evogram) => Command;
 export class CommandManager {
 	constructor(private client: Evogram) {}
 
@@ -12,7 +12,7 @@ export class CommandManager {
 	 * Static array to store registered commands and their parameters.
 	 * @static
 	 */
-	public static commands: { instance: CommandInstance; params?: CommandParams }[] = [];
+	public static commands: CommandInstance[] = [];
 	/**
 	 * Instance array to hold loaded Command objects.
 	 */
@@ -30,27 +30,39 @@ export class CommandManager {
 	public async loadCommands(commands?: CommandInstance[]) {
 		if (commands) {
 			this.commands = commands.map((x) => new x(this.client));
-		} else this.commands = CommandManager.commands.map((x) => new x.instance(this.client, x.params));
+		} else {
+			this.commands = CommandManager.commands.map((x) => new x(this.client));
+		}
+
+		this.commands = this.commands.sort((a, b) => (b.params.priority || 0) - (a.params.priority || 0));
 	}
 
 	/** Sets the bot commands for the client. */
-	public async setBotCommands(client: Evogram) {
+	public async setBotCommands() {
 		const commands: TelegramSetMyCommandsParams[] = [];
 		// Iterate through all the commands in the CommandManager.
 		// If a command has a description...
-		for (const command of this.commands)
-			if (command.params.description)
+		for (const command of this.commands.filter((x) => x.params.description)) {
+			if (command.params.description) {
+				const descriptions = Array.isArray(command.params.description) ? command.params.description : [command.params.description];
+				let defaultCommandName = command.params.name?.toLowerCase() || command.params.name?.toString().toLowerCase()!;
 				// Iterate through each language and text pair in the command's description.
 				// If there's already a command set for the current language...
 				// prettier-ignore
-				for (const [, { text, language }] of command.params.description.entries())
-					commands.find((x) => x.language_code === language && JSON.stringify(x.scope) === JSON.stringify(command.params.scope))
-						? commands.find((x) => x.language_code === language && JSON.stringify(x.scope) === JSON.stringify(command.params.scope))?.commands.push({ command: command.params.name.toLocaleLowerCase(), description: text })
-						: commands.find(x => x.scope && JSON.stringify(x.scope) === JSON.stringify(command.params.scope)) 
-							? commands.find(x => x.scope && JSON.stringify(x.scope) === JSON.stringify(command.params.scope))?.commands.push({ command: command.params.name.toLocaleLowerCase(), description: text })
-							: commands.push({ language_code: language, commands: [{ command: command.params.name.toLowerCase(), description: text }], scope: command.params.scope });
+				for (const { text, language, scope, command: commandName } of descriptions) {
+					const scopes = scope ? (Array.isArray(scope) ? scope : [scope]) : ['default']
+					for(const scope of scopes)
+						commands.find((x) => x.language_code === language && x.scope?.type === scope)
+							? commands.find((x) => x.language_code === language && x.scope?.type === scope)?.commands.push({ command: commandName || defaultCommandName, description: text })
+							: commands.find((x) => x.scope && x.scope.type === scope)
+								? commands.find((x) => x.scope && x.scope.type === scope)?.commands.push({ command: commandName?.toLowerCase() || defaultCommandName, description: text })
+								//@ts-ignore
+								: commands.push({ language_code: language, commands: [{ command: commandName?.toLowerCase() || defaultCommandName, description: text }], scope: { type: scope }});
+				}
+			}
+		}
 
-		for (const item of commands) await client.api.setMyCommands(item);
+		for (const item of commands) await this.client.api.setMyCommands(item);
 	}
 
 	/**

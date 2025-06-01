@@ -1,4 +1,4 @@
-import { Evogram } from '..';
+import { CommandInstance, Evogram } from '..';
 import { UserContext } from '../contexts';
 import { EvogramInlineKeyboardButton } from './keyboard.interface';
 import { KeyboardConvert } from './KeyboardConvert';
@@ -34,7 +34,7 @@ export class KeyboardBuilder {
 	}
 
 	/** Arranges buttons into a keyboard layout with pagination */
-	public arrangeButtons(buttons: EvogramInlineKeyboardButton[], width: number, height: number, commandName: string, page: number = 1): this {
+	public arrangeButtons(buttons: EvogramInlineKeyboardButton[], width: number, height: number, command: CommandInstance, page: number = 1): this {
 		this.keyboard = []; // Clear existing keyboard layout
 		this.buttons = buttons; // Update the stored buttons
 		const totalButtons = buttons.length;
@@ -61,7 +61,7 @@ export class KeyboardBuilder {
 		}
 
 		// Add pagination buttons if there are more pages available
-		this.addPaginationButtons(page, pages, commandName);
+		this.addPaginationButtons(page, pages, command);
 
 		return this;
 	}
@@ -77,14 +77,14 @@ export class KeyboardBuilder {
 	}
 
 	/** Adds pagination buttons for navigating between pages */
-	private addPaginationButtons(currentPage: number, totalPages: number, commandName: string): void {
+	private addPaginationButtons(currentPage: number, totalPages: number, command: CommandInstance): void {
 		const paginationButtons: EvogramInlineKeyboardButton[] = [];
 
 		if (currentPage > 1) {
 			// Add "Previous" button if not on the first page
 			paginationButtons.push({
 				text: '« Previous',
-				commandName, // Command for navigating to the previous page
+				command, // Command for navigating to the previous page
 				payload: { page: currentPage - 1 },
 			});
 		}
@@ -93,7 +93,7 @@ export class KeyboardBuilder {
 			// Add "Next" button if not on the last page
 			paginationButtons.push({
 				text: 'Next »',
-				commandName, // Command for navigating to the next page
+				command, // Command for navigating to the next page
 				payload: { page: currentPage + 1 },
 			});
 		}
