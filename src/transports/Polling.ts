@@ -31,7 +31,7 @@ export class Polling extends EventTransport {
 	 * Worker function for long-polling updates.
 	 * @param {TelegramGetUpdatesParams} [params={}] - Optional parameters for updates.
 	 */
-	private async worker(params: TelegramGetUpdatesParams = {}) {
+	private async worker(params: TelegramGetUpdatesParams = { timeout: 30 }) {
 		while (this.state === EventTransportState.Enabled) {
 			try {
 				if (Date.now() - this.lastUpdateTime > 60000) {

@@ -1,6 +1,6 @@
+import { MiddlewareContext, MiddlewareD } from '..';
 import { CallbackQueryContext, ContextManager } from '../../contexts';
 import { CallbackDataEntity } from '../../migrated';
-import { MiddlewareContext, MiddlewareD } from '..';
 
 class CallbackDataMiddleware {
 	@MiddlewareD()
@@ -8,8 +8,15 @@ class CallbackDataMiddleware {
 		// Проверяем данные callback_query и фиксируем событие
 		if (!ctx.callback_query || !ctx.callback_query.data || !ctx.callback_query.data.startsWith('cdm')) return next();
 
+		const buttonId = ctx.callback_query.data.replace('cdm ', '');
+		const payload = Object.fromEntries(
+			new URLSearchParams(decodeURI(ctx.callback_query?.data.slice(ctx.callback_query?.data.indexOf('?') + 1))).entries()
+		);
+
 		// Извлекаем данные из callback_query.data
-		ctx.state.callbackData = (await ctx.client.database.getCallbackData(ctx.callback_query.data.replace('cdm ', ''))) || {};
+		ctx.state.callbackData = (await ctx.client.database.getCallbackData(buttonId)) || {};
+		if (ctx.state.callbackData) ctx.state.callbackData.payload = { ...(payload || {}), ...(ctx.state.callbackData.payload || {}) };
+
 		const { onlyForUser, onClick } = ctx.state.callbackData as CallbackDataEntity;
 
 		// Проверяем ID пользователя
@@ -23,7 +30,7 @@ class CallbackDataMiddleware {
 				state: ctx.state,
 			});
 
-			await eval(`(${onClick})(callbackQuery)`);
+			await eval(`(${onClick})(callbackQuery, ctx.state.callbackData.payload)`);
 		}
 
 		return next();

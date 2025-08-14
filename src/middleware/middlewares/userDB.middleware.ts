@@ -1,5 +1,6 @@
-import { MiddlewareContext, MiddlewareD } from '..';
+import { MiddlewareContext } from '..';
 import { ContextManager } from '../../contexts';
+import { UserEntity } from '../../database/entities/User.entity';
 import { TelegramUser } from '../../types';
 
 export class UserDBMiddleware {
@@ -13,6 +14,7 @@ export class UserDBMiddleware {
 
 		if (userDB) {
 			ctx.state.userDB = userDB;
+			ctx.client.database.db.getRepository(UserEntity).update(userDB.id, { telegram_data: user });
 		} else {
 			const source = await ctx.client.database.addUser({ user_id: user.id, telegram_data: user });
 			ctx.state.userDB = ContextManager.getContext('UserDB', { client: ctx.client, source, state: ctx.state });

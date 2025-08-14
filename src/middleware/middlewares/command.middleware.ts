@@ -1,8 +1,6 @@
-import { Command, getCommandArguments } from '../../commands';
-import { CommandManager } from '../../commands/CommandManager';
 import { MiddlewareContext, MiddlewareD } from '../';
-import { CallbackQueryContext, CommandContext, MessageContext } from '../../migrated';
 import { ContextManager, InlineQueryContext } from '../../contexts';
+import { CallbackQueryContext, CommandContext, MessageContext } from '../../migrated';
 
 class CommandMiddleware {
 	@MiddlewareD()

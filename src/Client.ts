@@ -28,6 +28,12 @@ interface EvogramParams {
 				delay: number;
 		  };
 	logLevel?: LogLevel;
+
+	dbConfig?: {
+		messageLifetime?: number;
+		maxMessages?: number;
+		maxMessagesPayload?: number;
+	};
 }
 
 /** Represents the main client for the Evogram framework. */

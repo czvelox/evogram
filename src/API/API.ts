@@ -70,7 +70,6 @@ import {
 	TelegramHideGeneralForumTopicParams,
 	TelegramLeaveChatParams,
 	TelegramMenuButton,
-	TelegramMessage,
 	TelegramMessageId,
 	TelegramPinChatMessageParams,
 	TelegramPromoteChatMemberParams,

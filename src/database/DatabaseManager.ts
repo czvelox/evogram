@@ -1,4 +1,4 @@
-import { DataSource } from 'typeorm';
+import { DataSource, LessThan } from 'typeorm';
 import fs from 'fs';
 import path from 'path';
 import { CallbackDataEntity, UserEntity } from '../migrated/';
@@ -14,7 +14,9 @@ import { MessageService } from './services/Message.service';
 
 export class DatabaseManager {
 	public db!: DataSource;
-	public password = (Date.now() * 10000).toString(16);
+	public password = createHash('sha1')
+		.update((Date.now() + Math.random()).toString())
+		.digest('hex');
 
 	public config!: ConfigService;
 	public message!: MessageService;
@@ -40,7 +42,13 @@ export class DatabaseManager {
 
 		await this.db.initialize();
 		this.config = new ConfigService(this.db);
-		this.message = new MessageService(this.db);
+		this.message = new MessageService(this.client, this.db);
+
+		if (this.client.params.dbConfig?.messageLifetime)
+			this.db
+				.getRepository(MessageEntity)
+				.delete({ created_at: LessThan(new Date(Date.now() - this.client.params.dbConfig.messageLifetime)) });
+
 		return this;
 	}
 

@@ -1,5 +1,5 @@
 {
-	"printWidth": 180,
+	"printWidth": 140,
 	"tabWidth": 4,
 	"useTabs": true,
 	"semi": true,
@@ -7,5 +7,38 @@
 	"trailingComma": "es5",
 	"bracketSpacing": true,
 	"arrowParens": "always",
-	"endOfLine": "lf"
+	"endOfLine": "auto",
+	"singleAttributePerLine": false,
+	"bracketSameLine": false,
+	"proseWrap": "preserve",
+	"quoteProps": "as-needed",
+	"embeddedLanguageFormatting": "auto",
+	"htmlWhitespaceSensitivity": "css",
+	"insertPragma": false,
+	"requirePragma": false,
+	"vueIndentScriptAndStyle": false,
+	"overrides": [
+		{
+			"files": ["*.ts", "*.tsx"],
+			"options": {
+				"singleLine": {
+					"blocks": "always",
+					"getters": "always",
+					"setters": "always",
+					"functions": "ignore"
+				}
+			}
+		},
+		{
+			"files": ["src/database/instances/UserDB.context.ts"],
+			"options": {
+				"singleLine": {
+					"blocks": "always",
+					"getters": "always",
+					"setters": "always",
+					"functions": "ignore"
+				}
+			}
+		}
+	]
 }
